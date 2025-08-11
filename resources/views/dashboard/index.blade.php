@@ -10,37 +10,60 @@
 
 @section('content')
 <style>
-    .equal-height-cards {
+    /* Equal height cards for all rows */
+    .row {
         display: flex;
         flex-wrap: wrap;
     }
-    .equal-height-cards .col-lg-4 {
+    
+    .row > [class*="col-"] {
         display: flex;
         flex-direction: column;
     }
-    .equal-height-cards .card {
+    
+    .row > [class*="col-"] .card {
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-height: 400px;
+        height: 100%;
     }
-    .equal-height-cards .card-body {
+    
+    .row > [class*="col-"] .card .card-body {
         flex: 1;
         display: flex;
         flex-direction: column;
     }
-    .equal-height-cards .card-body .row:first-child {
+    
+    /* Specific styling for sentiment analysis card */
+    .sentiment-card .card-body .row {
         flex: 1;
     }
-    .equal-height-cards .card-body .row:last-child {
-        margin-top: auto;
+    
+    .sentiment-card .card-body .row .col-6:last-child {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    /* Ensure small-box cards have equal height */
+    .small-box {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .small-box .inner {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 </style>
 
 <div class="row">
     <!-- Statistics Cards -->
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%); color: #494850;">
+        <div class="small-box" style="background: linear-gradient(135deg, #8EA604 0%, #7a9504 100%); color: white;">
             <div class="inner">
                 <h3>{{ number_format($totalSurveys) }}</h3>
                 <p>Total Surveys</p>
@@ -52,7 +75,7 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #F16E70 0%, #e55a5c 100%); color: #494850;">
+        <div class="small-box" style="background: linear-gradient(135deg, #F5BB00 0%, #e4aa00 100%); color: #494850;">
             <div class="inner">
                 <h3>{{ number_format($totalTeachers) }}</h3>
                 <p>Total Teachers</p>
@@ -64,7 +87,7 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%); color: #494850;">
+        <div class="small-box" style="background: linear-gradient(135deg, #EC9F05 0%, #db8e04 100%); color: white;">
             <div class="inner">
                 <h3>{{ number_format($totalSubjects) }}</h3>
                 <p>Total Subjects</p>
@@ -76,7 +99,7 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%); color: #494850;">
+        <div class="small-box" style="background: linear-gradient(135deg, #BF3100 0%, #ae2a00 100%); color: white;">
             <div class="inner">
                 <h3>{{ number_format($averageRating, 1) }}</h3>
                 <p>Average Rating</p>
@@ -88,11 +111,11 @@
     </div>
 </div>
 
-<div class="row equal-height-cards">
-    <!-- Sentiment Statistics -->
-    <div class="col-lg-4">
-        <div class="card card-outline card-primary">
-            <div class="card-header">
+<div class="row">
+    <!-- Sentiment Analysis - Full Width -->
+    <div class="col-lg-6">
+        <div class="card card-outline sentiment-card" style="border-color: var(--light-green);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7a9504 100%); color: white;">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie mr-2"></i>
                     Sentiment Analysis
@@ -100,36 +123,32 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                         <canvas id="sentimentPieChart" style="height: 200px;"></canvas>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-4">
-                        <div class="text-center">
-                            <div class="text-success mb-2">
-                                <i class="fas fa-thumbs-up fa-2x"></i>
+                    <div class="col-6">
+                        <div class="d-flex flex-column justify-content-center h-100">
+                            <div class="text-center mb-4">
+                                <div class="text-success mb-2">
+                                    <i class="fas fa-thumbs-up fa-3x"></i>
+                                </div>
+                                <h3 class="text-success mb-0">{{ $sentimentStats['positive'] }}</h3>
+                                <small class="text-muted">Positive</small>
                             </div>
-                            <h5 class="text-success">{{ $sentimentStats['positive'] }}</h5>
-                            <small class="text-muted">Positive</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="text-center">
-                            <div class="text-warning mb-2">
-                                <i class="fas fa-minus-circle fa-2x"></i>
+                            <div class="text-center mb-4">
+                                <div class="text-warning mb-2">
+                                    <i class="fas fa-minus-circle fa-3x"></i>
+                                </div>
+                                <h3 class="text-warning mb-0">{{ $sentimentStats['neutral'] }}</h3>
+                                <small class="text-muted">Neutral</small>
                             </div>
-                            <h5 class="text-warning">{{ $sentimentStats['neutral'] }}</h5>
-                            <small class="text-muted">Neutral</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="text-center">
-                            <div class="text-danger mb-2">
-                                <i class="fas fa-thumbs-down fa-2x"></i>
+                            <div class="text-center">
+                                <div class="text-danger mb-2">
+                                    <i class="fas fa-thumbs-down fa-3x"></i>
+                                </div>
+                                <h3 class="text-danger mb-0">{{ $sentimentStats['negative'] }}</h3>
+                                <small class="text-muted">Negative</small>
                             </div>
-                            <h5 class="text-danger">{{ $sentimentStats['negative'] }}</h5>
-                            <small class="text-muted">Negative</small>
                         </div>
                     </div>
                 </div>
@@ -137,10 +156,27 @@
         </div>
     </div>
 
-    <!-- Top Teachers -->
+    <!-- Monthly Trends Chart -->
+    <div class="col-lg-6">
+        <div class="card card-outline" style="border-color: var(--golden-orange);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--golden-orange) 0%, #e4aa00 100%); color: #494850;">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Monthly Trends
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="monthlyTrendsChart" style="height: 280px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Top Rated Teachers -->
     <div class="col-lg-4">
-        <div class="card card-outline card-success">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--coral-pink);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%); color: white;">
                 <h3 class="card-title">
                     <i class="fas fa-trophy mr-2"></i>
                     Top Rated Teachers
@@ -149,7 +185,7 @@
             <div class="card-body">
                 @if($topTeachers->count() > 0)
                     @foreach($topTeachers as $teacher)
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-2" style="background: rgba(255, 78, 0, 0.05); border-radius: 8px;">
                             <div>
                                 <h6 class="mb-0">{{ $teacher->name }}</h6>
                                 <small class="text-muted">{{ $teacher->department }}</small>
@@ -177,10 +213,10 @@
         </div>
     </div>
 
-    <!-- Top Subjects -->
+    <!-- Top Rated Subjects -->
     <div class="col-lg-4">
-        <div class="card card-outline card-warning">
-            <div class="card-header">
+        <div class="card card-outline" style="border-color: var(--light-blue);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #db8e04 100%); color: white;">
                 <h3 class="card-title">
                     <i class="fas fa-medal mr-2"></i>
                     Top Rated Subjects
@@ -189,7 +225,7 @@
             <div class="card-body">
                 @if($topSubjects->count() > 0)
                     @foreach($topSubjects as $subject)
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-2" style="background: rgba(236, 159, 5, 0.05); border-radius: 8px;">
                             <div>
                                 <h6 class="mb-0">{{ $subject->name }}</h6>
                                 <small class="text-muted">{{ $subject->subject_code }}</small>
@@ -216,13 +252,39 @@
             </div>
         </div>
     </div>
+
+    <!-- Recent Activity Summary -->
+    <div class="col-lg-4">
+        <div class="card card-outline" style="border-color: var(--dark-gray);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--dark-gray) 0%, #ae2a00 100%); color: white;">
+                <h3 class="card-title">
+                    <i class="fas fa-activity mr-2"></i>
+                    Recent Activity
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h2 class="text-primary mb-0">{{ $recentSurveys->count() }}</h2>
+                    <small class="text-muted">New Surveys Today</small>
+                </div>
+                <div class="text-center mb-4">
+                    <h4 class="text-success mb-0">{{ number_format($averageRating, 1) }}</h4>
+                    <small class="text-muted">Average Rating</small>
+                </div>
+                <div class="text-center">
+                    <h4 class="text-warning mb-0">{{ $totalTeachers }}</h4>
+                    <small class="text-muted">Active Teachers</small>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
-    <!-- Recent Surveys -->
-    <div class="col-lg-8">
-        <div class="card card-outline card-info">
-            <div class="card-header">
+    <!-- Recent Surveys - Full Width -->
+    <div class="col-12">
+        <div class="card card-outline" style="border-color: var(--light-green);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7a9504 100%); color: white;">
                 <h3 class="card-title">
                     <i class="fas fa-clock mr-2"></i>
                     Recent Surveys
@@ -288,21 +350,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Monthly Trends Chart -->
-    <div class="col-lg-4">
-        <div class="card card-outline card-secondary">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-chart-line mr-2"></i>
-                    Monthly Trends
-                </h3>
-            </div>
-            <div class="card-body">
-                <canvas id="monthlyTrendsChart" style="height: 250px;"></canvas>
             </div>
         </div>
     </div>

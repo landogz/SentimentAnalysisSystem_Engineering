@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "sentiment-analysis/engineering",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Sentiment Analysis Engineering - A modern Laravel-based system for collecting and analyzing student feedback with advanced sentiment analysis capabilities.",
+    "keywords": ["laravel", "framework", "sentiment-analysis", "student-feedback", "education"],
     "license": "MIT",
     "require": {
         "php": "^8.1",

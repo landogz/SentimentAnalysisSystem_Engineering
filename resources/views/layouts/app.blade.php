@@ -21,11 +21,11 @@
     <!-- Custom CSS -->
     <style>
         :root {
-            --dark-gray: #494850;
-            --light-green: #8FCFA8;
-            --coral-pink: #F16E70;
-            --golden-orange: #F5B445;
-            --light-blue: #98AAE7;
+            --dark-gray: #BF3100;
+            --light-green: #8EA604;
+            --coral-pink: #FF4E00;
+            --golden-orange: #F5BB00;
+            --light-blue: #EC9F05;
         }
 
         .rating-stars {
@@ -103,10 +103,10 @@
             box-shadow: 0 2px 4px rgba(73, 72, 80, 0.1);
         }
         .table thead th {
-            background-color: var(--light-green);
+            background-color: var(--golden-orange);
             border-bottom: 2px solid #dee2e6;
             font-weight: 600;
-            color: var(--dark-gray);
+            color: white;
         }
         .table tbody tr:hover {
             background-color: rgba(143, 207, 168, 0.1);
@@ -867,9 +867,9 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('survey.index') }}" target="_blank" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white; border-radius: 8px; padding: 10px 16px; margin-right: 12px; font-weight: 500; transition: all 0.3s ease; border: none; display: flex; align-items: center;">
+                        <a class="nav-link" href="{{ route('survey.index') }}" target="_blank" style="background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%); color: white; border-radius: 8px; padding: 10px 16px; margin-right: 12px; font-weight: 500; transition: all 0.3s ease; border: none; display: flex; align-items: center;">
                         <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i> 
-                        <span>Public Survey</span>
+                        <span>Engineering Survey</span>
                     </a>
                 </li>
                 @auth
@@ -897,14 +897,14 @@
 
         <!-- Main Sidebar Container -->
         @auth
-        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: var(--dark-gray) !important;">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: var(--coral-pink) !important;">
             <!-- Sidebar -->
-            <div class="sidebar" style="background-color: var(--dark-gray);">
+            <div class="sidebar" style="background-color: var(--coral-pink);">
                 <!-- Brand Logo at Top -->
                 <div class="text-center" style="padding: 25px 15px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
                     <a href="{{ route('dashboard') }}" style="text-decoration: none; display: block;">
-                        <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
-                        <div style="color: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">ESP-CIT</div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Sentiment Analysis Engineering" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
+                        <div style="color: black; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">Sentiment Analysis Engineering</div>
                     </a>
                 </div>
                 
@@ -912,47 +912,47 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" style="padding: 0px;">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-tachometer-alt" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Dashboard</p>
+                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-tachometer-alt" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('teachers.index') }}" class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-chalkboard-teacher" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Teachers</p>
+                            <a href="{{ route('teachers.index') }}" class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-chalkboard-teacher" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Teachers</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-book" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Subjects</p>
+                            <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-book" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Subjects</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-users" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Users</p>
+                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-users" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Users</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-chart-bar" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Reports</p>
+                            <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-chart-bar" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Reports</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('sentiment-words.index') }}" class="nav-link {{ request()->routeIs('sentiment-words.*') ? 'active' : '' }}" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-brain" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Sentiment Words</p>
+                            <a href="{{ route('sentiment-words.index') }}" class="nav-link {{ request()->routeIs('sentiment-words.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-brain" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Sentiment Words</p>
                             </a>
                         </li>
                         
                         <!-- Logout Section -->
                         <li class="nav-item" style="margin-top: 50px;">
-                            <a href="#" onclick="logout()" class="nav-link" style="color: white; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-sign-out-alt" style="color: white; margin-right: 12px;"></i>
-                                <p style="color: white; font-family: 'Poppins', sans-serif; font-weight: 400;">Log out</p>
+                            <a href="#" onclick="logout()" class="nav-link" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-sign-out-alt" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Log out</p>
                             </a>
                         </li>
                     </ul>
@@ -1009,7 +1009,7 @@
         <!-- Footer -->
         <footer class="main-footer">
             <div class="float-right d-none d-sm-inline">
-                <span class="text-muted">ESP-CIT</span>
+                <span class="text-muted">Sentiment Analysis Engineering</span>
             </div>
             <strong>Copyright &copy; {{ date('Y') }}</strong> All rights reserved.
         </footer>
@@ -1049,8 +1049,8 @@
                 showConfirmButton: false,
                 toast: true,
                 position: 'top-end',
-                background: '#8FCFA8',
-                color: '#494850'
+                            background: '#8EA604',
+            color: '#BF3100'
             });
         }
 
@@ -1059,7 +1059,7 @@
                 icon: 'error',
                 title: 'Error!',
                 text: message,
-                background: '#F16E70',
+                background: '#FF4E00',
                 color: '#fff'
             });
         }
@@ -1168,15 +1168,87 @@
 
         function logout() {
             Swal.fire({
-                title: 'Are you sure you want to log out?',
+                title: '<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">' +
+                       '<i class="fas fa-sign-out-alt" style="font-size: 2rem; color: var(--coral-pink); margin-right: 15px;"></i>' +
+                       '<span style="font-family: \'Poppins\', sans-serif; font-weight: 600; color: var(--dark-gray);">Confirm Logout</span>' +
+                       '</div>',
+                html: '<div style="text-align: center; padding: 20px 0;">' +
+                      '<p style="font-family: \'Poppins\', sans-serif; font-size: 1.1rem; color: #666; margin-bottom: 15px; line-height: 1.5;">' +
+                      'You are about to log out of your account. All unsaved changes will be lost.</p>' +
+                      '<div style="background: linear-gradient(135deg, rgba(255, 78, 0, 0.1) 0%, rgba(245, 187, 0, 0.1) 100%); padding: 15px; border-radius: 10px; border-left: 4px solid var(--coral-pink);">' +
+                      '<p style="font-family: \'Poppins\', sans-serif; font-size: 0.95rem; color: var(--dark-gray); margin: 0; font-weight: 500;">' +
+                      '<i class="fas fa-info-circle" style="color: var(--coral-pink); margin-right: 8px;"></i>' +
+                      'You can log back in anytime using your credentials.</p>' +
+                      '</div>' +
+                      '</div>',
                 icon: 'warning',
+                iconColor: 'var(--coral-pink)',
                 showCancelButton: true,
-                confirmButtonColor: '#F16E70',
-                cancelButtonColor: '#494850',
-                confirmButtonText: 'Yes, log out',
-                cancelButtonText: 'Cancel'
+                confirmButtonColor: 'var(--coral-pink)',
+                cancelButtonColor: 'var(--dark-gray)',
+                confirmButtonText: '<i class="fas fa-sign-out-alt mr-2"></i>Yes, Log Out',
+                cancelButtonText: '<i class="fas fa-times mr-2"></i>Cancel',
+                background: '#ffffff',
+                backdrop: 'rgba(0, 0, 0, 0.4)',
+                allowOutsideClick: false,
+                allowEscapeKey: true,
+                customClass: {
+                    popup: 'logout-confirmation-popup',
+                    title: 'logout-confirmation-title',
+                    content: 'logout-confirmation-content',
+                    confirmButton: 'logout-confirm-btn',
+                    cancelButton: 'logout-cancel-btn'
+                },
+                didOpen: () => {
+                    // Add custom styling
+                    const popup = Swal.getPopup();
+                    popup.style.borderRadius = '16px';
+                    popup.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+                    popup.style.border = '1px solid rgba(255, 78, 0, 0.1)';
+                    
+                    // Style buttons
+                    const confirmBtn = Swal.getConfirmButton();
+                    const cancelBtn = Swal.getCancelButton();
+                    
+                    if (confirmBtn) {
+                        confirmBtn.style.borderRadius = '8px';
+                        confirmBtn.style.fontWeight = '600';
+                        confirmBtn.style.fontFamily = '\'Poppins\', sans-serif';
+                        confirmBtn.style.padding = '12px 24px';
+                        confirmBtn.style.transition = 'all 0.3s ease';
+                    }
+                    
+                    if (cancelBtn) {
+                        cancelBtn.style.borderRadius = '8px';
+                        cancelBtn.style.fontWeight = '600';
+                        cancelBtn.style.fontFamily = '\'Poppins\', sans-serif';
+                        cancelBtn.style.padding = '12px 24px';
+                        cancelBtn.style.transition = 'all 0.3s ease';
+                    }
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
+                    // Show loading state
+                    Swal.fire({
+                        title: '<div style="display: flex; align-items: center; justify-content: center;">' +
+                               '<i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--coral-pink); margin-right: 10px;"></i>' +
+                               '<span style="font-family: \'Poppins\', sans-serif; font-weight: 600; color: var(--dark-gray);">Logging Out...</span>' +
+                               '</div>',
+                        html: '<p style="font-family: \'Poppins\', sans-serif; color: #666; margin-top: 10px;">Please wait while we securely log you out.</p>',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        background: '#ffffff',
+                        customClass: {
+                            popup: 'logout-loading-popup'
+                        },
+                        didOpen: () => {
+                            const popup = Swal.getPopup();
+                            popup.style.borderRadius = '16px';
+                            popup.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+                        }
+                    });
+                    
                     $.ajax({
                         url: "{{ route('logout') }}",
                         type: 'POST',
@@ -1185,14 +1257,37 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                showSuccess(response.message);
-                                window.location.href = "{{ url('/login') }}";
+                                Swal.fire({
+                                    title: '<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">' +
+                                           '<span style="font-family: \'Poppins\', sans-serif; font-weight: 600; color: var(--dark-gray);">Logout Complete</span>' +
+                                           '</div>',
+                                    html: '<p style="font-family: \'Poppins\', sans-serif; color: #666; margin-bottom: 15px;">Your session has been terminated successfully.</p>' +
+                                          '<p style="font-family: \'Poppins\', sans-serif; color: #666; font-size: 0.9rem;">Taking you to the login screen...</p>',
+                                    icon: 'success',
+                                    iconColor: 'var(--light-green)',
+                                    background: '#ffffff',
+                                    confirmButtonColor: 'var(--light-green)',
+                                    confirmButtonText: '<i class="fas fa-sign-in-alt mr-2"></i>Continue',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    showCancelButton: false,
+                                    customClass: {
+                                        popup: 'logout-success-popup'
+                                    },
+                                    didOpen: () => {
+                                        const popup = Swal.getPopup();
+                                        popup.style.borderRadius = '16px';
+                                        popup.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
+                                    }
+                                }).then(() => {
+                                    window.location.href = "{{ url('/login') }}";
+                                });
                             } else {
-                                showError(response.message || 'Logout failed.');
+                                showError(response.message || 'Logout failed. Please try again.');
                             }
                         },
                         error: function(xhr, status, error) {
-                            showError('Network error or server issue.');
+                            showError('Network error or server issue. Please check your connection and try again.');
                         }
                     });
                 }

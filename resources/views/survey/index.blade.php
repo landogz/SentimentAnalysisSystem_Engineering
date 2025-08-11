@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>ESP-CIT - Student Feedback Survey</title>
+    <title>Sentiment Analysis Engineering - Student Feedback Survey</title>
 
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -18,11 +18,11 @@
     
     <style>
         :root {
-            --dark-gray: #494850;
-            --light-green: #8FCFA8;
-            --coral-pink: #F16E70;
-            --golden-orange: #F5B445;
-            --light-blue: #98AAE7;
+            --dark-gray: #BF3100;
+            --light-green: #8EA604;
+            --coral-pink: #FF4E00;
+            --golden-orange: #F5BB00;
+            --light-blue: #EC9F05;
         }
         
         body {
@@ -50,7 +50,7 @@
         }
         
         .survey-header {
-            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--coral-pink) 100%);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
@@ -85,7 +85,7 @@
         }
         
         .logo-section img {
-            height: 80px;
+            height: 150px;
             width: auto;
             margin-bottom: 1rem;
             filter: brightness(1.1) contrast(1.1);
@@ -217,7 +217,7 @@
         }
         
         .btn-submit {
-            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
+            background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%);
             border: none;
             color: white;
             padding: 1.25rem 3rem;
@@ -225,7 +225,7 @@
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
+            box-shadow: 0 4px 15px rgba(245, 187, 0, 0.3);
             width: 100%;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
@@ -240,7 +240,7 @@
         
         .btn-submit:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
+            box-shadow: 0 8px 25px rgba(245, 187, 0, 0.4);
             color: white;
         }
         
@@ -393,9 +393,9 @@
         <div class="survey-container">
             <div class="survey-header">
                 <div class="logo-section">
-                    <img src="{{ asset('images/logo.png') }}" alt="ESP-CIT" class="logo">
+                    <img src="{{ asset('images/logo.png') }}" alt="Sentiment Analysis Engineering" class="logo">
                 </div>
-                <h1>ESP-CIT</h1>
+                <h1>Sentiment Analysis Engineering</h1>
                 <p>Student Feedback Survey</p>
             </div>
             
@@ -534,7 +534,7 @@
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} ESP-CIT. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Sentiment Analysis Engineering. All rights reserved.</p>
         </div>
     </div>
 
