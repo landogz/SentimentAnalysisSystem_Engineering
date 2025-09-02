@@ -17,100 +17,148 @@ class SubjectSeeder extends Seeder
         
         $subjects = [
             [
-                'subject_code' => 'CS101',
-                'name' => 'Introduction to Computer Science',
-                'description' => 'Fundamental concepts of programming and computer science principles.',
-                'teacher_ids' => [1, 2] // Multiple teachers
+                'subject_code' => 'CE101',
+                'name' => 'Engineering Mechanics',
+                'description' => 'Fundamental principles of statics and dynamics for engineering applications.',
+                'teacher_ids' => [1, 2] // Civil and Mechanical Engineering
             ],
             [
-                'subject_code' => 'CS201',
-                'name' => 'Data Structures and Algorithms',
-                'description' => 'Advanced programming concepts and algorithm design.',
-                'teacher_ids' => [1, 3]
-            ],
-            [
-                'subject_code' => 'CS301',
-                'name' => 'Database Systems',
-                'description' => 'Database design, SQL, and data management.',
-                'teacher_ids' => [2]
-            ],
-            [
-                'subject_code' => 'CS401',
-                'name' => 'Software Engineering',
-                'description' => 'Software development methodologies and best practices.',
-                'teacher_ids' => [3, 4]
-            ],
-            [
-                'subject_code' => 'MATH101',
-                'name' => 'Calculus I',
-                'description' => 'Introduction to differential and integral calculus.',
-                'teacher_ids' => [5]
-            ],
-            [
-                'subject_code' => 'MATH201',
-                'name' => 'Linear Algebra',
-                'description' => 'Vector spaces, matrices, and linear transformations.',
-                'teacher_ids' => [5, 6]
-            ],
-            [
-                'subject_code' => 'PHYS101',
-                'name' => 'Physics I',
-                'description' => 'Classical mechanics and thermodynamics.',
-                'teacher_ids' => [7]
-            ],
-            [
-                'subject_code' => 'PHYS201',
-                'name' => 'Physics II',
-                'description' => 'Electromagnetism and modern physics.',
-                'teacher_ids' => [7, 8]
-            ],
-            [
-                'subject_code' => 'ENG101',
-                'name' => 'English Composition',
-                'description' => 'Academic writing and communication skills.',
+                'subject_code' => 'CE201',
+                'name' => 'Structural Analysis',
+                'description' => 'Analysis of structural systems, loads, and design principles.',
                 'teacher_ids' => [1]
             ],
             [
-                'subject_code' => 'ENG201',
-                'name' => 'Advanced Writing',
-                'description' => 'Advanced writing techniques and analysis.',
+                'subject_code' => 'ME101',
+                'name' => 'Thermodynamics',
+                'description' => 'Principles of energy conversion and thermodynamic cycles.',
                 'teacher_ids' => [2]
             ],
             [
-                'subject_code' => 'BIO101',
-                'name' => 'Biology I',
-                'description' => 'Introduction to biological concepts and principles.',
+                'subject_code' => 'ME201',
+                'name' => 'Fluid Mechanics',
+                'description' => 'Study of fluid behavior and hydraulic systems.',
+                'teacher_ids' => [2, 7] // Mechanical and Environmental
+            ],
+            [
+                'subject_code' => 'EE101',
+                'name' => 'Circuit Analysis',
+                'description' => 'Fundamental electrical circuits and network analysis.',
                 'teacher_ids' => [3]
             ],
             [
-                'subject_code' => 'BIO201',
-                'name' => 'Biology II',
-                'description' => 'Advanced biological concepts and laboratory techniques.',
-                'teacher_ids' => [3, 4]
+                'subject_code' => 'EE201',
+                'name' => 'Electronics',
+                'description' => 'Electronic devices and circuit design principles.',
+                'teacher_ids' => [3, 4] // Electrical and Computer Engineering
             ],
             [
-                'subject_code' => 'CHEM101',
-                'name' => 'Chemistry I',
-                'description' => 'Fundamental principles of chemistry.',
+                'subject_code' => 'CPE101',
+                'name' => 'Computer Architecture',
+                'description' => 'Digital logic design and computer system organization.',
+                'teacher_ids' => [4]
+            ],
+            [
+                'subject_code' => 'CPE201',
+                'name' => 'Embedded Systems',
+                'description' => 'Design and programming of microcontroller-based systems.',
+                'teacher_ids' => [4]
+            ],
+            [
+                'subject_code' => 'CHE101',
+                'name' => 'Chemical Process Principles',
+                'description' => 'Fundamental principles of chemical engineering processes.',
                 'teacher_ids' => [5]
             ],
             [
-                'subject_code' => 'CHEM201',
-                'name' => 'Chemistry II',
-                'description' => 'Advanced chemistry concepts and laboratory work.',
-                'teacher_ids' => [5, 6]
+                'subject_code' => 'CHE201',
+                'name' => 'Unit Operations',
+                'description' => 'Chemical engineering unit operations and equipment design.',
+                'teacher_ids' => [5, 8] // Chemical and Materials Engineering
             ],
             [
-                'subject_code' => 'HIST101',
-                'name' => 'World History',
-                'description' => 'Survey of world history from ancient to modern times.',
+                'subject_code' => 'IE101',
+                'name' => 'Operations Research',
+                'description' => 'Mathematical optimization and decision-making methods.',
+                'teacher_ids' => [6]
+            ],
+            [
+                'subject_code' => 'IE201',
+                'name' => 'Quality Control',
+                'description' => 'Statistical quality control and process improvement.',
+                'teacher_ids' => [6]
+            ],
+            [
+                'subject_code' => 'ENVE101',
+                'name' => 'Environmental Engineering',
+                'description' => 'Environmental systems and pollution control principles.',
                 'teacher_ids' => [7]
             ],
             [
-                'subject_code' => 'HIST201',
-                'name' => 'Modern History',
-                'description' => 'History from the 18th century to present day.',
-                'teacher_ids' => [7, 8]
+                'subject_code' => 'ENVE201',
+                'name' => 'Water Treatment',
+                'description' => 'Water purification and wastewater treatment technologies.',
+                'teacher_ids' => [7]
+            ],
+            [
+                'subject_code' => 'MATE101',
+                'name' => 'Materials Science',
+                'description' => 'Structure-property relationships in engineering materials.',
+                'teacher_ids' => [8]
+            ],
+            [
+                'subject_code' => 'MATE201',
+                'name' => 'Nanomaterials',
+                'description' => 'Advanced materials and nanotechnology applications.',
+                'teacher_ids' => [8]
+            ],
+            [
+                'subject_code' => 'AE101',
+                'name' => 'Aerodynamics',
+                'description' => 'Principles of flight and aerodynamic design.',
+                'teacher_ids' => [9]
+            ],
+            [
+                'subject_code' => 'AE201',
+                'name' => 'Aircraft Design',
+                'description' => 'Aircraft configuration and performance analysis.',
+                'teacher_ids' => [9]
+            ],
+            [
+                'subject_code' => 'BME101',
+                'name' => 'Biomechanics',
+                'description' => 'Mechanical principles applied to biological systems.',
+                'teacher_ids' => [10]
+            ],
+            [
+                'subject_code' => 'BME201',
+                'name' => 'Medical Device Design',
+                'description' => 'Design principles for healthcare technology and devices.',
+                'teacher_ids' => [10]
+            ],
+            [
+                'subject_code' => 'PE101',
+                'name' => 'Reservoir Engineering',
+                'description' => 'Petroleum reservoir characterization and management.',
+                'teacher_ids' => [11]
+            ],
+            [
+                'subject_code' => 'PE201',
+                'name' => 'Drilling Technology',
+                'description' => 'Oil and gas drilling operations and well design.',
+                'teacher_ids' => [11]
+            ],
+            [
+                'subject_code' => 'MINE101',
+                'name' => 'Mining Methods',
+                'description' => 'Surface and underground mining techniques.',
+                'teacher_ids' => [12]
+            ],
+            [
+                'subject_code' => 'MINE201',
+                'name' => 'Mineral Processing',
+                'description' => 'Ore beneficiation and mineral extraction processes.',
+                'teacher_ids' => [12]
             ]
         ];
 

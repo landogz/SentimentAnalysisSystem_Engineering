@@ -5,243 +5,131 @@
 @section('page-title', 'Dashboard')
 
 @section('breadcrumb')
-<!-- <li class="breadcrumb-item active">Dashboard</li> -->
+<li class="breadcrumb-item active">Dashboard</li>
 @endsection
 
 @section('content')
 <style>
-    /* Equal height cards for all rows */
-    .row {
+    .equal-height-cards {
         display: flex;
         flex-wrap: wrap;
     }
-    
-    .row > [class*="col-"] {
+    .equal-height-cards .col-lg-4 {
         display: flex;
         flex-direction: column;
     }
-    
-    .row > [class*="col-"] .card {
+    .equal-height-cards .card {
         flex: 1;
         display: flex;
         flex-direction: column;
-        height: 100%;
-        transition: all 0.3s ease;
+        min-height: 400px;
     }
-    
-    .row > [class*="col-"] .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
-    }
-    
-    .row > [class*="col-"] .card .card-body {
+    .equal-height-cards .card-body {
         flex: 1;
         display: flex;
         flex-direction: column;
     }
-    
-    /* Specific styling for sentiment analysis card */
-    .sentiment-card .card-body .row {
+    .equal-height-cards .card-body .row:first-child {
         flex: 1;
     }
-    
-    .sentiment-card .card-body .row .col-6:last-child {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    /* Ensure small-box cards have equal height */
-    .small-box {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        transition: all 0.3s ease;
-    }
-    
-    .small-box:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.2) !important;
-    }
-    
-    .small-box .inner {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    /* Activity item hover effects */
-    .activity-item {
-        transition: all 0.3s ease;
-    }
-    
-    .activity-item:hover {
-        transform: translateX(5px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    /* Professional table styling */
-    .table {
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .table thead th {
-        background: linear-gradient(135deg, var(--golden-orange) 0%, #e4aa00 100%);
-        color: white;
-        border: none;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        padding: 1rem;
-    }
-    
-    .table tbody tr {
-        transition: all 0.2s ease;
-    }
-    
-    .table tbody tr:hover {
-        background: rgba(245, 187, 0, 0.05);
-        transform: scale(1.01);
-    }
-    
-    /* Professional card body padding */
-    .card-body {
-        padding: 2rem;
-    }
-    
-    /* Enhanced typography */
-    .card-title {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-    }
-    
-    /* Professional spacing */
-    .mb-4 {
-        margin-bottom: 2rem !important;
-    }
-    
-    /* Clickable elements hover effects */
-    .clickable-item:hover {
-        background: rgba(255, 78, 0, 0.1) !important;
-        transform: translateX(5px);
-        box-shadow: 0 5px 15px rgba(255, 78, 0, 0.2);
-    }
-    
-    .clickable-subject:hover {
-        background: rgba(236, 159, 5, 0.1) !important;
-        transform: translateX(5px);
-        box-shadow: 0 5px 15px rgba(236, 159, 5, 0.2);
-    }
-    
-    /* Table clickable elements */
-    .table tbody tr strong[onclick]:hover {
-        text-decoration: underline;
-        transform: scale(1.05);
+    .equal-height-cards .card-body .row:last-child {
+        margin-top: auto;
     }
 </style>
 
 <div class="row">
     <!-- Statistics Cards -->
-    <div class="col-lg-3 col-6 mb-4">
-        <div class="small-box" style="background: linear-gradient(135deg, #8EA604 0%, #7a9504 100%); color: white; border-radius: 16px; box-shadow: 0 8px 25px rgba(142, 166, 4, 0.2); transition: all 0.3s ease; overflow: hidden; position: relative;">
-            <div class="inner" style="padding: 1.5rem;">
-                <h3 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 2.2rem; margin-bottom: 0.5rem;">{{ number_format($totalSurveys) }}</h3>
-                <p style="font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 1rem; margin-bottom: 0;">Total Surveys</p>
-                <div class="trend-indicator" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                    <i class="fas fa-arrow-up"></i> +15%
-                </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%); color: #494850;">
+            <div class="inner">
+                <h3>{{ number_format($totalSurveys) }}</h3>
+                <p>Total Surveys</p>
             </div>
-            <div class="icon" style="position: absolute; bottom: 1rem; right: 1rem; opacity: 0.3; font-size: 3rem;">
+            <div class="icon">
                 <i class="fas fa-clipboard-list"></i>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-3 col-6 mb-4">
-        <div class="small-box" style="background: linear-gradient(135deg, #F5BB00 0%, #e4aa00 100%); color: #494850; border-radius: 16px; box-shadow: 0 8px 25px rgba(245, 187, 0, 0.2); transition: all 0.3s ease; overflow: hidden; position: relative;">
-            <div class="inner" style="padding: 1.5rem;">
-                <h3 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 2.2rem; margin-bottom: 0.5rem;">{{ number_format($totalTeachers) }}</h3>
-                <p style="font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 1rem; margin-bottom: 0;">Total Teachers</p>
-                <div class="trend-indicator" style="position: absolute; top: 1rem; right: 1rem; background: rgba(73, 72, 80, 0.2); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                    <i class="fas fa-arrow-up"></i> +3
-                </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background: linear-gradient(135deg, #F16E70 0%, #e55a5c 100%); color: #494850;">
+            <div class="inner">
+                <h3>{{ number_format($totalTeachers) }}</h3>
+                <p>Total Teachers</p>
             </div>
-            <div class="icon" style="position: absolute; bottom: 1rem; right: 1rem; opacity: 0.3; font-size: 3rem;">
+            <div class="icon">
                 <i class="fas fa-chalkboard-teacher"></i>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-3 col-6 mb-4">
-        <div class="small-box" style="background: linear-gradient(135deg, #EC9F05 0%, #db8e04 100%); color: white; border-radius: 16px; box-shadow: 0 8px 25px rgba(236, 159, 5, 0.2); transition: all 0.3s ease; overflow: hidden; position: relative;">
-            <div class="inner" style="padding: 1.5rem;">
-                <h3 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 2.2rem; margin-bottom: 0.5rem;">{{ number_format($totalSubjects) }}</h3>
-                <p style="font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 1rem; margin-bottom: 0;">Total Subjects</p>
-                <div class="trend-indicator" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                    <i class="fas fa-arrow-up"></i> +2
-                </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%); color: #494850;">
+            <div class="inner">
+                <h3>{{ number_format($totalSubjects) }}</h3>
+                <p>Total Subjects</p>
             </div>
-            <div class="icon" style="position: absolute; bottom: 1rem; right: 1rem; opacity: 0.3; font-size: 3rem;">
+            <div class="icon">
                 <i class="fas fa-book"></i>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-3 col-6 mb-4">
-        <div class="small-box" style="background: linear-gradient(135deg, #BF3100 0%, #ae2a00 100%); color: white; border-radius: 16px; box-shadow: 0 8px 25px rgba(191, 49, 0, 0.2); transition: all 0.3s ease; overflow: hidden; position: relative;">
-            <div class="inner" style="padding: 1.5rem;">
-                <h3 style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 2.2rem; margin-bottom: 0.5rem;">{{ number_format($averageRating, 1) }}</h3>
-                <p style="font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 1rem; margin-bottom: 0;">Average Rating</p>
-                <div class="trend-indicator" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                    <i class="fas fa-arrow-up"></i> +0.2
-                </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%); color: #494850;">
+            <div class="inner">
+                <h3>{{ number_format($averageRating, 1) }}</h3>
+                <p>Average Rating</p>
             </div>
-            <div class="icon" style="position: absolute; bottom: 1rem; right: 1rem; opacity: 0.3; font-size: 3rem;">
+            <div class="icon">
                 <i class="fas fa-star"></i>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <!-- Sentiment Analysis - Full Width -->
-    <div class="col-lg-6">
-        <div class="card card-outline sentiment-card" style="border-color: var(--light-green); border-radius: 16px; box-shadow: 0 8px 25px rgba(142, 166, 4, 0.1);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7a9504 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-chart-pie mr-2" style="font-size: 1.2rem;"></i>
-                    <span style="font-family: 'Poppins', sans-serif; font-weight: 600;">Sentiment Analysis</span>
+<div class="row equal-height-cards">
+    <!-- Sentiment Statistics -->
+    <div class="col-lg-4">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie mr-2"></i>
+                    Sentiment Analysis
                 </h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <canvas id="sentimentPieChart" style="height: 200px;"></canvas>
                     </div>
-                    <div class="col-6">
-                        <div class="d-flex flex-column justify-content-center h-100">
-                            <div class="text-center mb-4">
-                                <div class="text-success mb-2">
-                                    <i class="fas fa-thumbs-up fa-3x"></i>
-                                </div>
-                                <h3 class="text-success mb-0">{{ $sentimentStats['positive'] }}</h3>
-                                <small class="text-muted">Positive</small>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <div class="text-success mb-2">
+                                <i class="fas fa-thumbs-up fa-2x"></i>
                             </div>
-                            <div class="text-center mb-4">
-                                <div class="text-warning mb-2">
-                                    <i class="fas fa-minus-circle fa-3x"></i>
-                                </div>
-                                <h3 class="text-warning mb-0">{{ $sentimentStats['neutral'] }}</h3>
-                                <small class="text-muted">Neutral</small>
+                            <h5 class="text-success">{{ $sentimentStats['positive'] }}</h5>
+                            <small class="text-muted">Positive</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <div class="text-warning mb-2">
+                                <i class="fas fa-minus-circle fa-2x"></i>
                             </div>
-                            <div class="text-center">
-                                <div class="text-danger mb-2">
-                                    <i class="fas fa-thumbs-down fa-3x"></i>
-                                </div>
-                                <h3 class="text-danger mb-0">{{ $sentimentStats['negative'] }}</h3>
-                                <small class="text-muted">Negative</small>
+                            <h5 class="text-warning">{{ $sentimentStats['neutral'] }}</h5>
+                            <small class="text-muted">Neutral</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <div class="text-danger mb-2">
+                                <i class="fas fa-thumbs-down fa-2x"></i>
                             </div>
+                            <h5 class="text-danger">{{ $sentimentStats['negative'] }}</h5>
+                            <small class="text-muted">Negative</small>
                         </div>
                     </div>
                 </div>
@@ -249,38 +137,21 @@
         </div>
     </div>
 
-    <!-- Monthly Trends Chart -->
-    <div class="col-lg-6">
-        <div class="card card-outline" style="border-color: var(--golden-orange); border-radius: 16px; box-shadow: 0 8px 25px rgba(245, 187, 0, 0.1);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--golden-orange) 0%, #e4aa00 100%); color: #494850; border-radius: 16px 16px 0 0; padding: 1.5rem;">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-chart-line mr-2" style="font-size: 1.2rem;"></i>
-                    <span style="font-family: 'Poppins', sans-serif; font-weight: 600;">Monthly Trends</span>
-                </h3>
-            </div>
-            <div class="card-body">
-                <canvas id="monthlyTrendsChart" style="height: 280px;"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Top Rated Teachers -->
+    <!-- Top Teachers -->
     <div class="col-lg-4">
-        <div class="card card-outline" style="border-color: var(--coral-pink); border-radius: 16px; box-shadow: 0 8px 25px rgba(255, 78, 0, 0.1);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-trophy mr-2" style="font-size: 1.2rem;"></i>
-                    <span style="font-family: 'Poppins', sans-serif; font-weight: 600;">Top Rated Teachers</span>
+        <div class="card card-outline card-success">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-trophy mr-2"></i>
+                    Top Rated Teachers
                 </h3>
             </div>
             <div class="card-body">
                 @if($topTeachers->count() > 0)
                     @foreach($topTeachers as $teacher)
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 clickable-item" style="background: rgba(255, 78, 0, 0.05); border-radius: 8px; transition: all 0.3s ease; cursor: pointer;" onclick="window.location.href='{{ route('teachers.show', $teacher->id) }}'">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <h6 class="mb-0" style="color: var(--coral-pink); font-weight: 600; transition: all 0.3s ease;">{{ $teacher->name }}</h6>
+                                <h6 class="mb-0">{{ $teacher->name }}</h6>
                                 <small class="text-muted">{{ $teacher->department }}</small>
                             </div>
                             <div class="text-right">
@@ -306,21 +177,21 @@
         </div>
     </div>
 
-    <!-- Top Rated Subjects -->
+    <!-- Top Subjects -->
     <div class="col-lg-4">
-        <div class="card card-outline" style="border-color: var(--light-blue); border-radius: 16px; box-shadow: 0 8px 25px rgba(236, 159, 5, 0.1);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #db8e04 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-medal mr-2" style="font-size: 1.2rem;"></i>
-                    <span style="font-family: 'Poppins', sans-serif; font-weight: 600;">Top Rated Subjects</span>
+        <div class="card card-outline card-warning">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-medal mr-2"></i>
+                    Top Rated Subjects
                 </h3>
             </div>
             <div class="card-body">
                 @if($topSubjects->count() > 0)
                     @foreach($topSubjects as $subject)
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 clickable-subject" style="background: rgba(236, 159, 5, 0.05); border-radius: 8px; transition: all 0.3s ease; cursor: pointer;" onclick="window.location.href='{{ route('subjects.show', $subject->id) }}'">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <h6 class="mb-0" style="color: var(--light-blue); font-weight: 600; transition: all 0.3s ease;">{{ $subject->name }}</h6>
+                                <h6 class="mb-0">{{ $subject->name }}</h6>
                                 <small class="text-muted">{{ $subject->subject_code }}</small>
                             </div>
                             <div class="text-right">
@@ -345,77 +216,16 @@
             </div>
         </div>
     </div>
-
-    <!-- Recent Activity Summary -->
-    <div class="col-lg-4">
-        <div class="card card-outline" style="border-color: var(--dark-gray); border-radius: 16px; box-shadow: 0 8px 25px rgba(191, 49, 0, 0.1);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--dark-gray) 0%, #ae2a00 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-chart-line mr-2" style="font-size: 1.2rem;"></i>
-                    <span style="font-family: 'Poppins', sans-serif; font-weight: 600;">Activity Overview</span>
-                </h3>
-            </div>
-            <div class="card-body" style="padding: 2rem;">
-                <!-- New Surveys Today -->
-                <div class="activity-item mb-4" style="background: linear-gradient(135deg, rgba(142, 166, 4, 0.1) 0%, rgba(142, 166, 4, 0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--light-green);">
-                    <div class="d-flex align-items-center">
-                        <div class="activity-icon mr-3" style="background: linear-gradient(135deg, var(--light-green) 0%, #7a9504 100%); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-clipboard-check" style="color: white; font-size: 1.2rem;"></i>
-                        </div>
-                        <div class="activity-content flex-grow-1">
-                            <h4 class="mb-0" style="color: var(--dark-gray); font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.8rem;">{{ $recentSurveys->count() }}</h4>
-                            <p class="mb-0" style="color: #666; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 500;">New Surveys Today</p>
-                        </div>
-                        <div class="activity-trend" style="color: var(--light-green); font-size: 0.8rem; font-weight: 600;">
-                            <i class="fas fa-arrow-up"></i> +12%
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Average Rating -->
-                <div class="activity-item mb-4" style="background: linear-gradient(135deg, rgba(245, 187, 0, 0.1) 0%, rgba(245, 187, 0, 0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--golden-orange);">
-                    <div class="d-flex align-items-center">
-                        <div class="activity-icon mr-3" style="background: linear-gradient(135deg, var(--golden-orange) 0%, #e4aa00 100%); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-star" style="color: white; font-size: 1.2rem;"></i>
-                        </div>
-                        <div class="activity-content flex-grow-1">
-                            <h4 class="mb-0" style="color: var(--dark-gray); font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.8rem;">{{ number_format($averageRating, 1) }}</h4>
-                            <p class="mb-0" style="color: #666; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 500;">Average Rating</p>
-                        </div>
-                        <div class="activity-trend" style="color: var(--golden-orange); font-size: 0.8rem; font-weight: 600;">
-                            <i class="fas fa-arrow-up"></i> +0.3
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Teachers -->
-                <div class="activity-item" style="background: linear-gradient(135deg, rgba(255, 78, 0, 0.1) 0%, rgba(255, 78, 0, 0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--coral-pink);">
-                    <div class="d-flex align-items-center">
-                        <div class="activity-icon mr-3" style="background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-users" style="color: white; font-size: 1.2rem;"></i>
-                        </div>
-                        <div class="activity-content flex-grow-1">
-                            <h4 class="mb-0" style="color: var(--dark-gray); font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.8rem;">{{ $totalTeachers }}</h4>
-                            <p class="mb-0" style="color: #666; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 500;">Active Teachers</p>
-                        </div>
-                        <div class="activity-trend" style="color: var(--coral-pink); font-size: 0.8rem; font-weight: 600;">
-                            <i class="fas fa-arrow-up"></i> +2
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="row">
-    <!-- Recent Surveys - Full Width -->
-    <div class="col-12">
-        <div class="card card-outline" style="border-color: var(--light-green); border-radius: 16px; box-shadow: 0 8px 25px rgba(142, 166, 4, 0.1);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7a9504 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-clock mr-2" style="font-size: 1.2rem;"></i>
-                    <span style="font-family: 'Poppins', sans-serif; font-weight: 600;">Recent Surveys</span>
+    <!-- Recent Surveys -->
+    <div class="col-lg-8">
+        <div class="card card-outline card-info">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-clock mr-2"></i>
+                    Recent Surveys
                 </h3>
             </div>
             <div class="card-body">
@@ -434,12 +244,12 @@
                             @forelse($recentSurveys as $survey)
                                 <tr>
                                     <td>
-                                        <strong style="color: var(--coral-pink); cursor: pointer; transition: all 0.3s ease;" onclick="window.location.href='{{ route('teachers.show', $survey->teacher->id) }}'">{{ $survey->teacher->name }}</strong>
+                                        <strong>{{ $survey->teacher->name }}</strong>
                                         <br>
                                         <small class="text-muted">{{ $survey->teacher->department }}</small>
                                     </td>
                                     <td>
-                                        <strong style="color: var(--light-blue); cursor: pointer; transition: all 0.3s ease;" onclick="window.location.href='{{ route('subjects.show', $survey->subject->id) }}'">{{ $survey->subject->name }}</strong>
+                                        <strong>{{ $survey->subject->name }}</strong>
                                         <br>
                                         <small class="text-muted">{{ $survey->subject->subject_code }}</small>
                                     </td>
@@ -478,6 +288,21 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Trends Chart -->
+    <div class="col-lg-4">
+        <div class="card card-outline card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Monthly Trends
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="monthlyTrendsChart" style="height: 250px;"></canvas>
             </div>
         </div>
     </div>

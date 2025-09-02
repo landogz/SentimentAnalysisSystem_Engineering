@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Login - Sentiment Analysis Engineering</title>
+    <title>Login - PRMSU ENGINEERING Student Feedback System</title>
 
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -18,11 +18,11 @@
     
     <style>
         :root {
-            --dark-gray: #BF3100;
-            --light-green: #8EA604;
-            --coral-pink: #FF4E00;
-            --golden-orange: #F5BB00;
-            --light-blue: #EC9F05;
+            --dark-gray: #494850;
+            --light-green: #8FCFA8;
+            --coral-pink: #F16E70;
+            --golden-orange: #F5B445;
+            --light-blue: #98AAE7;
         }
         
         body {
@@ -31,40 +31,15 @@
             font-family: 'Poppins', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 20% 80%, rgba(236, 159, 5, 0.03) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(142, 166, 4, 0.03) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(245, 187, 0, 0.02) 0%, transparent 50%);
-            animation: backgroundFloat 20s ease-in-out infinite;
-            z-index: -1;
-        }
-        
-        @keyframes backgroundFloat {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(-30px, -30px) rotate(1deg); }
-            66% { transform: translate(30px, -15px) rotate(-1deg); }
         }
         
         .login-container {
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(73, 72, 80, 0.12);
-            margin: 2rem auto;
-            max-width: 480px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(73, 72, 80, 0.15);
+            margin: 1rem auto;
+            max-width: 450px;
             overflow: hidden;
-            position: relative;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         @media (max-width: 768px) {
@@ -75,13 +50,18 @@
         }
         
         .login-header {
-            background: linear-gradient(135deg, var(--light-blue) 0%, var(--coral-pink) 100%);
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
             color: white;
-            padding: 1.5rem 2rem 1rem;
+            padding: 3rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
-            border-radius: 24px 24px 0 0;
+        }
+        
+        @media (max-width: 768px) {
+            .login-header {
+                padding: 2rem 1rem;
+            }
         }
         
         .login-header::before {
@@ -92,30 +72,7 @@
             width: 200%;
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 8s ease-in-out infinite;
-        }
-        
-        .login-header::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: white;
-            border-radius: 50% 50% 0 0;
-            transform: translateY(50%);
-        }
-        
-        @media (max-width: 768px) {
-            .login-header {
-                padding: 2rem 1rem;
-            }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            animation: float 6s ease-in-out infinite;
         }
         
         @keyframes float {
@@ -124,31 +81,23 @@
         }
         
         .logo-section {
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 2;
+            margin-bottom: 1.5rem;
         }
         
         .logo-section img {
-            height: 150px;
+            height: 80px;
             width: auto;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             filter: brightness(1.1) contrast(1.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-section img:hover {
-            transform: scale(1.05);
         }
         
         .login-header h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
             position: relative;
-            z-index: 2;
+            z-index: 1;
             color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         @media (max-width: 768px) {
@@ -178,10 +127,7 @@
         }
         
         .login-body {
-            padding: 2rem 2rem 2rem;
-            background: white;
-            position: relative;
-            z-index: 1;
+            padding: 3rem 2rem;
         }
         
         @media (max-width: 768px) {
@@ -191,20 +137,19 @@
         }
         
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .form-control {
             border: 2px solid #e9ecef;
-            border-radius: 16px;
-            padding: 1.25rem 1rem;
+            border-radius: 12px;
+            padding: 1rem;
             font-size: 1rem;
             transition: all 0.3s ease;
             background-color: #f8f9fa;
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            position: relative;
         }
         
         @media (max-width: 768px) {
@@ -216,9 +161,9 @@
         
         .form-control:focus {
             border-color: var(--light-blue);
-            box-shadow: 0 8px 25px rgba(236, 159, 5, 0.15);
+            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
             background-color: white;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         
         .input-group-text {
@@ -235,35 +180,18 @@
         }
         
         .btn-login {
-            background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%);
+            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
             border: none;
             color: white;
-            padding: 1.5rem 3rem;
-            border-radius: 16px;
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(245, 187, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
             width: 100%;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-login::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-login:hover::before {
-            left: 100%;
         }
         
         @media (max-width: 768px) {
@@ -274,8 +202,8 @@
         }
         
         .btn-login:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 35px rgba(245, 187, 0, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
             color: white;
         }
         
@@ -356,19 +284,11 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            background: rgba(236, 159, 5, 0.08);
-            border: 1px solid rgba(236, 159, 5, 0.1);
         }
         
         .links-section a:hover {
-            color: var(--light-blue);
-            background: rgba(236, 159, 5, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(236, 159, 5, 0.2);
+            color: #7a8cd6;
+            text-decoration: underline;
         }
         
         .divider {
@@ -477,9 +397,9 @@
         <div class="login-container">
             <div class="login-header">
                 <div class="logo-section">
-                    <img src="{{ asset('images/logo.png') }}" alt="Sentiment Analysis Engineering" class="logo">
-                </div>
-                <h1>Sentiment Analysis Engineering</h1>
+                                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU ENGINEERING" class="logo">
+            </div>
+            <h1>PRMSU ENGINEERING</h1>
                 <p>Student Feedback System</p>
             </div>
             
@@ -570,14 +490,14 @@
 
                 <div class="links-section">
                     <a href="{{ route('survey.index') }}">
-                        <i class="fas fa-external-link-alt me-1"></i>Access Engineering Survey
+                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
                     </a>
                 </div>
             </div>
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Sentiment Analysis Engineering. All rights reserved.</p>
+                            <p>&copy; {{ date('Y') }} PRMSU ENGINEERING. All rights reserved.</p>
         </div>
     </div>
 
@@ -628,7 +548,7 @@
                                 text: response.message,
                                 timer: 1500,
                                 showConfirmButton: false,
-                                confirmButtonColor: '#EC9F05'
+                                confirmButtonColor: '#98AAE7'
                             }).then(function() {
                                 window.location.href = response.redirect;
                             });
@@ -648,7 +568,7 @@
                             icon: 'error',
                             title: 'Login Failed',
                             text: errorMessage,
-                            confirmButtonColor: '#FF4E00'
+                            confirmButtonColor: '#F16E70'
                         });
                         
                         loginBtn.prop('disabled', false).html(originalText);

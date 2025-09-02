@@ -15,67 +15,99 @@ class TeacherSeeder extends Seeder
     {
         $teachers = [
             [
-                'name' => 'Dr. Sarah Johnson',
-                'email' => 'sarah.johnson@university.edu',
-                'department' => 'Computer Science',
-                'phone' => '+1-555-0101',
-                'bio' => 'Expert in software engineering and database systems with 15 years of teaching experience.',
+                'name' => 'Dr. Carlos Santos',
+                'email' => 'carlos.santos@prmsu.edu',
+                'department' => 'Civil Engineering',
+                'phone' => '+63-912-345-6789',
+                'bio' => 'Expert in structural engineering and construction management with 18 years of teaching and industry experience.',
                 'is_active' => true
             ],
             [
-                'name' => 'Prof. Michael Chen',
-                'email' => 'michael.chen@university.edu',
-                'department' => 'Mathematics',
-                'phone' => '+1-555-0102',
-                'bio' => 'Specializes in advanced calculus and linear algebra. Published author with 20+ research papers.',
+                'name' => 'Prof. Maria Gonzales',
+                'email' => 'maria.gonzales@prmsu.edu',
+                'department' => 'Mechanical Engineering',
+                'phone' => '+63-912-345-6790',
+                'bio' => 'Specializes in thermodynamics, fluid mechanics, and machine design. Published researcher with 25+ engineering papers.',
                 'is_active' => true
             ],
             [
-                'name' => 'Dr. Emily Rodriguez',
-                'email' => 'emily.rodriguez@university.edu',
-                'department' => 'Physics',
-                'phone' => '+1-555-0103',
-                'bio' => 'Quantum physics researcher with expertise in theoretical physics and experimental design.',
+                'name' => 'Dr. Ahmed Hassan',
+                'email' => 'ahmed.hassan@prmsu.edu',
+                'department' => 'Electrical Engineering',
+                'phone' => '+63-912-345-6791',
+                'bio' => 'Power systems and electronics expert with expertise in renewable energy and smart grid technologies.',
                 'is_active' => true
             ],
             [
-                'name' => 'Prof. David Thompson',
-                'email' => 'david.thompson@university.edu',
-                'department' => 'English Literature',
-                'phone' => '+1-555-0104',
-                'bio' => 'Shakespearean scholar and creative writing instructor with a passion for modern literature.',
+                'name' => 'Prof. Jennifer Lee',
+                'email' => 'jennifer.lee@prmsu.edu',
+                'department' => 'Computer Engineering',
+                'phone' => '+63-912-345-6792',
+                'bio' => 'Computer architecture and embedded systems specialist with focus on IoT and AI applications.',
                 'is_active' => true
             ],
             [
-                'name' => 'Dr. Lisa Wang',
-                'email' => 'lisa.wang@university.edu',
-                'department' => 'Chemistry',
-                'phone' => '+1-555-0105',
-                'bio' => 'Organic chemistry specialist with focus on sustainable materials and green chemistry.',
+                'name' => 'Dr. David Kim',
+                'email' => 'david.kim@prmsu.edu',
+                'department' => 'Chemical Engineering',
+                'phone' => '+63-912-345-6793',
+                'bio' => 'Process engineering and materials science expert with research in sustainable chemical processes.',
                 'is_active' => true
             ],
             [
-                'name' => 'Prof. James Wilson',
-                'email' => 'james.wilson@university.edu',
-                'department' => 'History',
-                'phone' => '+1-555-0106',
-                'bio' => 'Medieval history expert with extensive research in European cultural development.',
+                'name' => 'Prof. Isabella Martinez',
+                'email' => 'isabella.martinez@prmsu.edu',
+                'department' => 'Industrial Engineering',
+                'phone' => '+63-912-345-6794',
+                'bio' => 'Operations research and systems optimization specialist with extensive industry collaboration experience.',
                 'is_active' => true
             ],
             [
-                'name' => 'Dr. Maria Garcia',
-                'email' => 'maria.garcia@university.edu',
-                'department' => 'Psychology',
-                'phone' => '+1-555-0107',
-                'bio' => 'Clinical psychologist specializing in cognitive behavioral therapy and research methods.',
+                'name' => 'Dr. Ryan Thompson',
+                'email' => 'ryan.thompson@prmsu.edu',
+                'department' => 'Environmental Engineering',
+                'phone' => '+63-912-345-6795',
+                'bio' => 'Environmental systems and sustainability expert with focus on water treatment and pollution control.',
                 'is_active' => true
             ],
             [
-                'name' => 'Prof. Robert Kim',
-                'email' => 'robert.kim@university.edu',
-                'department' => 'Economics',
-                'phone' => '+1-555-0108',
-                'bio' => 'Macroeconomic theory expert with experience in policy analysis and economic modeling.',
+                'name' => 'Prof. Sofia Rodriguez',
+                'email' => 'sofia.rodriguez@prmsu.edu',
+                'department' => 'Materials Engineering',
+                'phone' => '+63-912-345-6796',
+                'bio' => 'Advanced materials and nanotechnology researcher with expertise in composite materials and biomaterials.',
+                'is_active' => true
+            ],
+            [
+                'name' => 'Dr. Kevin Chen',
+                'email' => 'kevin.chen@prmsu.edu',
+                'department' => 'Aerospace Engineering',
+                'phone' => '+63-912-345-6797',
+                'bio' => 'Aerodynamics and flight mechanics specialist with experience in aircraft design and propulsion systems.',
+                'is_active' => true
+            ],
+            [
+                'name' => 'Prof. Ana Silva',
+                'email' => 'ana.silva@prmsu.edu',
+                'department' => 'Biomedical Engineering',
+                'phone' => '+63-912-345-6798',
+                'bio' => 'Medical device design and biomechanics expert with focus on healthcare technology innovation.',
+                'is_active' => true
+            ],
+            [
+                'name' => 'Dr. Miguel Torres',
+                'email' => 'miguel.torres@prmsu.edu',
+                'department' => 'Petroleum Engineering',
+                'phone' => '+63-912-345-6799',
+                'bio' => 'Reservoir engineering and drilling technology specialist with extensive oil and gas industry experience.',
+                'is_active' => true
+            ],
+            [
+                'name' => 'Prof. Lisa Wang',
+                'email' => 'lisa.wang@prmsu.edu',
+                'department' => 'Mining Engineering',
+                'phone' => '+63-912-345-6800',
+                'bio' => 'Mining operations and mineral processing expert with focus on sustainable mining practices.',
                 'is_active' => true
             ]
         ];

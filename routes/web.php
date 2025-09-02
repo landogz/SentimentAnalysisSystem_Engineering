@@ -1,15 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SurveyQuestionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SentimentWordController;
+use App\Http\Controllers\LicenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +24,13 @@ use App\Http\Controllers\SentimentWordController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// License routes (no middleware to allow access when license is invalid)
+Route::prefix('license')->name('license.')->group(function () {
+    Route::get('/', [LicenseController::class, 'index'])->name('index');
+    Route::post('/', [LicenseController::class, 'store'])->name('store');
+    Route::post('/test', [LicenseController::class, 'test'])->name('test');
+});
 
 // Public routes
 Route::get('/', function () {
@@ -40,10 +50,44 @@ Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', function () {
         return view('auth.forgot-password');
     })->name('password.request');
+    
+    Route::get('/reset-password/{token}', function (Request $request, $token) {
+        $email = $request->query('email');
+        
+        // Log for debugging
+        \Log::info('Reset password page accessed', [
+            'token' => $token,
+            'email' => $email,
+            'all_query_params' => $request->query()
+        ]);
+        
+        // If email is missing, try to get it from the token
+        if (empty($email)) {
+            // Try to find the token record - Laravel might store it differently
+            $tokenRecord = \DB::table('password_reset_tokens')->where('token', $token)->first();
+            if (!$tokenRecord) {
+                // Try with hashed token
+                $tokenRecord = \DB::table('password_reset_tokens')->where('token', hash('sha256', $token))->first();
+            }
+            if (!$tokenRecord) {
+                // Try with base64 encoded token
+                $tokenRecord = \DB::table('password_reset_tokens')->where('token', base64_encode($token))->first();
+            }
+            
+            if ($tokenRecord) {
+                $email = $tokenRecord->email;
+                \Log::info('Email retrieved from token', ['email' => $email, 'token_type' => 'found']);
+            } else {
+                \Log::warning('Token not found in database', ['token' => $token]);
+            }
+        }
+        
+        return view('auth.reset-password', ['request' => $request, 'token' => $token, 'email' => $email]);
+    })->name('password.reset');
 });
 
-// Public survey routes (no authentication required)
-Route::prefix('survey')->name('survey.')->group(function () {
+// Public survey routes (license required)
+Route::prefix('survey')->name('survey.')->middleware('license')->group(function () {
     Route::get('/', [SurveyController::class, 'index'])->name('index');
     Route::post('/store', [SurveyController::class, 'store'])->name('store');
     Route::get('/results', [SurveyController::class, 'results'])->name('results');
@@ -52,7 +96,7 @@ Route::prefix('survey')->name('survey.')->group(function () {
 });
 
 // Authentication routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'license'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
@@ -69,6 +113,14 @@ Route::middleware('auth')->group(function () {
     // User management
     Route::resource('users', UserController::class);
     Route::get('/users-ajax', [UserController::class, 'getUsers'])->name('users.ajax');
+    
+    // Survey Questions management
+    Route::resource('survey-questions', SurveyQuestionController::class);
+    Route::post('/survey-questions/{surveyQuestion}/toggle-status', [SurveyQuestionController::class, 'toggleStatus'])->name('survey-questions.toggle-status');
+    Route::get('/survey-questions/active/list', [SurveyQuestionController::class, 'getActiveQuestions'])->name('survey-questions.active');
+    
+    // Survey responses
+    Route::get('/surveys/{survey}/responses', [SurveyController::class, 'getResponses'])->name('surveys.responses');
     
     // Reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');

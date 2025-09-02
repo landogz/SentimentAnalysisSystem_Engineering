@@ -168,7 +168,7 @@ class ReportsController extends Controller
         
         // Prepare data for export
         $exportData = [
-            'title' => 'Sentiment Analysis Engineering - Student Feedback Report',
+            'title' => 'PRMSU ENGINEERING Student Feedback Report',
             'generated_at' => now()->format('F j, Y \a\t g:i A'),
             'filters' => [
                 'teacher' => $teacherId ? Teacher::find($teacherId)->name ?? 'All Teachers' : 'All Teachers',
@@ -245,7 +245,7 @@ class ReportsController extends Controller
      */
     private function exportCSV($data)
     {
-        $filename = 'sentiment-analysis-engineering-feedback-report-' . date('Y-m-d-H-i-s') . '.csv';
+        $filename = 'prmsu-ccit-feedback-report-' . date('Y-m-d-H-i-s') . '.csv';
         
         $headers = [
             'Content-Type' => 'text/csv',
@@ -256,7 +256,7 @@ class ReportsController extends Controller
             $file = fopen('php://output', 'w');
             
             // Add report header
-            fputcsv($file, ['Sentiment Analysis Engineering - Student Feedback Report']);
+            fputcsv($file, ['PRMSU ENGINEERING Student Feedback Report']);
             fputcsv($file, ['Generated: ' . $data['generated_at']]);
             fputcsv($file, []);
             

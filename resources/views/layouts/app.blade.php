@@ -935,6 +935,13 @@
                                 <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Users</p>
                             </a>
                         </li>
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('survey-questions.index') }}" class="nav-link {{ request()->routeIs('survey-questions.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
+                                <i class="nav-icon fas fa-question-circle" style="color: black; margin-right: 12px;"></i>
+                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Survey Questions</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
                                 <i class="nav-icon fas fa-chart-bar" style="color: black; margin-right: 12px;"></i>

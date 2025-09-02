@@ -15,7 +15,7 @@
     <!-- Filter Panel -->
     <div class="col-12">
         <div class="card card-outline" style="border-color: var(--light-blue);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%); color: white;">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white;">
                 <h3 class="card-title">
                     <i class="fas fa-filter mr-2"></i>
                     Filter Options
@@ -61,7 +61,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>&nbsp;</label>
-                                <button type="submit" class="btn btn-block" style="background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%); color: white; border: none;">
+                                <button type="submit" class="btn btn-block" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white; border: none;">
                                     <i class="fas fa-search mr-1"></i>Generate Report
                                 </button>
                             </div>
@@ -74,7 +74,7 @@
 
     <!-- Statistics Cards -->
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #8EA604 0%, #7a9504 100%); color: white;">
+        <div class="small-box" style="background: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%); color: #494850;">
             <div class="inner">
                 <h3 id="totalSurveys">{{ number_format($totalSurveys) }}</h3>
                 <p>Total Surveys</p>
@@ -86,7 +86,7 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #F5BB00 0%, #e4aa00 100%); color: #494850;">
+        <div class="small-box" style="background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%); color: #494850;">
             <div class="inner">
                 <h3 id="avgRating">{{ number_format($averageRating, 1) }}</h3>
                 <p>Average Rating</p>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #EC9F05 0%, #db8e04 100%); color: white;">
+        <div class="small-box" style="background: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%); color: #494850;">
             <div class="inner">
                 <h3 id="positiveSentiment">{{ $sentimentStats['positive'] }}</h3>
                 <p>Positive Feedback</p>
@@ -110,7 +110,7 @@
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box" style="background: linear-gradient(135deg, #BF3100 0%, #ae2a00 100%); color: white;">
+        <div class="small-box" style="background: linear-gradient(135deg, #F16E70 0%, #e55a5c 100%); color: #494850;">
             <div class="inner">
                 <h3 id="negativeSentiment">{{ $sentimentStats['negative'] }}</h3>
                 <p>Negative Feedback</p>
@@ -183,10 +183,146 @@
         </div>
     </div>
 
+    <!-- Top Performers -->
+    <!-- <div class="col-lg-6">
+        <div class="card card-outline" style="border-color: var(--light-green);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white;">
+                <h3 class="card-title">
+                    <i class="fas fa-trophy mr-2"></i>
+                    Top Rated Teachers
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Teacher</th>
+                                <th>Department</th>
+                                <th>Rating</th>
+                                <th>Surveys</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($topTeachers as $teacher)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $teacher->name }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: var(--light-blue); color: white;">{{ $teacher->department }}</span>
+                                    </td>
+                                    <td>
+                                        @if($teacher->surveys_avg_rating)
+                                            <div class="rating-stars">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $teacher->surveys_avg_rating)
+                                                        <i class="fas fa-star"></i>
+                                                    @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    @else
+                                                        <i class="far fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <small class="text-muted">{{ number_format($teacher->surveys_avg_rating, 1) }}</small>
+                                        @else
+                                            <span class="text-muted">No ratings</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: var(--dark-gray); color: white;">{{ $teacher->surveys_count }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No teachers with surveys yet</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-lg-6">
+        <div class="card card-outline" style="border-color: var(--light-blue);">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white;">
+                <h3 class="card-title">
+                    <i class="fas fa-book mr-2"></i>
+                    Top Rated Subjects
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Teachers</th>
+                                <th>Rating</th>
+                                <th>Surveys</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($topSubjects as $subject)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $subject->name }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ $subject->subject_code }}</small>
+                                    </td>
+                                    <td>
+                                        @if($subject->teachers->count() > 0)
+                                            @foreach($subject->teachers as $teacher)
+                                                <span class="badge" style="background-color: var(--light-blue); color: white;">
+                                                    {{ $teacher->name }}
+                                                    @if($teacher->pivot->is_primary)
+                                                        <i class="fas fa-star" style="color: var(--golden-orange);"></i>
+                                                    @endif
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            <span class="text-muted">No teachers assigned</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($subject->surveys_avg_rating)
+                                            <div class="rating-stars">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $subject->surveys_avg_rating)
+                                                        <i class="fas fa-star"></i>
+                                                    @elseif($i - 0.5 <= $subject->surveys_avg_rating)
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    @else
+                                                        <i class="far fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <small class="text-muted">{{ number_format($subject->surveys_avg_rating, 1) }}</small>
+                                        @else
+                                            <span class="text-muted">No ratings</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: var(--dark-gray); color: white;">{{ $subject->surveys_count }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No subjects with surveys yet</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> -->
 
     <!-- Export Options -->
-    <div class="col-12">
+    <!-- <div class="col-12">
         <div class="card card-outline" style="border-color: var(--dark-gray);">
             <div class="card-header" style="background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%); color: white;">
                 <h3 class="card-title">
@@ -202,7 +338,7 @@
                         </button>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-block" onclick="exportReport('excel')" style="background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%); color: white; border: none;">
+                        <button type="button" class="btn btn-block" onclick="exportReport('excel')" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white; border: none;">
                             <i class="fas fa-file-excel mr-1"></i>Export Excel
                         </button>
                     </div>
@@ -219,7 +355,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 @endsection
 
@@ -396,7 +532,7 @@ function exportReport(format) {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `sentiment-analysis-engineering-feedback-report-${new Date().toISOString().slice(0,10)}.csv`;
+                    a.download = `prmsu-ccit-feedback-report-${new Date().toISOString().slice(0,10)}.csv`;
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
