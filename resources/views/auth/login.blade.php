@@ -6,7 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <title>Login - PRMSU ENGINEERING Student Feedback System</title>
-
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <!-- Bootstrap CSS -->
@@ -85,7 +87,7 @@
         }
         
         .logo-section img {
-            height: 80px;
+            height: 150px;
             width: auto;
             margin-bottom: 1rem;
             filter: brightness(1.1) contrast(1.1);
@@ -403,6 +405,12 @@
                 <p>Student Feedback System</p>
             </div>
             
+                <div class="links-section">
+                    <a href="{{ route('survey.index') }}">
+                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
+                    </a>
+                </div>
+            
             <div class="login-body">
                 @if(session('status'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -488,11 +496,6 @@
                     </p>
                 </div>
 
-                <div class="links-section">
-                    <a href="{{ route('survey.index') }}">
-                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
-                    </a>
-                </div>
             </div>
         </div>
         
