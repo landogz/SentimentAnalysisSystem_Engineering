@@ -87,7 +87,7 @@
         }
         
         .logo-section img {
-            height: 80px;
+            height: 150px;
             width: auto;
             margin-bottom: 1rem;
             filter: brightness(1.1) contrast(1.1);
@@ -806,6 +806,17 @@
             </div>
             <h1>PRMSU ENGINEERING</h1>
                 <p>Student Feedback Survey</p>
+                
+                <!-- Login Link Section -->
+                <div class="mt-4" style="position: relative; z-index: 10;">
+                    <p class="mb-2" style="color: rgba(255, 255, 255, 0.9); font-size: 0.9rem;">
+                        <i class="fas fa-user-lock me-2" style="color: var(--light-blue);"></i>
+                        Faculty or Staff Member?
+                    </p>
+                    <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm" style="border-radius: 8px; padding: 0.5rem 1.5rem; font-weight: 500; transition: all 0.3s ease; border: 2px solid rgba(255, 255, 255, 0.3); position: relative; z-index: 10;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
+                    </a>
+                </div>
             </div>
             
             <div class="survey-body">
@@ -1121,6 +1132,8 @@
                 </form>
             </div>
         </div>
+        
+
         
         <div class="footer">
                             <p>&copy; {{ date('Y') }} PRMSU ENGINEERING. All rights reserved.</p>
