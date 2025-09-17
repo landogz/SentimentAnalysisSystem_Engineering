@@ -32,7 +32,7 @@
                     <h4 class="text-primary mb-3">
                         <i class="fas fa-star me-2"></i>
                         Part 1: Instructor Evaluation
-                        <span class="badge badge-primary ms-2">{{ $questionsByPart['part1']->count() ?? 0 }} Questions</span>
+                        <span class="badge badge-primary ms-2">{{ isset($questionsByPart['part1']) ? $questionsByPart['part1']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="alert alert-info">
                         <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
@@ -118,7 +118,7 @@
                     <h4 class="text-warning mb-3">
                         <i class="fas fa-chart-line me-2"></i>
                         Part 2: Difficulty Level
-                        <span class="badge badge-warning ms-2">{{ $questionsByPart['part2']->count() ?? 0 }} Questions</span>
+                        <span class="badge badge-warning ms-2">{{ isset($questionsByPart['part2']) ? $questionsByPart['part2']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped">
@@ -187,7 +187,7 @@
                     <h4 class="text-info mb-3">
                         <i class="fas fa-comments me-2"></i>
                         Part 3: Open Comments
-                        <span class="badge badge-info ms-2">{{ $questionsByPart['part3']->count() ?? 0 }} Questions</span>
+                        <span class="badge badge-info ms-2">{{ isset($questionsByPart['part3']) ? $questionsByPart['part3']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped">

@@ -928,8 +928,12 @@
                             <div class="tab-indicator">
                                 <span class="me-2">Progress:</span>
                                 <div class="tab-dot active" data-tab="1"></div>
+                                @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
                                 <div class="tab-dot" data-tab="2"></div>
+                                @endif
+                                @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
                                 <div class="tab-dot" data-tab="3"></div>
+                                @endif
                             </div>
                         </div>
                         
@@ -1013,7 +1017,7 @@
                         
                         <!-- Tab 2: Part 2 - Difficulty Level -->
                         <div class="survey-tab" id="tab2">
-                            @if(isset($questionsByPart['part2']))
+                            @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
                             <div class="part-section part2">
                                 <h5 class="mb-3" style="color: var(--golden-orange); border-bottom: 2px solid var(--golden-orange); padding-bottom: 0.5rem;">
                                     <i class="fas fa-chart-line me-2"></i>Part 2: Difficulty Level
@@ -1071,8 +1075,30 @@
                                     Next<i class="fas fa-arrow-right ms-2"></i>
                                 </button>
                             </div>
+                            @else
+                            <!-- No Part 2 questions available -->
+                            <div class="part-section part2">
+                                <h5 class="mb-3" style="color: var(--golden-orange); border-bottom: 2px solid var(--golden-orange); padding-bottom: 0.5rem;">
+                                    <i class="fas fa-chart-line me-2"></i>Part 2: Difficulty Level
+                                </h5>
+                                <div class="alert alert-info text-center">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>No difficulty level questions are currently available.</strong><br>
+                                    This section has been temporarily disabled.
+                                </div>
+                            </div>
+                            
+                            <!-- Navigation buttons for Tab 2 -->
+                            <div class="nav-buttons mt-4">
+                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
+                                    <i class="fas fa-arrow-left me-2"></i>Previous
+                                </button>
+                                <button type="button" class="btn btn-nav btn-next" id="btnNext2">
+                                    Next<i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                            @endif
                         </div>
-                        @endif
                         
                         <!-- Tab 3: Part 3 - Open Comments -->
                         <div class="survey-tab" id="tab3">
@@ -1150,7 +1176,8 @@
     <script>
         $(document).ready(function() {
             let currentTab = 1;
-            const totalTabs = 3;
+            // Calculate total tabs dynamically based on available content
+            const totalTabs = $('.tab-dot').length;
             
             // Tab Navigation Functions
             function showTab(tabNumber) {
@@ -1182,6 +1209,14 @@
                 const currentTabElement = $(`#tab${currentTab}`);
                 let isValid = true;
                 
+                // Check if tab has any required fields to validate
+                const hasRequiredFields = currentTabElement.find('input[type="radio"]:required, textarea[required]').length > 0;
+                
+                // If no required fields, tab is automatically valid
+                if (!hasRequiredFields) {
+                    return true;
+                }
+                
                 // Check required radio buttons
                 currentTabElement.find('input[type="radio"]:required').each(function() {
                     const name = $(this).attr('name');
@@ -1208,14 +1243,21 @@
                     // Mark current tab as completed
                     $(`.tab-dot[data-tab="${currentTab}"]`).addClass('completed');
                     
-                    // Move to next tab
+                    // Move to next available tab
                     currentTab++;
-                    showTab(currentTab);
+                    // Skip to next available tab if current one doesn't exist
+                    while (currentTab <= totalTabs && !$(`#tab${currentTab}`).length) {
+                        currentTab++;
+                    }
                     
-                    // Scroll to top of new tab
-                    $('html, body').animate({
-                        scrollTop: $('.survey-tab.active').offset().top - 100
-                    }, 500);
+                    if (currentTab <= totalTabs) {
+                        showTab(currentTab);
+                        
+                        // Scroll to top of new tab
+                        $('html, body').animate({
+                            scrollTop: $('.survey-tab.active').offset().top - 100
+                        }, 500);
+                    }
                 } else {
                     Swal.fire({
                         icon: 'warning',
@@ -1228,12 +1270,19 @@
             
             $('.btn-prev').click(function() {
                 currentTab--;
-                showTab(currentTab);
+                // Skip to previous available tab if current one doesn't exist
+                while (currentTab >= 1 && !$(`#tab${currentTab}`).length) {
+                    currentTab--;
+                }
                 
-                // Scroll to top of new tab
-                $('html, body').animate({
-                    scrollTop: $('.survey-tab.active').offset().top - 100
-                }, 500);
+                if (currentTab >= 1) {
+                    showTab(currentTab);
+                    
+                    // Scroll to top of new tab
+                    $('html, body').animate({
+                        scrollTop: $('.survey-tab.active').offset().top - 100
+                    }, 500);
+                }
             });
             
             // Tab dot click handlers
