@@ -330,7 +330,18 @@ $(document).ready(function() {
 
     // Handle teacher checkbox changes for primary teacher selection
     $('.teacher-checkbox').on('change', function() {
-        updatePrimaryTeacherOptions();
+        updatePrimaryTeacherOptions.call(this);
+    });
+    
+    // Initialize primary teacher dropdown when modals are shown
+    $('#addSubjectModal').on('show.bs.modal', function() {
+        // Clear primary teacher dropdown
+        $('#primary_teacher_id').val('').find('option:not(:first)').remove();
+    });
+    
+    $('#editSubjectModal').on('show.bs.modal', function() {
+        // Clear primary teacher dropdown
+        $('#edit_primary_teacher_id').val('').find('option:not(:first)').remove();
     });
 
     // Add subject form
@@ -433,7 +444,13 @@ function updatePrimaryTeacherOptions() {
     const selectedTeachers = modal.find('.teacher-checkbox:checked');
     const primarySelect = modal.find('select[name*="primary_teacher_id"]');
     
-    // Clear current options
+    console.log('Updating primary teacher options:', {
+        modal: modal.attr('id'),
+        selectedCount: selectedTeachers.length,
+        primarySelect: primarySelect.attr('id')
+    });
+    
+    // Clear current options (keep the first "Select Primary Teacher" option)
     primarySelect.find('option:not(:first)').remove();
     
     // Add options for selected teachers
@@ -446,6 +463,9 @@ function updatePrimaryTeacherOptions() {
     // If only one teacher is selected, auto-select as primary
     if (selectedTeachers.length === 1) {
         primarySelect.val(selectedTeachers.val());
+    } else if (selectedTeachers.length === 0) {
+        // If no teachers selected, clear the primary teacher selection
+        primarySelect.val('');
     }
 }
 

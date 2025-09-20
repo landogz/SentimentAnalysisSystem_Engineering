@@ -118,7 +118,7 @@
                     <h4 class="text-warning mb-3">
                         <i class="fas fa-chart-line me-2"></i>
                         Part 2: Difficulty Level
-                        <span class="badge badge-warning ms-2">{{ isset($questionsByPart['part2']) ? $questionsByPart['part2']->count() : 0 }} Questions</span>
+                        <span class="badge badge-warning ms-2">{{ isset($questionsByPart['part2']) ? $question sByPart['part2']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped">

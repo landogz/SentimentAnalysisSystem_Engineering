@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <title>PRMSU ENGINEERING - Student Feedback Survey</title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <!-- Google Font: Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -287,8 +287,8 @@
             .star {
                 min-width: 44px;
                 min-height: 44px;
-                display: flex;
-                align-items: center;
+            display: flex;
+            align-items: center;
                 justify-content: center;
             }
             
@@ -300,9 +300,9 @@
             /* Improve button touch area */
             .btn {
                 min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             }
         }
         
@@ -664,9 +664,9 @@
         
         .survey-tab.active {
             display: block;
-        }
-        
-        .nav-buttons {
+            }
+            
+            .nav-buttons {
             display: none; /* Hidden by default */
         }
         
@@ -802,8 +802,8 @@
         <div class="survey-container">
             <div class="survey-header">
                 <div class="logo-section">
-                                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU ENGINEERING" class="logo">
-            </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU ENGINEERING" class="logo">
+                </div>
             <h1>PRMSU ENGINEERING</h1>
                 <p>Student Feedback Survey</p>
                 
@@ -816,156 +816,156 @@
                     <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm" style="border-radius: 8px; padding: 0.5rem 1.5rem; font-weight: 500; transition: all 0.3s ease; border: 2px solid rgba(255, 255, 255, 0.3); position: relative; z-index: 10;">
                         <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
                     </a>
-                </div>
             </div>
-            
+        </div>
+        
             <div class="survey-body">
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fas fa-check-circle me-2"></i>
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-                @if($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        <ul class="mb-0">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-                <form method="POST" action="{{ route('survey.store') }}" id="surveyForm">
-                    @csrf
-                    
-                    <div class="form-section">
+            <form method="POST" action="{{ route('survey.store') }}" id="surveyForm">
+                @csrf
+                
+                <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-user me-2" style="color: var(--light-blue);"></i>
-                            Student Information
-                        </h4>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="student_name" class="form-label">Full Name (Optional)</label>
-                                    <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
-                                           id="student_name" name="student_name" value="{{ old('student_name') }}" 
-                                           placeholder="Enter your full name (optional)">
-                                    @error('student_name')
-                                        <div class="error-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        Student Information
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="student_name" class="form-label">Full Name (Optional)</label>
+                                <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
+                                       id="student_name" name="student_name" value="{{ old('student_name') }}" 
+                                       placeholder="Enter your full name (optional)">
+                                @error('student_name')
+                                    <div class="error-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="student_email" class="form-label">Email Address (Optional)</label>
-                                    <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
-                                           id="student_email" name="student_email" value="{{ old('student_email') }}" 
-                                           placeholder="Enter your email (optional)">
-                                    @error('student_email')
-                                        <div class="error-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="student_email" class="form-label">Email Address (Optional)</label>
+                                <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
+                                       id="student_email" name="student_email" value="{{ old('student_email') }}" 
+                                       placeholder="Enter your email (optional)">
+                                @error('student_email')
+                                    <div class="error-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-section">
+                <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-chalkboard-teacher me-2" style="color: var(--light-blue);"></i>
-                            Teacher & Subject Selection
-                        </h4>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="teacher_id" class="form-label">Select Teacher</label>
-                                    <select class="form-select @error('teacher_id') is-invalid @enderror" 
-                                            id="teacher_id" name="teacher_id" required>
-                                        <option value="">Choose a teacher...</option>
-                                        @foreach($teachers as $teacher)
-                                            <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                                                {{ $teacher->name }} - {{ $teacher->department }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('teacher_id')
-                                        <div class="error-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        Teacher & Subject Selection
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="teacher_id" class="form-label">Select Teacher</label>
+                                <select class="form-select @error('teacher_id') is-invalid @enderror" 
+                                        id="teacher_id" name="teacher_id" required>
+                                    <option value="">Choose a teacher...</option>
+                                    @foreach($teachers as $teacher)
+                                        <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                            {{ $teacher->name }} - {{ $teacher->department }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('teacher_id')
+                                    <div class="error-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="subject_id" class="form-label">Select Subject</label>
-                                    <select class="form-select @error('subject_id') is-invalid @enderror" 
-                                            id="subject_id" name="subject_id" required disabled>
-                                        <option value="">Choose a subject...</option>
-                                    </select>
-                                    @error('subject_id')
-                                        <div class="error-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="subject_id" class="form-label">Select Subject</label>
+                                <select class="form-select @error('subject_id') is-invalid @enderror" 
+                                        id="subject_id" name="subject_id" required disabled>
+                                    <option value="">Choose a subject...</option>
+                                </select>
+                                @error('subject_id')
+                                    <div class="error-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
+                </div>
 
 
 
-                    <!-- Survey Questions Section -->
-                    <div class="form-section">
+                                    <!-- Survey Questions Section -->
+                <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-question-circle me-2" style="color: var(--light-blue);"></i>
-                            Faculty Evaluation Survey
-                        </h4>
-                        
-                        <!-- Tab Navigation -->
-                        <div class="tab-navigation">
-                            <div class="tab-indicator">
+                        Faculty Evaluation Survey
+                    </h4>
+                    
+                    <!-- Tab Navigation -->
+                    <div class="tab-navigation">
+                        <div class="tab-indicator">
                                 <span class="me-2">Progress:</span>
-                                <div class="tab-dot active" data-tab="1"></div>
+                            <div class="tab-dot active" data-tab="1"></div>
                                 @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
-                                <div class="tab-dot" data-tab="2"></div>
+                            <div class="tab-dot" data-tab="2"></div>
                                 @endif
                                 @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
-                                <div class="tab-dot" data-tab="3"></div>
+                            <div class="tab-dot" data-tab="3"></div>
                                 @endif
-                            </div>
                         </div>
-                        
-                        <!-- Tab 1: Part 1 - Instructor Evaluation -->
-                        <div class="survey-tab active" id="tab1">
-                            @if(isset($questionsByPart['part1']))
-                            <div class="part-section">
+                    </div>
+                    
+                    <!-- Tab 1: Part 1 - Instructor Evaluation -->
+                    <div class="survey-tab active" id="tab1">
+                        @if(isset($questionsByPart['part1']))
+                        <div class="part-section">
                                 <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
                                     <i class="fas fa-star me-2"></i>Part 1: Instructor Evaluation
-                                </h5>
+                            </h5>
                                 <div class="alert alert-info mb-3">
-                                    <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
-                                </div>
-                                
-                                @php
-                                    $part1Questions = $questionsByPart['part1'];
-                                    $sections = [
-                                        'A. Commitment' => $part1Questions->where('order_number', '<=', 5),
-                                        'B. Knowledge of Subject' => $part1Questions->where('order_number', '>', 5)->where('order_number', '<=', 10),
-                                        'C. Teaching for Independent Learning' => $part1Questions->where('order_number', '>', 10)->where('order_number', '<=', 15),
-                                        'D. Management of Learning' => $part1Questions->where('order_number', '>', 15)->where('order_number', '<=', 20)
-                                    ];
-                                @endphp
-                                
-                                @foreach($sections as $sectionName => $sectionQuestions)
+                                <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
+                            </div>
+                            
+                            @php
+                                $part1Questions = $questionsByPart['part1'];
+                                $sections = [
+                                    'A. Commitment' => $part1Questions->where('order_number', '<=', 5),
+                                    'B. Knowledge of Subject' => $part1Questions->where('order_number', '>', 5)->where('order_number', '<=', 10),
+                                    'C. Teaching for Independent Learning' => $part1Questions->where('order_number', '>', 10)->where('order_number', '<=', 15),
+                                    'D. Management of Learning' => $part1Questions->where('order_number', '>', 15)->where('order_number', '<=', 20)
+                                ];
+                            @endphp
+                            
+                            @foreach($sections as $sectionName => $sectionQuestions)
                                 <div class="mb-4">
                                     <div class="section-subtitle">{{ $sectionName }}</div>
-                                    @foreach($sectionQuestions as $question)
+                                @foreach($sectionQuestions as $question)
                                     <div class="form-group mb-3">
                                         <label class="question-label">
                                             <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                        </label>
+                                    </label>
                                         <div class="btn-group w-100" role="group">
                                             <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                    id="q{{ $question->id }}_5" value="5" required>
@@ -996,41 +996,41 @@
                                             <label class="btn btn-outline-danger" for="q{{ $question->id }}_1">
                                                 1<br><small>Poor</small>
                                             </label>
-                                        </div>
                                     </div>
-                                    @endforeach
                                 </div>
                                 @endforeach
                             </div>
-                            
-                            <!-- Navigation buttons for Tab 1 -->
-                            <div class="nav-buttons mt-4">
-                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev" disabled>
-                                    <i class="fas fa-arrow-left me-2"></i>Previous
-                                </button>
-                                <button type="button" class="btn btn-nav btn-next" id="btnNext">
-                                    Next<i class="fas fa-arrow-right ms-2"></i>
-                                </button>
-                            </div>
+                            @endforeach
                         </div>
-                        @endif
                         
-                        <!-- Tab 2: Part 2 - Difficulty Level -->
-                        <div class="survey-tab" id="tab2">
+                        <!-- Navigation buttons for Tab 1 -->
+                        <div class="nav-buttons mt-4">
+                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev" disabled>
+                                <i class="fas fa-arrow-left me-2"></i>Previous
+                            </button>
+                            <button type="button" class="btn btn-nav btn-next" id="btnNext">
+                                Next<i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @endif
+                    
+                    <!-- Tab 2: Part 2 - Difficulty Level -->
+                    <div class="survey-tab" id="tab2">
                             @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
-                            <div class="part-section part2">
+                        <div class="part-section part2">
                                 <h5 class="mb-3" style="color: var(--golden-orange); border-bottom: 2px solid var(--golden-orange); padding-bottom: 0.5rem;">
                                     <i class="fas fa-chart-line me-2"></i>Part 2: Difficulty Level
-                                </h5>
+                            </h5>
                                 <div class="alert alert-warning mb-3">
-                                    <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
-                                </div>
-                                
-                                @foreach($questionsByPart['part2'] as $question)
+                                <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
+                            </div>
+                            
+                            @foreach($questionsByPart['part2'] as $question)
                                 <div class="form-group mb-3">
                                     <label class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                    </label>
+                                </label>
                                     <div class="btn-group w-100" role="group">
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_5" value="5" required>
@@ -1061,20 +1061,20 @@
                                         <label class="btn btn-outline-success" for="q{{ $question->id }}_1">
                                             1<br><small>Very Not Difficult</small>
                                         </label>
-                                    </div>
                                 </div>
-                                @endforeach
                             </div>
-                            
-                            <!-- Navigation buttons for Tab 2 -->
-                            <div class="nav-buttons mt-4">
-                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
-                                    <i class="fas fa-arrow-left me-2"></i>Previous
-                                </button>
-                                <button type="button" class="btn btn-nav btn-next" id="btnNext2">
-                                    Next<i class="fas fa-arrow-right ms-2"></i>
-                                </button>
-                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Navigation buttons for Tab 2 -->
+                        <div class="nav-buttons mt-4">
+                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
+                                <i class="fas fa-arrow-left me-2"></i>Previous
+                            </button>
+                            <button type="button" class="btn btn-nav btn-next" id="btnNext2">
+                                Next<i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
                             @else
                             <!-- No Part 2 questions available -->
                             <div class="part-section part2">
@@ -1096,47 +1096,47 @@
                                 <button type="button" class="btn btn-nav btn-next" id="btnNext2">
                                     Next<i class="fas fa-arrow-right ms-2"></i>
                                 </button>
-                            </div>
-                            @endif
+                    </div>
+                    @endif
                         </div>
-                        
-                        <!-- Tab 3: Part 3 - Open Comments -->
-                        <div class="survey-tab" id="tab3">
-                            @if(isset($questionsByPart['part3']))
-                            <div class="part-section part3">
+                    
+                    <!-- Tab 3: Part 3 - Open Comments -->
+                    <div class="survey-tab" id="tab3">
+                        @if(isset($questionsByPart['part3']))
+                        <div class="part-section part3">
                                 <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
                                     <i class="fas fa-comments me-2"></i>Part 3: Open Comments
-                                </h5>
+                            </h5>
                                 <div class="alert alert-info mb-3">
-                                    <strong>Instructions:</strong> Please provide detailed responses to the following questions.
-                                </div>
-                                
-                                @foreach($questionsByPart['part3'] as $question)
+                                <strong>Instructions:</strong> Please provide detailed responses to the following questions.
+                            </div>
+                            
+                            @foreach($questionsByPart['part3'] as $question)
                                 <div class="form-group mb-3">
                                     <label for="comment_{{ $question->id }}" class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                    </label>
-                                    <textarea class="form-control" 
-                                              id="comment_{{ $question->id }}" 
-                                              name="question_responses[{{ $question->id }}]" 
-                                              rows="3" 
-                                              placeholder="Please provide your response..."></textarea>
-                                </div>
-                                @endforeach
+                                </label>
+                                <textarea class="form-control" 
+                                          id="comment_{{ $question->id }}" 
+                                          name="question_responses[{{ $question->id }}]" 
+                                          rows="3" 
+                                          placeholder="Please provide your response..."></textarea>
                             </div>
-                            
-                            <!-- Navigation buttons for Tab 3 -->
-                            <div class="nav-buttons mt-4">
-                                <button type="button" class="btn btn-nav btn-prev" id="btnPrev3">
-                                    <i class="fas fa-arrow-left me-2"></i>Previous
-                                </button>
-                                <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
-                                    <i class="fas fa-paper-plane me-2"></i>Submit Survey
-                                </button>
-                            </div>
+                            @endforeach
                         </div>
-                        @endif
+                        
+                        <!-- Navigation buttons for Tab 3 -->
+                        <div class="nav-buttons mt-4">
+                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev3">
+                                <i class="fas fa-arrow-left me-2"></i>Previous
+                            </button>
+                            <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Survey
+                            </button>
+                        </div>
                     </div>
+                    @endif
+                </div>
 
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
@@ -1251,12 +1251,12 @@
                     }
                     
                     if (currentTab <= totalTabs) {
-                        showTab(currentTab);
-                        
-                        // Scroll to top of new tab
-                        $('html, body').animate({
-                            scrollTop: $('.survey-tab.active').offset().top - 100
-                        }, 500);
+                    showTab(currentTab);
+                    
+                    // Scroll to top of new tab
+                    $('html, body').animate({
+                        scrollTop: $('.survey-tab.active').offset().top - 100
+                    }, 500);
                     }
                 } else {
                     Swal.fire({
@@ -1276,12 +1276,12 @@
                 }
                 
                 if (currentTab >= 1) {
-                    showTab(currentTab);
-                    
-                    // Scroll to top of new tab
-                    $('html, body').animate({
-                        scrollTop: $('.survey-tab.active').offset().top - 100
-                    }, 500);
+                showTab(currentTab);
+                
+                // Scroll to top of new tab
+                $('html, body').animate({
+                    scrollTop: $('.survey-tab.active').offset().top - 100
+                }, 500);
                 }
             });
             
