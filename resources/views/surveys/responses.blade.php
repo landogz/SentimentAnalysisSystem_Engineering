@@ -69,14 +69,8 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="part2-tab" data-bs-toggle="tab" data-bs-target="#part2" type="button" role="tab">
-                    <i class="fas fa-chart-line me-2"></i>Part 2
-                    <span class="badge bg-info ms-1">{{ $part2Responses->count() }}</span>
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="part3-tab" data-bs-toggle="tab" data-bs-target="#part3" type="button" role="tab">
-                    <i class="fas fa-comments me-2"></i>Part 3
-                    <span class="badge bg-success ms-1">{{ $part3Responses->count() }}</span>
+                    <i class="fas fa-comments me-2"></i>Part 2
+                    <span class="badge bg-success ms-1">{{ $part2Responses->count() }}</span>
                 </button>
             </li>
         </ul>
@@ -98,7 +92,7 @@
                         
                         <!-- Analysis Cards -->
                         <div class="row g-3 mb-4">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="analysis-card analysis-card-primary">
                                     <div class="text-center p-3">
                                         <div class="analysis-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
@@ -110,31 +104,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="analysis-card analysis-card-info">
-                                    <div class="text-center p-3">
-                                        <div class="analysis-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
-                                            <i class="fas fa-chart-line"></i>
-                                        </div>
-                                        <h4 class="text-info mb-1">{{ number_format($part2Average, 1) }}</h4>
-                                        <p class="mb-0 fw-bold text-dark">Part 2: Difficulty</p>
-                                        <small class="text-muted">Level Score</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="analysis-card analysis-card-success">
                                     <div class="text-center p-3">
                                         <div class="analysis-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
                                             <i class="fas fa-comments"></i>
                                         </div>
-                                        <h4 class="text-success mb-1">{{ number_format($part3Score, 1) }}</h4>
-                                        <p class="mb-0 fw-bold text-dark">Part 3: Comments</p>
+                                        <h4 class="text-success mb-1">{{ number_format($part2Score, 1) }}</h4>
+                                        <p class="mb-0 fw-bold text-dark">Part 2: Comments</p>
                                         <small class="text-muted">Sentiment Score</small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="analysis-card analysis-card-warning">
                                     <div class="text-center p-3">
                                         <div class="analysis-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
@@ -236,64 +218,16 @@
         <div class="row">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-info text-white">
+                    <div class="card-header bg-success text-white">
                         <h6 class="card-title mb-0">
-                            <i class="fas fa-chart-line me-2"></i>
-                            Part 2: Difficulty Level
-                            <span class="badge bg-light text-info ms-2">{{ number_format($part2Average, 1) }}/5.0</span>
+                            <i class="fas fa-comments me-2"></i>
+                            Part 2: Open Comments
+                            <span class="badge bg-light text-success ms-2">Sentiment: {{ ucfirst($part2Sentiment) }}</span>
                         </h6>
                     </div>
                     <div class="card-body p-4">
                         @if($part2Responses->count() > 0)
-                            <div class="row">
-                                @foreach($part2Responses as $response)
-                                <div class="col-md-6 mb-3">
-                                    <div class="response-card border rounded p-3">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <span class="badge bg-info">Q{{ $response->question->order_number }}</span>
-                                            <span class="badge bg-secondary">{{ $response->answer }}/5</span>
-                                        </div>
-                                        <p class="mb-2 text-muted small">{{ $response->question->question_text }}</p>
-                                        <div class="rating-display">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $response->answer)
-                                                    <i class="fas fa-star text-warning"></i>
-                                                @else
-                                                    <i class="far fa-star text-warning"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-5">
-                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No Part 2 responses available</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Part 3 Tab -->
-    <div class="tab-pane fade" id="part3" role="tabpanel">
-        <div class="row">
-            <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h6 class="card-title mb-0">
-                            <i class="fas fa-comments me-2"></i>
-                            Part 3: Open Comments
-                            <span class="badge bg-light text-success ms-2">Sentiment: {{ ucfirst($part3Sentiment) }}</span>
-                        </h6>
-                    </div>
-                    <div class="card-body p-4">
-                        @if($part3Responses->count() > 0)
-                            @foreach($part3Responses as $response)
+                            @foreach($part2Responses as $response)
                             <div class="comment-card border rounded p-4 mb-3">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <span class="badge bg-success">Q{{ $response->question->order_number }}</span>
@@ -314,7 +248,7 @@
                         @else
                             <div class="text-center py-5">
                                 <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No Part 3 responses available</p>
+                                <p class="text-muted">No Part 2 responses available</p>
                             </div>
                         @endif
                     </div>

@@ -167,46 +167,8 @@ class SurveyQuestionSeeder extends Seeder
             ]
         ];
 
-        // Part 2: Difficulty Level (Very Difficult, Difficult, Slightly Difficult, Not Difficult, Very Not Difficult)
-        $part2Questions = [
-            [
-                'question_text' => 'How would you rate the difficulty of understanding the concepts taught in the CCIT subject?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 1,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How would you rate the difficulty of completing CCIT assignments and projects?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 2,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How would you rate the difficulty of preparing for CCIT quizzes and exams?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 3,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How would you rate the difficulty of applying CCIT concepts in practical activities or exercises?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 4,
-                'is_active' => true
-            ],
-            [
-                'question_text' => 'How would you rate the difficulty of keeping up with the pace of lessons in CCIT?',
-                'question_type' => 'option',
-                'part' => 'part2',
-                'order_number' => 5,
-                'is_active' => true
-            ]
-        ];
 
-        // Part 3: Open Comments
+        // Part 2: Open Comments
         $part3Questions = [
             [
                 'question_text' => 'How do your major subjects influence your interest and motivation in pursuing your chosen engineering program?',
@@ -236,17 +198,13 @@ class SurveyQuestionSeeder extends Seeder
             SurveyQuestion::create($question);
         }
 
-        foreach ($part2Questions as $question) {
-            SurveyQuestion::create($question);
-        }
 
         foreach ($part3Questions as $question) {
             SurveyQuestion::create($question);
         }
 
-        $this->command->info('Survey questions seeded successfully with 3 parts structure!');
+        $this->command->info('Survey questions seeded successfully with 2 parts structure!');
         $this->command->info('Part 1: Student Evaluation (20 questions) - Sections A: Commitment, B: Academic Challenges, C: Learning Experiences, D: Assignments and Exams');
-        $this->command->info('Part 2: Difficulty Level (5 questions)');
-        $this->command->info('Part 3: Open Comments (3 questions)');
+        $this->command->info('Part 2: Open Comments (3 questions)');
     }
 }

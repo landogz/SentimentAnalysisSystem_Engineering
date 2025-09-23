@@ -235,7 +235,7 @@ class SurveySeeder extends Seeder
             ]);
         }
 
-        // Part 3: Open Comments
+        // Part 2: Open Comments
         foreach ($part3Questions as $question) {
             $comment = $this->generatePart3Comment($question, $surveyData['part3_sentiment']);
             SurveyResponse::create([
@@ -269,7 +269,7 @@ class SurveySeeder extends Seeder
     }
 
     /**
-     * Generate Part 3 comment based on sentiment for Engineering students
+     * Generate Part 2 comment based on sentiment for Engineering students
      */
     private function generatePart3Comment($question, $sentiment)
     {

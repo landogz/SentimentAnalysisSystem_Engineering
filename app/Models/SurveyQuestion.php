@@ -77,8 +77,7 @@ class SurveyQuestion extends Model
     {
         return match($this->part) {
             'part1' => 'Part 1 - Instructor Evaluation',
-            'part2' => 'Part 2 - Difficulty Level',
-            'part3' => 'Part 3 - Open Comments',
+            'part3' => 'Part 2 - Open Comments',
             default => 'Unknown Part'
         };
     }
@@ -90,7 +89,6 @@ class SurveyQuestion extends Model
     {
         return match($this->part) {
             'part1' => 'badge-primary',
-            'part2' => 'badge-warning',
             'part3' => 'badge-info',
             default => 'badge-secondary'
         };
