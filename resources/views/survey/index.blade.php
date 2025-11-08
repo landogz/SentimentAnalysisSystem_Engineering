@@ -928,8 +928,11 @@
                         <div class="tab-indicator">
                                 <span class="me-2">Progress:</span>
                             <div class="tab-dot active" data-tab="1"></div>
-                                @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
+                                @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
                             <div class="tab-dot" data-tab="2"></div>
+                                @endif
+                                @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
+                            <div class="tab-dot" data-tab="3"></div>
                                 @endif
                         </div>
                     </div>
@@ -1012,13 +1015,75 @@
                     </div>
                     @endif
                     
-                    
-                    <!-- Tab 2: Part 2 - Open Comments -->
+                    <!-- Tab 2: Part 2 - Difficulty Level -->
                     <div class="survey-tab" id="tab2">
+                        @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
+                        <div class="part-section part2">
+                                <h5 class="mb-3" style="color: var(--golden-orange); border-bottom: 2px solid var(--golden-orange); padding-bottom: 0.5rem;">
+                                    <i class="fas fa-chart-line me-2"></i>Part 2: Difficulty Level
+                            </h5>
+                                <div class="alert alert-warning mb-3">
+                                <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
+                            </div>
+                            
+                            @foreach($questionsByPart['part2'] as $question)
+                                <div class="form-group mb-3">
+                                    <label class="question-label">
+                                        <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
+                                </label>
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_5" value="5" required>
+                                        <label class="btn btn-outline-danger" for="q{{ $question->id }}_5">
+                                            5<br><small>Very Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_4" value="4" required>
+                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_4">
+                                            4<br><small>Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_3" value="3" required>
+                                        <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
+                                            3<br><small>Slightly Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_2" value="2" required>
+                                        <label class="btn btn-outline-info" for="q{{ $question->id }}_2">
+                                            2<br><small>Not Difficult</small>
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                               id="q{{ $question->id }}_1" value="1" required>
+                                        <label class="btn btn-outline-success" for="q{{ $question->id }}_1">
+                                            1<br><small>Very Not Difficult</small>
+                                        </label>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Navigation buttons for Tab 2 -->
+                        <div class="nav-buttons mt-4">
+                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
+                                <i class="fas fa-arrow-left me-2"></i>Previous
+                            </button>
+                            <button type="button" class="btn btn-nav btn-next" id="btnNext2">
+                                Next<i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                        @endif
+                    </div>
+                    
+                    <!-- Tab 3: Part 3 - Open Comments -->
+                    <div class="survey-tab" id="tab3">
                         @if(isset($questionsByPart['part3']))
                         <div class="part-section part3">
                                 <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
-                                    <i class="fas fa-comments me-2"></i>Part 2: Open Comments
+                                    <i class="fas fa-comments me-2"></i>Part 3: Open Comments
                             </h5>
                                 <div class="alert alert-info mb-3">
                                 <strong>Instructions:</strong> Please provide detailed responses to the following questions.
@@ -1038,9 +1103,9 @@
                             @endforeach
                         </div>
                         
-                        <!-- Navigation buttons for Tab 2 -->
+                        <!-- Navigation buttons for Tab 3 -->
                         <div class="nav-buttons mt-4">
-                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
+                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev3">
                                 <i class="fas fa-arrow-left me-2"></i>Previous
                             </button>
                             <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
