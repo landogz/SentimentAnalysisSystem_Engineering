@@ -11,56 +11,180 @@
 @endsection
 
 @section('content')
+<style>
+    /* Modern Card Design */
+    .modern-card {
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        margin-bottom: 1.5rem;
+    }
+
+    .modern-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+    }
+
+    .modern-card .card-header {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);
+        border-bottom: 2px solid rgba(152, 170, 231, 0.2);
+        padding: 1.5rem;
+        border-radius: 24px 24px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modern-card .card-header h3 {
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #494850;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .modern-card .card-header h3 i {
+        background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+    }
+
+    .modern-card .card-header .btn-modern {
+        margin-left: auto;
+    }
+
+    .modern-card .card-body {
+        padding: 2rem;
+    }
+
+    /* Enhanced Table */
+    .modern-table {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .modern-table thead {
+        background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+    }
+
+    .modern-table thead th {
+        color: white;
+        font-weight: 600;
+        padding: 1.25rem;
+        border: none;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    .modern-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(152, 170, 231, 0.1);
+    }
+
+    .modern-table tbody tr:hover {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.05) 0%, rgba(143, 207, 168, 0.05) 100%);
+        transform: scale(1.01);
+    }
+
+    .modern-table tbody td {
+        padding: 1.25rem;
+        vertical-align: middle;
+    }
+
+    /* Filter Panel */
+    .filter-panel {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(152, 170, 231, 0.2);
+    }
+
+    .filter-panel .form-control,
+    .filter-panel .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        transition: all 0.2s ease;
+    }
+
+    .filter-panel .form-control:focus,
+    .filter-panel .form-select:focus {
+        border-color: #98AAE7;
+        box-shadow: 0 0 0 0.2rem rgba(152, 170, 231, 0.25);
+    }
+
+    .btn-modern {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
 <div class="row">
     <div class="col-12">
-        <div class="card card-outline card-primary">
+        <div class="modern-card">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-book mr-2"></i>
+                    <i class="fas fa-book"></i>
                     Subjects List
                 </h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
-                        <i class="fas fa-plus mr-1"></i>Add Subject
-                    </button>
-                </div>
+                <button type="button" class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+                    <i class="fas fa-plus me-1"></i>Add Subject
+                </button>
             </div>
             <div class="card-body">
                 <!-- Search and Filter Controls -->
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <input type="text" class="form-control search-box" id="searchInput" placeholder="Search subjects...">
+                <div class="filter-panel">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search subjects...">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-control" id="teacherFilter">
-                            <option value="">All Teachers</option>
-                            @foreach($teachers as $teacher)
-                                <option value="{{ $teacher->name }}">{{ $teacher->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-control" id="statusFilter">
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-outline-secondary btn-block" id="clearFilters">
-                            <i class="fas fa-times"></i> Clear
-                        </button>
+                        <div class="col-md-3">
+                            <select class="form-select" id="teacherFilter">
+                                <option value="">All Teachers</option>
+                                @foreach($teachers as $teacher)
+                                    <option value="{{ $teacher->name }}">{{ $teacher->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-outline-secondary w-100" id="clearFilters">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Subjects Table -->
                 <div class="table-responsive">
-                    <table class="table table-hover" id="subjectsTable">
+                    <table class="table modern-table" id="subjectsTable">
                         <thead>
                             <tr>
                                 <th>Code</th>

@@ -20,120 +20,168 @@
         :root {
             --dark-gray: #494850;
             --light-green: #8FCFA8;
-            --coral-pink: #F16E70;
+            --coral-pink: #FF4E00;
             --golden-orange: #F5B445;
             --light-blue: #98AAE7;
         }
         
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-        }
-        
-        .forgot-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(73, 72, 80, 0.15);
-            margin: 1rem auto;
-            max-width: 450px;
+            display: flex;
             overflow: hidden;
         }
         
-        @media (max-width: 768px) {
-            .forgot-container {
-                margin: 0.5rem;
-                border-radius: 15px;
-            }
+        .forgot-wrapper {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
         }
         
-        .forgot-header {
-            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
+        /* Left Section - Welcome Area */
+        .welcome-section {
+            flex: 2;
+            background: linear-gradient(135deg, #6B46C1 0%, #9333EA 50%, #EC4899 100%);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
         }
         
-        @media (max-width: 768px) {
-            .forgot-header {
-                padding: 2rem 1rem;
-            }
-        }
-        
-        .forgot-header::before {
+        .welcome-section::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient></defs><ellipse cx="50" cy="50" rx="40" ry="20" fill="url(%23grad)" /></svg>') repeat;
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
         }
         
-        .logo-section {
-            margin-bottom: 1.5rem;
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            max-width: 500px;
         }
         
-        .logo-section img {
-            height: 80px;
-            width: auto;
-            margin-bottom: 1rem;
-            filter: brightness(1.1) contrast(1.1);
-        }
-        
-        .forgot-header h1 {
-            font-size: 2.2rem;
+        .welcome-content h1 {
+            font-size: 3.5rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
         }
         
-        @media (max-width: 768px) {
-            .forgot-header h1 {
-                font-size: 1.8rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .forgot-header h1 {
-                font-size: 1.5rem;
-            }
-        }
-        
-        .forgot-header p {
+        .welcome-content p {
             font-size: 1.1rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-            color: white;
+            line-height: 1.8;
+            opacity: 0.95;
         }
         
-        @media (max-width: 768px) {
-            .forgot-header p {
-                font-size: 1rem;
-            }
+        /* Abstract shapes */
+        .abstract-shape {
+            position: absolute;
+            border-radius: 50px;
+            opacity: 0.4;
+            animation: moveShape 15s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 300px;
+            height: 80px;
+            background: linear-gradient(135deg, #EC4899 0%, #F97316 100%);
+            top: 20%;
+            left: 10%;
+            transform: rotate(-25deg);
+        }
+        
+        .shape-2 {
+            width: 250px;
+            height: 70px;
+            background: linear-gradient(135deg, #F97316 0%, #EC4899 100%);
+            bottom: 25%;
+            right: 15%;
+            transform: rotate(35deg);
+            animation-delay: -5s;
+        }
+        
+        .shape-3 {
+            width: 200px;
+            height: 60px;
+            background: linear-gradient(135deg, #EC4899 0%, #F97316 100%);
+            top: 60%;
+            left: 20%;
+            transform: rotate(-15deg);
+            animation-delay: -10s;
+        }
+        
+        @keyframes moveShape {
+            0%, 100% { transform: translateY(0) rotate(var(--rotation, 0deg)); }
+            50% { transform: translateY(-30px) rotate(calc(var(--rotation, 0deg) + 10deg)); }
+        }
+        
+        /* Right Section - Forgot Password Form */
+        .form-section {
+            flex: 1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+        
+        .forgot-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo-container img {
+            height: 120px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        
+        .form-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6B46C1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         .forgot-body {
-            padding: 3rem 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .forgot-body {
-                padding: 2rem 1rem;
-            }
+            padding: 0;
         }
         
         .form-group {
@@ -141,74 +189,64 @@
         }
         
         .form-control {
-            border: 2px solid #e9ecef;
+            border: none;
             border-radius: 12px;
-            padding: 1rem;
+            padding: 1rem 1rem 1rem 3.5rem;
             font-size: 1rem;
             transition: all 0.3s ease;
-            background-color: #f8f9fa;
+            background-color: #F3F4F6;
+            width: 100%;
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
         
-        @media (max-width: 768px) {
-            .form-control {
-                padding: 0.875rem;
-                font-size: 16px; /* Prevents zoom on iOS */
-            }
-        }
-        
         .form-control:focus {
-            border-color: var(--light-blue);
-            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
-            background-color: white;
-            transform: translateY(-2px);
+            outline: none;
+            background-color: #E5E7EB;
+            box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
         }
         
-        .input-group-text {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-right: none;
-            border-radius: 12px 0 0 12px;
-            color: var(--dark-gray);
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
         }
         
-        .form-control {
-            border-left: none;
-            border-radius: 0 12px 12px 0;
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B46C1;
+            font-size: 1.1rem;
+            z-index: 1;
         }
         
         .btn-reset {
-            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
+            background: linear-gradient(135deg, #EC4899 0%, #6B46C1 100%);
             border: none;
             color: white;
-            padding: 1.25rem 3rem;
+            padding: 1rem 2rem;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
+            box-shadow: 0 4px 15px rgba(107, 70, 193, 0.3);
             width: 100%;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
         
-        @media (max-width: 768px) {
-            .btn-reset {
-                padding: 1rem 2rem;
-                font-size: 1rem;
-            }
-        }
-        
         .btn-reset:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 70, 193, 0.4);
             color: white;
         }
         
         .btn-reset:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
         }
         
         .btn-reset:disabled {
@@ -226,12 +264,12 @@
         
         .alert-success {
             background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%);
-            color: #155724;
+            color: white;
         }
         
         .alert-danger {
-            background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%);
-            color: #721c24;
+            background: linear-gradient(135deg, var(--coral-pink) 0%, #E64500 100%);
+            color: white;
         }
         
         .error-feedback {
@@ -244,108 +282,87 @@
         .info-section {
             text-align: center;
             margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(107, 70, 193, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(107, 70, 193, 0.2);
         }
         
         .info-section i {
-            font-size: 4rem;
-            color: var(--light-blue);
+            font-size: 3rem;
+            color: #6B46C1;
             margin-bottom: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .info-section i {
-                font-size: 3rem;
-            }
         }
         
         .info-section p {
             color: var(--dark-gray);
-            font-size: 1rem;
+            font-size: 0.95rem;
             line-height: 1.6;
+            margin: 0;
         }
         
-        .links-section {
+        .login-link {
             text-align: center;
             margin-top: 2rem;
+            color: #6c757d;
         }
         
-        .links-section a {
-            color: var(--light-blue);
+        .login-link a {
+            color: #6B46C1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .login-link a:hover {
+            color: #9333EA;
+            text-decoration: underline;
+        }
+        
+        .public-survey-link {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .public-survey-link a {
+            color: #6B46C1;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
         }
         
-        .links-section a:hover {
-            color: #7a8cd6;
-            text-decoration: underline;
-        }
-        
-        .divider {
-            margin: 2rem 0;
-            border-top: 1px solid #e9ecef;
-            position: relative;
-        }
-        
-        .divider::before {
-            content: 'or';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 0 1rem;
-            color: var(--dark-gray);
-            font-size: 0.875rem;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--dark-gray);
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 768px) {
-            .footer {
-                padding: 1rem;
-                font-size: 0.8rem;
-            }
-        }
-        
-        .footer a {
-            color: var(--light-blue);
-            text-decoration: none;
-        }
-        
-        .footer a:hover {
+        .public-survey-link a:hover {
+            color: #9333EA;
             text-decoration: underline;
         }
         
         /* Mobile-specific improvements */
+        @media (max-width: 968px) {
+            .forgot-wrapper {
+                flex-direction: column;
+            }
+            
+            .welcome-section {
+                display: none;
+            }
+            
+            .form-section {
+                flex: 1;
+                padding: 2rem 1.5rem;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .container {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
+            .welcome-content h1 {
+                font-size: 1.5rem;
             }
             
-            /* Improve touch targets */
-            .form-check-input {
-                min-width: 20px;
-                min-height: 20px;
+            .form-title h2 {
+                font-size: 1.5rem;
             }
             
-            /* Better spacing for mobile */
-            .mb-3 {
-                margin-bottom: 1rem !important;
-            }
-            
-            /* Improve button touch area */
             .btn {
                 min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
             }
         }
         
@@ -366,7 +383,7 @@
         /* Better focus indicators for accessibility */
         .form-control:focus,
         .btn:focus {
-            outline: 2px solid var(--light-blue);
+            outline: 2px solid #6B46C1;
             outline-offset: 2px;
         }
         
@@ -383,17 +400,36 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="forgot-container">
-            <div class="forgot-header">
-                <div class="logo-section">
-                                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU ENGINEERING" class="logo">
+    <div class="forgot-wrapper">
+        <!-- Left Section - Welcome Area -->
+        <div class="welcome-section">
+            <div class="abstract-shape shape-1"></div>
+            <div class="abstract-shape shape-2"></div>
+            <div class="abstract-shape shape-3"></div>
+            <div class="welcome-content">
+                <h1>Welcome to PRMSU ENGINEERING</h1>
+                <p>Student Feedback System - Forgot your password? No worries! We'll help you reset it quickly and securely. Enter your email address to receive a password reset link.</p>
             </div>
-            <h1>PRMSU ENGINEERING</h1>
-                <p>Student Feedback System</p>
-            </div>
-            
-            <div class="forgot-body">
+        </div>
+        
+        <!-- Right Section - Forgot Password Form -->
+        <div class="form-section">
+            <div class="forgot-container">
+                <div class="logo-container">
+                    <img src="{{ asset('images/logo.png') }}" alt="PRMSU ENGINEERING Logo">
+                </div>
+                
+                <div class="form-title">
+                    <h2>Forgot Password</h2>
+                </div>
+                
+                <div class="public-survey-link">
+                    <a href="{{ route('survey.index') }}">
+                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
+                    </a>
+                </div>
+                
+                <div class="forgot-body">
                 @if(session('status'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="fas fa-check-circle me-2"></i>
@@ -414,25 +450,19 @@
                     </div>
                 @endif
 
-                <div class="info-section">
-                    <i class="fas fa-key"></i>
-                    <p>
-                        Enter your email address and we'll send you a link to reset your password.
-                    </p>
-                </div>
-
                 <form method="POST" action="{{ route('password.email') }}" id="forgotForm">
                     @csrf
                     
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                   id="email" name="email" value="{{ old('email') }}" 
-                                   placeholder="Enter your email" required autofocus>
-                        </div>
+                    <div class="info-section">
+                        <i class="fas fa-key"></i>
+                        <p>Enter your email address and we'll send you a link to reset your password.</p>
+                    </div>
+                    
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                               id="email" name="email" value="{{ old('email') }}" 
+                               placeholder="Email" required autofocus>
                         @error('email')
                             <div class="error-feedback">{{ $message }}</div>
                         @enderror
@@ -440,32 +470,21 @@
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-reset" id="resetBtn">
-                            <i class="fas fa-paper-plane me-2"></i>Send Reset Link
+                            Send Reset Link
                         </button>
                     </div>
                 </form>
 
-                <div class="divider"></div>
-
-                <div class="links-section">
-                    <p class="text-muted mb-0">
+                <div class="login-link">
+                    <p class="mb-0">
                         Remember your password? 
                         <a href="{{ route('login') }}">
-                            <i class="fas fa-sign-in-alt me-1"></i>Login here
+                            Login here
                         </a>
                     </p>
                 </div>
 
-                <div class="links-section">
-                    <a href="{{ route('survey.index') }}">
-                        <i class="fas fa-external-link-alt me-1"></i>Access Public Survey
-                    </a>
-                </div>
             </div>
-        </div>
-        
-        <div class="footer">
-                            <p>&copy; {{ date('Y') }} PRMSU ENGINEERING. All rights reserved.</p>
         </div>
     </div>
 

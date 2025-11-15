@@ -12,34 +12,156 @@
 @endsection
 
 @section('content')
+<style>
+    /* Modern Card Design */
+    .modern-card {
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        margin-bottom: 1.5rem;
+    }
+
+    .modern-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+    }
+
+    .modern-card .card-header {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);
+        border-bottom: 2px solid rgba(152, 170, 231, 0.2);
+        padding: 1.5rem;
+        border-radius: 24px 24px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modern-card .card-header h3 {
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #494850;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .modern-card .card-header h3 i {
+        background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+    }
+
+    .modern-card .card-header .btn-modern {
+        margin-left: auto;
+    }
+
+    .modern-card .card-body {
+        padding: 2rem;
+    }
+
+    /* Part Sections */
+    .part-section {
+        margin-bottom: 2.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        border-radius: 16px;
+        border: 1px solid rgba(152, 170, 231, 0.2);
+    }
+
+    .part-section h4 {
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .part-section h4 i {
+        font-size: 1.5rem;
+    }
+
+    /* Enhanced Table */
+    .modern-table {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .modern-table thead {
+        background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+    }
+
+    .modern-table thead th {
+        color: white;
+        font-weight: 600;
+        padding: 1.25rem;
+        border: none;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    .modern-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(152, 170, 231, 0.1);
+    }
+
+    .modern-table tbody tr:hover {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.05) 0%, rgba(143, 207, 168, 0.05) 100%);
+        transform: scale(1.01);
+    }
+
+    .modern-table tbody td {
+        padding: 1.25rem;
+        vertical-align: middle;
+    }
+
+    .btn-modern {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="modern-card">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-question-circle me-2"></i>
+                    <i class="fas fa-question-circle"></i>
                     Survey Questions Management
                 </h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createQuestionModal">
-                        <i class="fas fa-plus me-2"></i>Add New Question
-                    </button>
-                </div>
+                <button type="button" class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#createQuestionModal">
+                    <i class="fas fa-plus me-2"></i>Add New Question
+                </button>
             </div>
             <div class="card-body">
                 <!-- Part 1: Instructor Evaluation -->
-                <div class="mb-4">
+                <div class="part-section">
                     <h4 class="text-primary mb-3">
-                        <i class="fas fa-star me-2"></i>
+                        <i class="fas fa-star"></i>
                         Part 1: Instructor Evaluation
                         <span class="badge badge-primary ms-2">{{ isset($questionsByPart['part1']) ? $questionsByPart['part1']->count() : 0 }} Questions</span>
                     </h4>
-                    <div class="alert alert-info">
+                    <div class="alert alert-info" style="border-radius: 12px; border: none; background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);">
                         <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
-                            <thead class="table-primary">
+                        <table class="table modern-table">
+                            <thead>
                                 <tr>
                                     <th width="80">Order</th>
                                     <th width="100">Section</th>
@@ -114,15 +236,15 @@
                 </div>
 
                 <!-- Part 2: Difficulty Level -->
-                <div class="mb-4">
+                <div class="part-section">
                     <h4 class="text-warning mb-3">
-                        <i class="fas fa-chart-line me-2"></i>
+                        <i class="fas fa-chart-line"></i>
                         Part 2: Difficulty Level
                         <span class="badge badge-warning ms-2">{{ isset($questionsByPart['part2']) ? $questionsByPart['part2']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
-                            <thead class="table-warning">
+                        <table class="table modern-table">
+                            <thead>
                                 <tr>
                                     <th width="80">Order</th>
                                     <th>Question</th>
@@ -183,15 +305,15 @@
                 </div>
 
                 <!-- Part 3: Open Comments -->
-                <div class="mb-4">
+                <div class="part-section">
                     <h4 class="text-info mb-3">
-                        <i class="fas fa-comments me-2"></i>
+                        <i class="fas fa-comments"></i>
                         Part 3: Open Comments
                         <span class="badge badge-info ms-2">{{ isset($questionsByPart['part3']) ? $questionsByPart['part3']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
-                            <thead class="table-info">
+                        <table class="table modern-table">
+                            <thead>
                                 <tr>
                                     <th width="80">Order</th>
                                     <th>Question</th>

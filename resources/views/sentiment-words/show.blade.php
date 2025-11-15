@@ -10,9 +10,76 @@
 @endsection
 
 @section('content')
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+        --success-gradient: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%);
+        --danger-gradient: linear-gradient(135deg, #FF4E00 0%, #E64500 100%);
+        --warning-gradient: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%);
+    }
+
+    /* Modern Card Design */
+    .modern-card {
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        margin-bottom: 1.5rem;
+    }
+
+    .modern-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+    }
+
+    .modern-card .card-header {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);
+        border-bottom: 2px solid rgba(152, 170, 231, 0.2);
+        padding: 1.5rem;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .modern-card .card-header h3 {
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #494850;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .modern-card .card-header h3 i {
+        background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+    }
+
+    .modern-card .card-body {
+        padding: 2rem;
+    }
+
+    .btn-modern {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
 <div class="row">
     <div class="col-md-8">
-        <div class="card">
+        <div class="modern-card">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-eye"></i> Word Details
@@ -104,13 +171,13 @@
                     <div class="col-md-12">
                         <h5>Quick Actions</h5>
                         <div class="btn-group" role="group">
-                            <a href="{{ route('sentiment-words.edit', $sentimentWord) }}" class="btn btn-primary">
+                            <a href="{{ route('sentiment-words.edit', $sentimentWord) }}" class="btn btn-primary btn-modern">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
-                            <button type="button" class="btn btn-danger" onclick="deleteWord()">
+                            <button type="button" class="btn btn-danger btn-modern" onclick="deleteWord()">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
-                            <a href="{{ route('sentiment-words.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('sentiment-words.index') }}" class="btn btn-secondary btn-modern">
                                 <i class="fas fa-arrow-left"></i> Back to List
                             </a>
                         </div>
@@ -121,7 +188,7 @@
     </div>
     
     <div class="col-md-4">
-        <div class="card">
+        <div class="modern-card">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie"></i> Statistics
@@ -172,7 +239,7 @@
             </div>
         </div>
         
-        <div class="card mt-3">
+        <div class="modern-card mt-3">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-lightbulb"></i> Similar Words

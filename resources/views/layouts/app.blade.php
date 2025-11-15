@@ -21,11 +21,11 @@
     <!-- Custom CSS -->
     <style>
         :root {
-            --dark-gray: #BF3100;
-            --light-green: #8EA604;
+            --dark-gray: #494850;
+            --light-green: #8FCFA8;
             --coral-pink: #FF4E00;
-            --golden-orange: #F5BB00;
-            --light-blue: #EC9F05;
+            --golden-orange: #F5B445;
+            --light-blue: #98AAE7;
         }
 
         .rating-stars {
@@ -162,8 +162,8 @@
             border-color: var(--coral-pink);
         }
         .btn-danger:hover {
-            background-color: #e55a5c;
-            border-color: #e55a5c;
+            background-color: #E64500;
+            border-color: #E64500;
         }
         .btn-warning {
             background-color: var(--golden-orange);
@@ -215,76 +215,97 @@
             background-color: var(--golden-orange);
         }
 
-        /* Enhanced Sidebar */
+        /* Hide Sidebar */
         .main-sidebar {
-            box-shadow: 2px 0 8px rgba(73, 72, 80, 0.1);
-            background-color: var(--dark-gray) !important;
-        }
-        .nav-sidebar .nav-link {
-            border-radius: 8px;
-            margin: 2px 8px;
-            transition: all 0.2s ease;
-        }
-        .nav-sidebar .nav-link:hover {
-            background-color: rgba(255,255,255,0.1);
-            transform: translateX(4px);
-        }
-        .nav-sidebar .nav-link.active {
-            background: linear-gradient(135deg, var(--light-blue) 0%, var(--coral-pink) 100%);
-            box-shadow: 0 2px 8px rgba(152, 170, 231, 0.3);
-            color: white !important;
-        }
-        .nav-sidebar .nav-link:hover {
-            background-color: rgba(255,255,255,0.1);
-            transform: translateX(4px);
-            color: white !important;
+            display: none !important;
         }
 
-        /* Collapsed Sidebar Styling */
-        .sidebar-collapse .main-sidebar {
-            width: 70px !important;
+        /* Horizontal Navigation Menu */
+        .horizontal-nav {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            border-bottom: 3px solid var(--light-blue);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
         }
-        .sidebar-collapse .brand-link {
-            padding: 10px 5px !important;
-            justify-content: center !important;
+        
+        .horizontal-nav .container-fluid {
+            padding: 0;
         }
-        .sidebar-collapse .brand-image {
-            height: 25px !important;
-            width: auto !important;
-            margin-right: 0 !important;
+        
+        .horizontal-nav .navbar-nav {
+            flex-direction: row;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem 1rem;
+            flex-wrap: wrap;
         }
-        .sidebar-collapse .brand-text {
-            display: none !important;
+        
+        .horizontal-nav .nav-item {
+            position: relative;
         }
-        .sidebar-collapse .nav-sidebar .nav-link {
-            padding: 12px 8px !important;
-            text-align: center !important;
-            margin: 4px 6px !important;
+        
+        .horizontal-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            padding: 0.875rem 1.5rem !important;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            position: relative;
+            white-space: nowrap;
+            font-family: 'Poppins', sans-serif;
         }
-        .sidebar-collapse .nav-sidebar .nav-link i {
-            font-size: 1.2rem !important;
-            margin-right: 0 !important;
+        
+        .horizontal-nav .nav-link i {
+            font-size: 1.05rem;
+            width: 22px;
+            text-align: center;
         }
-        .sidebar-collapse .nav-sidebar .nav-link p {
-            display: none !important;
+        
+        .horizontal-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        .sidebar-collapse .nav-sidebar .nav-item {
-            margin-bottom: 8px !important;
+        
+        .horizontal-nav .nav-link.active {
+            background: linear-gradient(135deg, var(--coral-pink) 0%, #E64500 100%);
+            color: white !important;
+            box-shadow: 0 6px 20px rgba(255, 78, 0, 0.5);
+            font-weight: 700;
         }
-        .sidebar-collapse .sidebar {
-            padding: 10px 0 !important;
+        
+        .horizontal-nav .navbar-toggler {
+            margin: 0.5rem 1rem;
+        }
+        
+        .horizontal-nav .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
         }
 
         /* Enhanced Navbar */
         .main-header {
             box-shadow: 0 2px 8px rgba(73, 72, 80, 0.1);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-bottom: 1px solid #e9ecef;
         }
-        .navbar-nav .nav-link {
+        
+        .main-header .navbar-nav .nav-link {
             border-radius: 6px;
             transition: all 0.2s ease;
         }
-        .navbar-nav .nav-link:hover {
-            background-color: rgba(143, 207, 168, 0.1);
+        
+        .main-header .navbar-nav .nav-link:hover {
+            background-color: rgba(152, 170, 231, 0.1);
         }
 
         /* Enhanced Content Area */
@@ -292,6 +313,42 @@
             background: linear-gradient(135deg, #f5f7fa 0%, rgba(152, 170, 231, 0.1) 100%);
             min-height: 100vh;
             padding: 20px;
+            margin-left: 0 !important;
+        }
+        
+        /* Override AdminLTE sidebar margin */
+        body .content-wrapper,
+        body .main-footer,
+        body .main-header {
+            margin-left: 0 !important;
+        }
+        
+        @media (min-width: 768px) {
+            body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper,
+            body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer,
+            body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
+                margin-left: 0 !important;
+            }
+        }
+        
+        /* Logo in Navbar */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--dark-gray) !important;
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand img {
+            height: 45px;
+            width: auto;
+        }
+        
+        .navbar-brand:hover {
+            color: var(--light-blue) !important;
         }
 
         /* Enhanced Stats Cards */
@@ -385,24 +442,157 @@
             background-color: var(--golden-orange) !important;
         }
 
+        /* Content Header Professional Design */
+        .content-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(135deg, var(--light-blue) 0%, var(--coral-pink) 100%) 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--light-blue) 0%, var(--coral-pink) 50%, var(--light-green) 100%);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .content-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(152, 170, 231, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
         /* Page Title Styling */
         .page-title-custom {
             font-family: 'Poppins', 'Source Sans Pro', sans-serif;
-            font-weight: 600;
-            font-size: 2.2rem;
-            color: var(--dark-gray);
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(73, 72, 80, 0.1);
-            letter-spacing: -0.5px;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
         }
+
+        .page-title-custom::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 60%;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--coral-pink) 100%);
+            border-radius: 10px;
+        }
+
         .page-title-custom i {
-            color: var(--light-blue);
-            margin-right: 12px;
-            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--coral-pink) 0%, #E64500 100%);
+            color: white;
+            border-radius: 16px;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(255, 78, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        .page-title-custom:hover {
+
+        .page-title-custom:hover i {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 30px rgba(255, 78, 0, 0.4);
+        }
+
+        .page-title-custom span {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #6a6a7a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        /* Breadcrumb Professional Design */
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: '\f105';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
             color: var(--light-blue);
-            transition: color 0.3s ease;
+            padding: 0 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .breadcrumb-item a:hover {
+            background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);
+            color: var(--light-blue);
+            transform: translateX(-2px);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--dark-gray);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(152, 170, 231, 0.15) 0%, rgba(143, 207, 168, 0.15) 100%);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .breadcrumb-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--coral-pink) 100%);
+            border-radius: 2px;
         }
 
         /* Mobile Responsiveness */
@@ -430,42 +620,34 @@
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             }
             
-            /* Sidebar Mobile Optimizations */
-            .main-sidebar {
-                width: 100% !important;
-                position: fixed !important;
-                top: 0 !important;
-                left: -100% !important;
-                height: 100vh !important;
-                z-index: 1050 !important;
-                transition: left 0.3s ease !important;
+            /* Horizontal Nav Mobile Optimizations */
+            .horizontal-nav {
+                position: relative;
             }
-            .sidebar-open .main-sidebar {
-                left: 0 !important;
+            
+            .horizontal-nav .navbar-nav {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+                padding: 1rem;
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 0 0 12px 12px;
             }
-            .sidebar-collapse .main-sidebar {
-                width: 100% !important;
-                left: -100% !important;
+            
+            .horizontal-nav .nav-link {
+                padding: 0.875rem 1rem !important;
+                font-size: 0.9rem !important;
+                width: 100%;
+                justify-content: flex-start;
             }
-            .brand-link {
-                padding: 1rem !important;
-                justify-content: center !important;
+            
+            .horizontal-nav .nav-link i {
+                font-size: 1rem !important;
+                width: 24px !important;
             }
-            .brand-image {
-                height: 45px !important;
-            }
-            .brand-text {
-                font-size: 1.4rem !important;
-                font-weight: 600 !important;
-            }
-            .nav-sidebar .nav-link {
-                padding: 1rem 1.5rem !important;
+            
+            .navbar-brand span {
                 font-size: 1.1rem !important;
-                margin: 0.25rem 1rem !important;
-            }
-            .nav-sidebar .nav-link i {
-                font-size: 1.3rem !important;
-                margin-right: 1rem !important;
             }
             
             /* Content Area Mobile Optimizations */
@@ -473,15 +655,47 @@
                 padding: 10px !important;
                 margin-left: 0 !important;
             }
+            /* Content Header Mobile */
             .content-header {
-                padding: 1rem !important;
+                padding: 1.5rem 0 !important;
+                margin-bottom: 1.5rem !important;
             }
+
             .page-title-custom {
                 font-size: 1.8rem !important;
                 margin-bottom: 0.5rem !important;
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.75rem !important;
             }
+
+            .page-title-custom::before {
+                display: none;
+            }
+
             .page-title-custom i {
+                width: 50px !important;
+                height: 50px !important;
                 font-size: 1.5rem !important;
+            }
+
+            .page-title-custom span {
+                font-size: 1.8rem !important;
+            }
+
+            .breadcrumb {
+                justify-content: flex-start !important;
+                margin-top: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .breadcrumb-item {
+                font-size: 0.85rem !important;
+            }
+
+            .breadcrumb-item a,
+            .breadcrumb-item.active {
+                padding: 0.4rem 0.75rem !important;
             }
             
             /* Cards Mobile Optimizations */
@@ -639,20 +853,6 @@
                 font-size: 1rem !important;
             }
             
-            /* Overlay for sidebar */
-            .sidebar-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.5);
-                z-index: 1040;
-                display: none;
-            }
-            .sidebar-open .sidebar-overlay {
-                display: block;
-            }
         }
         
         /* Extra Small Devices */
@@ -845,38 +1045,30 @@
     @stack('styles')
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition layout-fixed">
     <div class="wrapper">
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-bottom: 1px solid #e9ecef; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button" style="color: var(--dark-gray); font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: all 0.3s ease; margin-right: 8px;">
-                        <i class="fas fa-bars" style="font-size: 1.1rem;"></i>
-                    </a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('dashboard') }}" class="nav-link" style="color: var(--dark-gray); font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: all 0.3s ease; display: flex; align-items: center;">
-                        <i class="fas fa-home" style="margin-right: 8px; color: var(--light-blue);"></i> 
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-            </ul>
+        <!-- Top Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Brand Logo -->
+            <a class="navbar-brand" href="{{ route('dashboard') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="Sentiment Analysis Engineering">
+                <span class="d-none d-md-inline" style="font-family: 'Poppins', sans-serif;">Sentiment Analysis Engineering</span>
+            </a>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                        <a class="nav-link" href="{{ route('survey.index') }}" target="_blank" style="background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%); color: white; border-radius: 8px; padding: 10px 16px; margin-right: 12px; font-weight: 500; transition: all 0.3s ease; border: none; display: flex; align-items: center;">
+                    <a class="nav-link" href="{{ route('survey.index') }}" target="_blank" style="background: linear-gradient(135deg, var(--golden-orange) 0%, var(--light-green) 100%); color: white; border-radius: 8px; padding: 10px 16px; margin-right: 12px; font-weight: 500; transition: all 0.3s ease; border: none; display: flex; align-items: center;">
                         <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i> 
-                        <span>Engineering Survey</span>
+                        <span class="d-none d-sm-inline">Engineering Survey</span>
+                        <span class="d-sm-none">Survey</span>
                     </a>
                 </li>
                 @auth
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="color: var(--dark-gray); font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: all 0.3s ease; display: flex; align-items: center; background: rgba(152, 170, 231, 0.1);">
                         <i class="fas fa-user-circle" style="margin-right: 8px; color: var(--light-blue); font-size: 1.1rem;"></i> 
-                        <span>{{ Auth::user()->name }}</span>
+                        <span class="d-none d-sm-inline">{{ Auth::user()->name }}</span>
                         <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8rem; color: var(--dark-gray);"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" style="border: none; box-shadow: 0 8px 25px rgba(0,0,0,0.15); border-radius: 12px; padding: 8px; min-width: 200px;">
@@ -892,80 +1084,61 @@
             </ul>
         </nav>
 
-        <!-- Sidebar Overlay for Mobile -->
-        <div class="sidebar-overlay"></div>
-
-        <!-- Main Sidebar Container -->
+        <!-- Horizontal Navigation Menu -->
         @auth
-        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: var(--coral-pink) !important;">
-            <!-- Sidebar -->
-            <div class="sidebar" style="background-color: var(--coral-pink);">
-                <!-- Brand Logo at Top -->
-                <div class="text-center" style="padding: 25px 15px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
-                    <a href="{{ route('dashboard') }}" style="text-decoration: none; display: block;">
-                        <img src="{{ asset('images/logo.png') }}" alt="Sentiment Analysis Engineering" style="height: 150px; width: auto; margin-bottom: 10px; filter: brightness(1.1) contrast(1.1);">
-                        <div style="color: black; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.4rem; margin-top: 5px;">Sentiment Analysis Engineering</div>
-                    </a>
-                </div>
-                
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" style="padding: 0px;">
+        <nav class="navbar navbar-expand-lg horizontal-nav">
+            <div class="container-fluid">
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#horizontalNav" aria-controls="horizontalNav" aria-expanded="false" aria-label="Toggle navigation" style="border: 2px solid rgba(255,255,255,0.3); color: white; padding: 0.5rem 0.75rem;">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="horizontalNav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-tachometer-alt" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Dashboard</p>
+                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('teachers.index') }}" class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-chalkboard-teacher" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Teachers</p>
+                            <a href="{{ route('teachers.index') }}" class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <span>Teachers</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-book" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Subjects</p>
+                            <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}">
+                                <i class="fas fa-book"></i>
+                                <span>Subjects</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-users" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Users</p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('survey-questions.index') }}" class="nav-link {{ request()->routeIs('survey-questions.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-question-circle" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Survey Questions</p>
+                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                                <i class="fas fa-users"></i>
+                                <span>Users</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-chart-bar" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Reports</p>
+                            <a href="{{ route('survey-questions.index') }}" class="nav-link {{ request()->routeIs('survey-questions.*') ? 'active' : '' }}">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Survey Questions</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('sentiment-words.index') }}" class="nav-link {{ request()->routeIs('sentiment-words.*') ? 'active' : '' }}" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-brain" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Sentiment Words</p>
+                            <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Reports</span>
                             </a>
                         </li>
-                        
-                        <!-- Logout Section -->
-                        <li class="nav-item" style="margin-top: 50px;">
-                            <a href="#" onclick="logout()" class="nav-link" style="color: black; border-radius: 8px; margin-bottom: 8px; transition: all 0.3s ease;">
-                                <i class="nav-icon fas fa-sign-out-alt" style="color: black; margin-right: 12px;"></i>
-                                <p style="color: black; font-family: 'Poppins', sans-serif; font-weight: 400;">Log out</p>
+                        <li class="nav-item">
+                            <a href="{{ route('sentiment-words.index') }}" class="nav-link {{ request()->routeIs('sentiment-words.*') ? 'active' : '' }}">
+                                <i class="fas fa-brain"></i>
+                                <span>Sentiment Words</span>
                             </a>
                         </li>
                     </ul>
-                </nav>
+                </div>
             </div>
-        </aside>
+        </nav>
         @endauth
 
         <!-- Content Wrapper -->
@@ -973,15 +1146,15 @@
             <!-- Content Header -->
             <section class="content-header">
                 <div class="container-fluid">
-                    <div class="row mb-2">
+                    <div class="row align-items-center">
                         <div class="col-sm-6">
                             <h1 class="page-title-custom">
                                 <i class="fas fa-@yield('icon', 'home')"></i>
-                                @yield('page-title', 'Dashboard')
+                                <span>@yield('page-title', 'Dashboard')</span>
                             </h1>
                         </div>
                         <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
+                            <ol class="breadcrumb">
                                 @yield('breadcrumb')
                             </ol>
                         </div>
@@ -1091,30 +1264,6 @@
                 }
             });
 
-            // Mobile sidebar functionality
-            $('[data-widget="pushmenu"]').on('click', function(e) {
-                e.preventDefault();
-                $('body').toggleClass('sidebar-open');
-            });
-
-            // Close sidebar when clicking overlay
-            $('.sidebar-overlay').on('click', function() {
-                $('body').removeClass('sidebar-open');
-            });
-
-            // Close sidebar on window resize
-            $(window).on('resize', function() {
-                if ($(window).width() > 768) {
-                    $('body').removeClass('sidebar-open');
-                }
-            });
-
-            // Prevent body scroll when sidebar is open on mobile
-            $('body').on('touchmove', function(e) {
-                if ($('body').hasClass('sidebar-open')) {
-                    e.preventDefault();
-                }
-            });
 
             // Session expiration detection
             let sessionTimeout;

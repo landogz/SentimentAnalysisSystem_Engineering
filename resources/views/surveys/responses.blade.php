@@ -1,8 +1,14 @@
 <!-- Survey Information Header -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
+        <div class="modern-card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Survey Information
+                </h3>
+            </div>
+            <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="mb-2">
@@ -55,7 +61,7 @@
 <!-- Tab Navigation -->
 <div class="row mb-4">
     <div class="col-12">
-        <ul class="nav nav-tabs nav-fill" id="surveyTabs" role="tablist">
+        <ul class="nav nav-tabs nav-fill modern-tabs" id="surveyTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
                     <i class="fas fa-chart-bar me-2"></i>Overview
@@ -89,13 +95,14 @@
     <div class="tab-pane fade show active" id="overview" role="tabpanel">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <h6 class="card-title mb-4">
-                            <i class="fas fa-chart-pie text-primary me-2"></i>
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie"></i>
                             Survey Analysis Summary
-                        </h6>
-                        
+                        </h3>
+                    </div>
+                    <div class="card-body">
                         <!-- Analysis Cards -->
                         <div class="row g-3 mb-4">
                             <div class="col-md-3">
@@ -187,15 +194,15 @@
     <div class="tab-pane fade" id="part1" role="tabpanel">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="card-title mb-0">
-                            <i class="fas fa-chalkboard-teacher me-2"></i>
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chalkboard-teacher"></i>
                             Part 1: Instructor Evaluation
-                            <span class="badge bg-light text-primary ms-2">{{ number_format($part1Average, 1) }}/5.0</span>
-                        </h6>
+                            <span class="badge bg-primary ms-2">{{ number_format($part1Average, 1) }}/5.0</span>
+                        </h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         @if($part1Responses->count() > 0)
                             <div class="row">
                                 @foreach($part1Responses as $response)
@@ -235,15 +242,15 @@
     <div class="tab-pane fade" id="part2" role="tabpanel">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-info text-white">
-                        <h6 class="card-title mb-0">
-                            <i class="fas fa-chart-line me-2"></i>
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-line"></i>
                             Part 2: Difficulty Level
-                            <span class="badge bg-light text-info ms-2">{{ number_format($part2Average, 1) }}/5.0</span>
-                        </h6>
+                            <span class="badge bg-info ms-2">{{ number_format($part2Average, 1) }}/5.0</span>
+                        </h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         @if($part2Responses->count() > 0)
                             <div class="row">
                                 @foreach($part2Responses as $response)
@@ -283,15 +290,15 @@
     <div class="tab-pane fade" id="part3" role="tabpanel">
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h6 class="card-title mb-0">
-                            <i class="fas fa-comments me-2"></i>
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-comments"></i>
                             Part 3: Open Comments
-                            <span class="badge bg-light text-success ms-2">Sentiment: {{ ucfirst($part3Sentiment) }}</span>
-                        </h6>
+                            <span class="badge bg-success ms-2">Sentiment: {{ ucfirst($part3Sentiment) }}</span>
+                        </h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         @if($part3Responses->count() > 0)
                             @foreach($part3Responses as $response)
                             <div class="comment-card border rounded p-4 mb-3">
@@ -328,14 +335,14 @@
 @if($survey->feedback_text)
 <div class="row mt-4">
     <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-secondary text-white">
-                <h6 class="card-title mb-0">
-                    <i class="fas fa-comment-dots me-2"></i>
+        <div class="modern-card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-comment-dots"></i>
                     Additional Feedback
-                </h6>
+                </h3>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body">
                 <div class="bg-light p-3 rounded">
                     {{ $survey->feedback_text }}
                 </div>
@@ -346,91 +353,158 @@
 @endif
 
 <style>
-/* Professional Tab Styling */
-.nav-tabs {
-    border-bottom: 2px solid #e9ecef;
-}
+    :root {
+        --primary-gradient: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+        --success-gradient: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%);
+        --danger-gradient: linear-gradient(135deg, #FF4E00 0%, #E64500 100%);
+        --warning-gradient: linear-gradient(135deg, #F5B445 0%, #e4a23d 100%);
+    }
 
-.nav-tabs .nav-link {
-    border: none;
-    border-bottom: 3px solid transparent;
-    border-radius: 0;
-    color: #6c757d;
-    font-weight: 500;
-    padding: 12px 20px;
-    transition: all 0.3s ease;
-}
+    /* Modern Card Design */
+    .modern-card {
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        margin-bottom: 1.5rem;
+    }
 
-.nav-tabs .nav-link:hover {
-    border-color: #dee2e6;
-    color: #495057;
-}
+    .modern-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+    }
 
-.nav-tabs .nav-link.active {
-    border-bottom-color: #0d6efd;
-    color: #0d6efd;
-    background-color: transparent;
-}
+    .modern-card .card-header {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);
+        border-bottom: 2px solid rgba(152, 170, 231, 0.2);
+        padding: 1.5rem;
+        border-radius: 24px 24px 0 0;
+    }
 
-/* Analysis Cards */
-.analysis-card {
-    border-radius: 12px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background-color: #ffffff;
-    border: 1px solid #e9ecef;
-}
+    .modern-card .card-header h3 {
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #494850;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
 
-.analysis-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+    .modern-card .card-header h3 i {
+        background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+    }
 
-.analysis-card-primary {
-    border-left: 4px solid #0d6efd;
-    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-}
+    .modern-card .card-body {
+        padding: 2rem;
+    }
 
-.analysis-card-info {
-    border-left: 4px solid #0dcaf0;
-    background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
-}
+    /* Professional Tab Styling */
+    .modern-tabs {
+        border-bottom: 2px solid rgba(152, 170, 231, 0.2);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        border-radius: 16px 16px 0 0;
+        padding: 0.5rem;
+    }
 
-.analysis-card-success {
-    border-left: 4px solid #198754;
-    background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
-}
+    .modern-tabs .nav-link {
+        border: none;
+        border-bottom: 3px solid transparent;
+        border-radius: 12px;
+        color: #6c757d;
+        font-weight: 600;
+        padding: 12px 20px;
+        transition: all 0.3s ease;
+        margin: 0 0.25rem;
+    }
 
-.analysis-card-warning {
-    border-left: 4px solid #ffc107;
-    background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
-}
+    .modern-tabs .nav-link:hover {
+        background: rgba(152, 170, 231, 0.1);
+        color: #98AAE7;
+    }
 
-.analysis-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-}
+    .modern-tabs .nav-link.active {
+        border-bottom-color: #98AAE7;
+        color: #98AAE7;
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.15) 0%, rgba(143, 207, 168, 0.15) 100%);
+    }
 
-/* Response Cards */
-.response-card {
-    background-color: #f8f9fa;
-    transition: transform 0.2s ease;
-}
+    /* Analysis Cards */
+    .analysis-card {
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background-color: #ffffff;
+        border: 1px solid rgba(152, 170, 231, 0.2);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
 
-.response-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+    .analysis-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    }
 
-.comment-card {
-    background-color: #f8f9fa;
-    transition: transform 0.2s ease;
-}
+    .analysis-card-primary {
+        border-left: 4px solid #98AAE7;
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+    }
 
-.comment-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+    .analysis-card-info {
+        border-left: 4px solid #0dcaf0;
+        background: linear-gradient(135deg, rgba(13, 202, 240, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    .analysis-card-success {
+        border-left: 4px solid #8FCFA8;
+        background: linear-gradient(135deg, rgba(143, 207, 168, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    .analysis-card-warning {
+        border-left: 4px solid #F5B445;
+        background: linear-gradient(135deg, rgba(245, 180, 69, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    .analysis-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Response Cards */
+    .response-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        border: 1px solid rgba(152, 170, 231, 0.2) !important;
+        border-radius: 16px !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .response-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        border-color: rgba(152, 170, 231, 0.4) !important;
+    }
+
+    .comment-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        border: 1px solid rgba(152, 170, 231, 0.2) !important;
+        border-radius: 16px !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .comment-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        border-color: rgba(152, 170, 231, 0.4) !important;
+    }
 
 /* Rating Display */
 .rating-display {
@@ -442,12 +516,13 @@
     font-size: 0.8rem;
 }
 
-/* Info Sections */
-.info-section {
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-}
+    /* Info Sections */
+    .info-section {
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.05) 0%, rgba(143, 207, 168, 0.05) 100%);
+        border-radius: 16px;
+        border: 1px solid rgba(152, 170, 231, 0.2);
+    }
 
 .sentiment-display {
     display: flex;
@@ -456,26 +531,12 @@
     height: 100%;
 }
 
-/* Card Styling */
-.card {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.card-header {
-    border: none;
-    padding: 1rem 1.5rem;
-}
-
-.card-body {
-    padding: 1.5rem;
-}
-
-/* Badge Styling */
-.badge {
-    font-weight: 500;
-    padding: 0.5em 0.75em;
-}
+    /* Badge Styling */
+    .badge {
+        font-weight: 600;
+        padding: 0.5em 0.75em;
+        border-radius: 8px;
+    }
 
 /* Responsive Design */
 @media (max-width: 768px) {

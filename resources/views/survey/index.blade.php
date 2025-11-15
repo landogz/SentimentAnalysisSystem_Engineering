@@ -25,44 +25,224 @@
             --coral-pink: #F16E70;
             --golden-orange: #F5B445;
             --light-blue: #98AAE7;
+            --primary-gradient: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
+            --success-gradient: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%);
+            --warning-gradient: linear-gradient(135deg, var(--golden-orange) 0%, #f5a623 100%);
+            --info-gradient: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background-size: 400% 400%;
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(152, 170, 231, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(245, 180, 69, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(143, 207, 168, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
         }
         
         .survey-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(73, 72, 80, 0.15);
-            margin: 1rem auto;
-            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            margin: 2rem auto;
+            max-width: 950px;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         @media (max-width: 768px) {
             .survey-container {
-                margin: 0.5rem;
-                border-radius: 15px;
+                margin: 1rem;
+                border-radius: 20px;
             }
         }
         
         .survey-header {
-            background: linear-gradient(135deg, var(--dark-gray) 0%, #5a5a6a 100%);
+            background: var(--primary-gradient);
             color: white;
-            padding: 3rem 2rem;
+            padding: 3rem 2rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
         
+        /* Multi-Step Wizard Styles */
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem auto 0;
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .wizard-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .wizard-step::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 0;
+        }
+        
+        .wizard-step:first-child::before {
+            display: none;
+        }
+        
+        .wizard-step.completed::before {
+            background: rgba(255, 255, 255, 0.6);
+        }
+        
+        .wizard-step.active::before {
+            background: rgba(255, 255, 255, 0.6);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+        
+        .wizard-step.active .step-number {
+            background: white;
+            color: var(--dark-gray);
+            border-color: white;
+            transform: scale(1.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .wizard-step.completed .step-number {
+            background: var(--light-green);
+            border-color: var(--light-green);
+            color: white;
+        }
+        
+        .wizard-step.completed .step-number::after {
+            content: '✓';
+            font-size: 1.2rem;
+        }
+        
+        .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            opacity: 0.7;
+            transition: all 0.4s ease;
+        }
+        
+        .wizard-step.active .step-label {
+            opacity: 1;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .wizard-steps {
+                margin: 1.5rem auto 0;
+            }
+            
+            .step-number {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            
+            .step-label {
+                font-size: 0.65rem;
+                margin-top: 0.4rem;
+            }
+        }
+        
+        .wizard-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .wizard-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         @media (max-width: 768px) {
             .survey-header {
-                padding: 2rem 1rem;
+                padding: 2.5rem 1.5rem;
             }
         }
         
@@ -73,53 +253,87 @@
             left: -50%;
             width: 200%;
             height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .survey-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
         
         .logo-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
         }
         
         .logo-section img {
-            height: 150px;
+            height: 140px;
             width: auto;
             margin-bottom: 1rem;
-            filter: brightness(1.1) contrast(1.1);
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+            animation: logoFloat 3s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-section img:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
         
         .survey-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
             position: relative;
-            z-index: 1;
+            z-index: 2;
             color: white;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            letter-spacing: -0.5px;
         }
         
         @media (max-width: 768px) {
             .survey-header h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
         }
         
         @media (max-width: 480px) {
             .survey-header h1 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
         }
         
         .survey-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            opacity: 0.95;
             position: relative;
-            z-index: 1;
+            z-index: 2;
             color: white;
+            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.15);
         }
         
         @media (max-width: 768px) {
@@ -129,128 +343,214 @@
         }
         
         .survey-body {
-            padding: 3rem 2rem;
+            padding: 3.5rem 2.5rem;
+            background: rgba(255, 255, 255, 0.5);
         }
         
         @media (max-width: 768px) {
             .survey-body {
-                padding: 2rem 1rem;
+                padding: 2rem 1.5rem;
             }
         }
         
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
         }
         
         .form-label {
             font-weight: 600;
             color: var(--dark-gray);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            display: block;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
         }
         
         .form-control {
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 1rem;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            padding: 1.1rem 1.25rem;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background-color: #f8f9fa;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         @media (max-width: 768px) {
             .form-control {
-                padding: 0.875rem;
-                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 1rem;
+                font-size: 16px;
             }
         }
         
         .form-control:focus {
             border-color: var(--light-blue);
-            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
+            box-shadow: 
+                0 0 0 4px rgba(152, 170, 231, 0.1),
+                0 8px 20px rgba(152, 170, 231, 0.15);
             background-color: white;
             transform: translateY(-2px);
+            outline: none;
+        }
+        
+        .form-control::placeholder {
+            color: #adb5bd;
+            opacity: 0.7;
         }
         
         .form-select {
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 1rem;
+            border: 2px solid rgba(152, 170, 231, 0.2);
+            border-radius: 16px;
+            padding: 1.1rem 1.25rem;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background-color: #f8f9fa;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.9) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2398AAE7' d='M6 9L1 4h10z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+            background-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .form-select:focus {
             border-color: var(--light-blue);
-            box-shadow: 0 0 0 0.3rem rgba(152, 170, 231, 0.15);
+            box-shadow: 
+                0 0 0 4px rgba(152, 170, 231, 0.1),
+                0 8px 20px rgba(152, 170, 231, 0.15);
             background-color: white;
+            transform: translateY(-2px);
+            outline: none;
+        }
+        
+        .form-select:hover {
+            border-color: rgba(152, 170, 231, 0.4);
         }
         
 
         
         .btn-submit {
-            background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%);
+            background: var(--info-gradient);
             border: none;
             color: white;
-            padding: 1.25rem 3rem;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 1.3rem 3rem;
+            border-radius: 16px;
+            font-weight: 700;
             font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
             width: 100%;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-submit:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-submit span {
+            position: relative;
+            z-index: 1;
         }
         
         @media (max-width: 768px) {
             .btn-submit {
-                padding: 1rem 2rem;
+                padding: 1.1rem 2rem;
                 font-size: 1rem;
             }
         }
         
         .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(152, 170, 231, 0.4);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(152, 170, 231, 0.5);
             color: white;
         }
         
         .btn-submit:active {
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(0.98);
         }
         
         .btn-submit:disabled {
             opacity: 0.6;
             transform: none;
-            box-shadow: none;
+            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.2);
+            cursor: not-allowed;
         }
         
         .alert {
-            border-radius: 12px;
+            border-radius: 16px;
             border: none;
-            box-shadow: 0 4px 15px rgba(73, 72, 80, 0.1);
-            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 1.25rem 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         .alert-success {
-            background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%);
-            color: #155724;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.9) 0%, rgba(0, 242, 254, 0.9) 100%);
+            color: white;
         }
         
         .alert-danger {
-            background: linear-gradient(135deg, var(--coral-pink) 0%, #e55a5c 100%);
-            color: #721c24;
+            background: linear-gradient(135deg, rgba(245, 87, 108, 0.9) 0%, rgba(250, 112, 154, 0.9) 100%);
+            color: white;
+        }
+        
+        .alert-info {
+            background: var(--info-gradient);
+            color: white;
+        }
+        
+        .alert-warning {
+            background: var(--warning-gradient);
+            color: #333;
         }
         
         .error-feedback {
-            color: var(--coral-pink);
+            color: #f5576c;
             font-size: 0.875rem;
             margin-top: 0.5rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .error-feedback::before {
+            content: '⚠';
+            font-size: 1rem;
         }
         
         .footer {
@@ -258,22 +558,43 @@
             padding: 2rem;
             color: var(--dark-gray);
             font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         @media (max-width: 768px) {
             .footer {
-                padding: 1rem;
-                font-size: 0.8rem;
+                padding: 1.5rem;
+                font-size: 0.85rem;
             }
+        }
+        
+        .footer p {
+            margin: 0;
+            color: var(--dark-gray);
+            opacity: 0.8;
         }
         
         .footer a {
             color: var(--light-blue);
             text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         
         .footer a:hover {
+            color: var(--dark-gray);
             text-decoration: underline;
+        }
+        
+        /* Login button hover effect */
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
         }
         
         /* Mobile-specific improvements */
@@ -348,304 +669,422 @@
         
         /* Form section styling */
         .form-section {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid #e9ecef;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--info-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .form-section:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .form-section:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.12),
+                0 0 0 1px rgba(255, 255, 255, 0.4) inset;
         }
         
         @media (max-width: 768px) {
             .form-section {
-                padding: 1.5rem;
+                padding: 1.75rem;
+                border-radius: 16px;
             }
+        }
+        
+        .form-section h4 {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .form-section h4 i {
+            font-size: 1.3rem;
         }
 
         /* Survey Questions Styling */
+        .btn-group {
+            gap: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
         .btn-group .btn {
-            border-radius: 8px;
-            margin: 0 2px;
+            border-radius: 12px;
+            margin: 0;
             transition: all 0.3s ease;
-            font-weight: 500;
-            padding: 0.75rem 0.5rem;
-            min-height: 60px;
+            font-weight: 600;
+            padding: 0.875rem 0.5rem;
+            min-height: 75px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            line-height: 1.2;
+            line-height: 1.3;
+            border-width: 2px;
+            flex: 1;
+            min-width: 85px;
+            max-width: calc(20% - 0.4rem);
+            position: relative;
+            background: white;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         
         .btn-group .btn small {
             font-size: 0.7rem;
-            font-weight: 400;
-            margin-top: 2px;
-            opacity: 0.8;
+            font-weight: 500;
+            margin-top: 4px;
+            opacity: 0.85;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-group .btn strong {
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 700;
         }
         
         .btn-group .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(152, 170, 231, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            z-index: 2;
         }
         
         .btn-check:checked + .btn {
-            background-color: var(--light-blue);
-            border-color: var(--light-blue);
+            border-color: transparent;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(152, 170, 231, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
         
         .btn-check:checked + .btn:hover {
-            background-color: #7a8cd6;
-            border-color: #7a8cd6;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
         
         .btn-check:checked + .btn small {
             opacity: 1;
-        }
-        
-        /* Part 2 specific button styling for better visibility */
-        .part2 .btn-group .btn {
-            border-width: 2px;
             font-weight: 600;
         }
         
+        .btn-check:checked + .btn strong {
+            font-size: 1.5rem;
+        }
+        
+        /* Part 1 Button Styling - Instructor Evaluation */
+        .part-section:not(.part2):not(.part3) .btn-outline-success {
+            color: #198754;
+            border-color: #198754;
+            background: rgba(25, 135, 84, 0.05);
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-success:hover {
+            background: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-check:checked + .btn-outline-success {
+            background: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-info {
+            color: #0dcaf0;
+            border-color: #0dcaf0;
+            background: rgba(13, 202, 240, 0.05);
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-info:hover {
+            background: #0dcaf0;
+            border-color: #0dcaf0;
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-check:checked + .btn-outline-info {
+            background: #0dcaf0;
+            border-color: #0dcaf0;
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-secondary {
+            color: #6c757d;
+            border-color: #6c757d;
+            background: rgba(108, 117, 125, 0.05);
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-secondary:hover {
+            background: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-check:checked + .btn-outline-secondary {
+            background: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-warning {
+            color: var(--golden-orange);
+            border-color: var(--golden-orange);
+            background: rgba(245, 180, 69, 0.05);
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-warning:hover {
+            background: var(--golden-orange);
+            border-color: var(--golden-orange);
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-check:checked + .btn-outline-warning {
+            background: var(--golden-orange);
+            border-color: var(--golden-orange);
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-danger {
+            color: var(--coral-pink);
+            border-color: var(--coral-pink);
+            background: rgba(241, 110, 112, 0.05);
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-outline-danger:hover {
+            background: var(--coral-pink);
+            border-color: var(--coral-pink);
+            color: white;
+        }
+        
+        .part-section:not(.part2):not(.part3) .btn-check:checked + .btn-outline-danger {
+            background: var(--coral-pink);
+            border-color: var(--coral-pink);
+            color: white;
+        }
+        
+        /* Part 2 Button Styling - Difficulty Level */
         .part2 .btn-outline-danger {
-            color: #dc3545;
-            border-color: #dc3545;
+            color: var(--coral-pink);
+            border-color: var(--coral-pink);
+            background: rgba(241, 110, 112, 0.05);
         }
         
         .part2 .btn-outline-danger:hover {
-            background-color: #dc3545;
-            border-color: #dc3545;
+            background: var(--coral-pink);
+            border-color: var(--coral-pink);
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-danger {
+            background: var(--coral-pink);
+            border-color: var(--coral-pink);
             color: white;
         }
         
         .part2 .btn-outline-warning {
-            color: #fd7e14;
-            border-color: #fd7e14;
+            color: var(--golden-orange);
+            border-color: var(--golden-orange);
+            background: rgba(245, 180, 69, 0.05);
         }
         
         .part2 .btn-outline-warning:hover {
-            background-color: #fd7e14;
-            border-color: #fd7e14;
+            background: var(--golden-orange);
+            border-color: var(--golden-orange);
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-warning {
+            background: var(--golden-orange);
+            border-color: var(--golden-orange);
             color: white;
         }
         
         .part2 .btn-outline-secondary {
             color: #6c757d;
             border-color: #6c757d;
+            background: rgba(108, 117, 125, 0.05);
         }
         
         .part2 .btn-outline-secondary:hover {
-            background-color: #6c757d;
+            background: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        
+        .part2 .btn-check:checked + .btn-outline-secondary {
+            background: #6c757d;
             border-color: #6c757d;
             color: white;
         }
         
         .part2 .btn-outline-info {
-            color: #0dcaf0;
-            border-color: #0dcaf0;
+            color: var(--light-blue);
+            border-color: var(--light-blue);
+            background: rgba(152, 170, 231, 0.05);
         }
         
         .part2 .btn-outline-info:hover {
-            background-color: #0dcaf0;
-            border-color: #0dcaf0;
-            color: white;
-        }
-        
-        .part2 .btn-outline-success {
-            color: #198754;
-            border-color: #198754;
-        }
-        
-        .part2 .btn-outline-success:hover {
-            background-color: #198754;
-            border-color: #198754;
-            color: white;
-        }
-        
-        /* Selected state for Part 2 buttons */
-        .part2 .btn-check:checked + .btn-outline-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            color: white;
-        }
-        
-        .part2 .btn-check:checked + .btn-outline-warning {
-            background-color: #fd7e14;
-            border-color: #fd7e14;
-            color: white;
-        }
-        
-        .part2 .btn-check:checked + .btn-outline-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
+            background: var(--light-blue);
+            border-color: var(--light-blue);
             color: white;
         }
         
         .part2 .btn-check:checked + .btn-outline-info {
-            background-color: #0dcaf0;
-            border-color: #0dcaf0;
+            background: var(--light-blue);
+            border-color: var(--light-blue);
+            color: white;
+        }
+        
+        .part2 .btn-outline-success {
+            color: var(--light-green);
+            border-color: var(--light-green);
+            background: rgba(143, 207, 168, 0.05);
+        }
+        
+        .part2 .btn-outline-success:hover {
+            background: var(--light-green);
+            border-color: var(--light-green);
             color: white;
         }
         
         .part2 .btn-check:checked + .btn-outline-success {
-            background-color: #198754;
-            border-color: #198754;
-            color: white;
-        }
-        
-        /* Part 1 specific button styling for better visibility */
-        .part-section:not(.part2) .btn-group .btn {
-            border-width: 2px;
-            font-weight: 600;
-        }
-        
-        .part-section:not(.part2) .btn-outline-success {
-            color: #198754;
-            border-color: #198754;
-        }
-        
-        .part-section:not(.part2) .btn-outline-success:hover {
-            background-color: #198754;
-            border-color: #198754;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-outline-info {
-            color: #0dcaf0;
-            border-color: #0dcaf0;
-        }
-        
-        .part-section:not(.part2) .btn-outline-info:hover {
-            background-color: #0dcaf0;
-            border-color: #0dcaf0;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-outline-secondary {
-            color: #6c757d;
-            border-color: #6c757d;
-        }
-        
-        .part-section:not(.part2) .btn-outline-secondary:hover {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-outline-warning {
-            color: #fd7e14;
-            border-color: #fd7e14;
-        }
-        
-        .part-section:not(.part2) .btn-outline-warning:hover {
-            background-color: #fd7e14;
-            border-color: #fd7e14;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-outline-danger {
-            color: #dc3545;
-            border-color: #dc3545;
-        }
-        
-        .part-section:not(.part2) .btn-outline-danger:hover {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            color: white;
-        }
-        
-        /* Selected state for Part 1 buttons */
-        .part-section:not(.part2) .btn-check:checked + .btn-outline-success {
-            background-color: #198754;
-            border-color: #198754;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-check:checked + .btn-outline-info {
-            background-color: #0dcaf0;
-            border-color: #0dcaf0;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-check:checked + .btn-outline-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-check:checked + .btn-outline-warning {
-            background-color: #fd7e14;
-            border-color: #fd7e14;
-            color: white;
-        }
-        
-        .part-section:not(.part2) .btn-check:checked + .btn-outline-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
+            background: var(--light-green);
+            border-color: var(--light-green);
             color: white;
         }
         
         /* Part-specific styling */
         .part-section {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--light-blue);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        .part-section.part2 {
-            border-left-color: var(--golden-orange);
+        .part-section::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--info-gradient);
         }
         
-        .part-section.part3 {
-            border-left-color: var(--light-blue);
+        .part-section:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .part-section.part2::before {
+            background: var(--warning-gradient);
+        }
+        
+        .part-section.part3::before {
+            background: var(--info-gradient);
+        }
+        
+        .part-section h5 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         
         .section-subtitle {
-            font-size: 0.9rem;
-            color: #6c757d;
-            font-weight: 500;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            background: rgba(152, 170, 231, 0.1);
-            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(122, 140, 214, 0.1) 100%);
+            border-radius: 12px;
+            border-left: 3px solid var(--light-blue);
+            letter-spacing: 0.3px;
         }
         
         .question-label {
             font-weight: 600;
             color: var(--dark-gray);
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            font-size: 1rem;
         }
         
         .question-number {
             color: var(--light-blue);
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 1.1em;
+            margin-right: 0.5rem;
         }
         
         /* Mobile responsive for survey questions */
         @media (max-width: 768px) {
             .btn-group {
                 flex-wrap: wrap;
+                gap: 0.5rem;
             }
             
             .btn-group .btn {
                 flex: 1;
-                min-width: 60px;
-                margin: 2px;
-                padding: 0.5rem 0.25rem;
-                min-height: 50px;
-                font-size: 0.8rem;
+                min-width: calc(50% - 0.25rem);
+                max-width: calc(50% - 0.25rem);
+                margin: 0;
+                padding: 0.75rem 0.5rem;
+                min-height: 70px;
+                font-size: 0.95rem;
+            }
+            
+            .btn-group .btn strong {
+                font-size: 1.3rem;
             }
             
             .btn-group .btn small {
-                font-size: 0.6rem;
+                font-size: 0.65rem;
+                margin-top: 3px;
             }
             
             .col-md-6 {
@@ -654,6 +1093,14 @@
             
             .part-section {
                 padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .btn-group .btn {
+                min-width: 100%;
+                max-width: 100%;
+                min-height: 65px;
             }
         }
 
@@ -674,106 +1121,172 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 2rem 0;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border: 1px solid #e9ecef;
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
         }
         
         .tab-indicator {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 1rem;
+        }
+        
+        .tab-indicator span {
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 0.95rem;
         }
         
         .tab-dot {
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             background: #dee2e6;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(152, 170, 231, 0.2);
+            transition: all 0.4s ease;
         }
         
         .tab-dot:hover {
-            transform: scale(1.1);
+            transform: scale(1.3);
             background: #adb5bd;
         }
         
+        .tab-dot:hover::after {
+            width: 30px;
+            height: 30px;
+        }
+        
         .tab-dot.active {
-            background: var(--light-blue);
-            transform: scale(1.2);
+            background: var(--info-gradient);
+            transform: scale(1.4);
+            box-shadow: 0 4px 15px rgba(152, 170, 231, 0.4);
+        }
+        
+        .tab-dot.active::after {
+            width: 35px;
+            height: 35px;
         }
         
         .tab-dot.completed {
-            background: var(--light-green);
+            background: var(--success-gradient);
+            box-shadow: 0 4px 15px rgba(143, 207, 168, 0.4);
         }
         
         .tab-dot.completed:hover {
-            background: #7bb894;
+            transform: scale(1.3);
         }
         
         .nav-buttons {
             display: flex;
             gap: 1rem;
             justify-content: space-between;
-            padding: 1.5rem 0;
-            border-top: 1px solid #e9ecef;
-            margin-top: 2rem;
+            padding: 2rem 0 0 0;
+            margin-top: 2.5rem;
+            border-top: 2px solid rgba(102, 126, 234, 0.1);
         }
         
         .btn-nav {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            min-width: 140px;
+        }
+        
+        .btn-nav::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        
+        .btn-nav:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-nav span {
+            position: relative;
+            z-index: 1;
         }
         
         .btn-prev {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.9);
             color: var(--dark-gray);
-            border-color: #dee2e6;
+            border-color: rgba(152, 170, 231, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
         
         .btn-prev:hover {
-            background: #e9ecef;
+            background: white;
             color: var(--dark-gray);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            border-color: rgba(152, 170, 231, 0.4);
         }
         
         .btn-next {
-            background: var(--light-blue);
+            background: var(--info-gradient);
             color: white;
-            border-color: var(--light-blue);
+            border-color: transparent;
+            box-shadow: 0 6px 20px rgba(152, 170, 231, 0.4);
         }
         
         .btn-next:hover {
-            background: #7a8cd6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(152, 170, 231, 0.5);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(152, 170, 231, 0.3);
         }
         
         .btn-submit-final {
-            background: var(--light-green);
+            background: var(--success-gradient);
             color: white;
-            border-color: var(--light-green);
+            border-color: transparent;
+            box-shadow: 0 6px 20px rgba(143, 207, 168, 0.4);
         }
         
         .btn-submit-final:hover {
-            background: #7bb894;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(143, 207, 168, 0.5);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(143, 207, 168, 0.3);
         }
         
         .btn-nav:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
         }
         
         /* Mobile responsive for tabs */
@@ -806,17 +1319,49 @@
                 </div>
             <h1>PRMSU ENGINEERING</h1>
                 <p>Student Feedback Survey</p>
-                
+                 
                 <!-- Login Link Section -->
                 <div class="mt-4" style="position: relative; z-index: 10;">
-                    <p class="mb-2" style="color: rgba(255, 255, 255, 0.9); font-size: 0.9rem;">
-                        <i class="fas fa-user-lock me-2" style="color: var(--light-blue);"></i>
+                    <p class="mb-3" style="color: rgba(255, 255, 255, 0.95); font-size: 0.95rem; font-weight: 500;">
+                        <i class="fas fa-user-lock me-2" style="color: rgba(255, 255, 255, 0.9);"></i>
                         Faculty or Staff Member?
                     </p>
-                    <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm" style="border-radius: 8px; padding: 0.5rem 1.5rem; font-weight: 500; transition: all 0.3s ease; border: 2px solid rgba(255, 255, 255, 0.3); position: relative; z-index: 10;">
+                    <a href="{{ route('login') }}" class="btn btn-outline-light" style="border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid rgba(255, 255, 255, 0.4); position: relative; z-index: 10; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
                         <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
                     </a>
             </div>
+                <!-- Multi-Step Wizard Indicator -->
+                <div class="wizard-steps">
+                    <div class="wizard-step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Student Info</div>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Teacher & Subject</div>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Part 1</div>
+                    </div>
+                    @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
+                    <div class="wizard-step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Part 2</div>
+                    </div>
+                    @endif
+                    @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
+                    <div class="wizard-step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Part 3</div>
+                    </div>
+                    @endif
+                    <div class="wizard-step" data-step="6">
+                        <div class="step-number">6</div>
+                        <div class="step-label">Comments</div>
+                    </div>
+                </div>
+               
         </div>
         
             <div class="survey-body">
@@ -843,43 +1388,57 @@
             <form method="POST" action="{{ route('survey.store') }}" id="surveyForm">
                 @csrf
                 
-                <div class="form-section">
+                <!-- Step 1: Student Information -->
+                <div class="wizard-content active" data-step="1">
+                    <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-user me-2" style="color: var(--light-blue);"></i>
-                        Student Information
-                    </h4>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="student_name" class="form-label">Full Name (Optional)</label>
-                                <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
-                                       id="student_name" name="student_name" value="{{ old('student_name') }}" 
-                                       placeholder="Enter your full name (optional)">
-                                @error('student_name')
-                                    <div class="error-feedback">{{ $message }}</div>
-                                @enderror
+                            Student Information
+                        </h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="student_name" class="form-label">Full Name (Optional)</label>
+                                    <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
+                                           id="student_name" name="student_name" value="{{ old('student_name') }}" 
+                                           placeholder="Enter your full name (optional)">
+                                    @error('student_name')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="student_email" class="form-label">Email Address (Optional)</label>
-                                <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
-                                       id="student_email" name="student_email" value="{{ old('student_email') }}" 
-                                       placeholder="Enter your email (optional)">
-                                @error('student_email')
-                                    <div class="error-feedback">{{ $message }}</div>
-                                @enderror
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="student_email" class="form-label">Email Address (Optional)</label>
+                                    <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
+                                           id="student_email" name="student_email" value="{{ old('student_email') }}" 
+                                           placeholder="Enter your email (optional)">
+                                    @error('student_email')
+                                        <div class="error-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-nav btn-prev" disabled>
+                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-nav btn-next" id="step1Next">
+                            Next<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="form-section">
+                <!-- Step 2: Teacher & Subject Selection -->
+                <div class="wizard-content" data-step="2">
+                    <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-chalkboard-teacher me-2" style="color: var(--light-blue);"></i>
-                        Teacher & Subject Selection
-                    </h4>
+                            Teacher & Subject Selection
+                        </h4>
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -912,42 +1471,32 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-
-                                    <!-- Survey Questions Section -->
-                <div class="form-section">
-                        <h4 class="mb-3" style="color: var(--dark-gray);">
-                            <i class="fas fa-question-circle me-2" style="color: var(--light-blue);"></i>
-                        Faculty Evaluation Survey
-                    </h4>
-                    
-                    <!-- Tab Navigation -->
-                    <div class="tab-navigation">
-                        <div class="tab-indicator">
-                                <span class="me-2">Progress:</span>
-                            <div class="tab-dot active" data-tab="1"></div>
-                                @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
-                            <div class="tab-dot" data-tab="2"></div>
-                                @endif
-                                @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
-                            <div class="tab-dot" data-tab="3"></div>
-                                @endif
-                        </div>
                     </div>
                     
-                    <!-- Tab 1: Part 1 - Instructor Evaluation -->
-                    <div class="survey-tab active" id="tab1">
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-nav btn-prev" id="step2Prev">
+                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-nav btn-next" id="step2Next">
+                            Next<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Part 1 - Instructor Evaluation -->
+                <div class="wizard-content" data-step="3">
+                    <div class="form-section">
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-star me-2" style="color: var(--light-blue);"></i>
+                            Part 1: Instructor Evaluation
+                        </h4>
+                        
+                        <div class="alert alert-info mb-3">
+                            <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
+                        </div>
+                        
                         @if(isset($questionsByPart['part1']))
                         <div class="part-section">
-                                <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
-                                    <i class="fas fa-star me-2"></i>Part 1: Instructor Evaluation
-                            </h5>
-                                <div class="alert alert-info mb-3">
-                                <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
-                            </div>
-                            
                             @php
                                 $part1Questions = $questionsByPart['part1'];
                                 $sections = [
@@ -961,161 +1510,168 @@
                             @foreach($sections as $sectionName => $sectionQuestions)
                                 <div class="mb-4">
                                     <div class="section-subtitle">{{ $sectionName }}</div>
-                                @foreach($sectionQuestions as $question)
-                                    <div class="form-group mb-3">
-                                        <label class="question-label">
-                                            <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                    </label>
-                                        <div class="btn-group w-100" role="group">
-                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                                   id="q{{ $question->id }}_5" value="5" required>
-                                            <label class="btn btn-outline-success" for="q{{ $question->id }}_5">
-                                                5<br><small>Outstanding</small>
+                                    @foreach($sectionQuestions as $question)
+                                        <div class="form-group mb-3">
+                                            <label class="question-label">
+                                                <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
                                             </label>
-                                            
-                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                                   id="q{{ $question->id }}_4" value="4" required>
-                                            <label class="btn btn-outline-info" for="q{{ $question->id }}_4">
-                                                4<br><small>Very Satisfactory</small>
-                                            </label>
-                                            
-                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                                   id="q{{ $question->id }}_3" value="3" required>
-                                            <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
-                                                3<br><small>Satisfactory</small>
-                                            </label>
-                                            
-                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                                   id="q{{ $question->id }}_2" value="2" required>
-                                            <label class="btn btn-outline-warning" for="q{{ $question->id }}_2">
-                                                2<br><small>Fair</small>
-                                            </label>
-                                            
-                                            <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                                   id="q{{ $question->id }}_1" value="1" required>
-                                            <label class="btn btn-outline-danger" for="q{{ $question->id }}_1">
-                                                1<br><small>Poor</small>
-                                            </label>
-                                    </div>
+                                            <div class="btn-group w-100" role="group">
+                                                <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                       id="q{{ $question->id }}_5" value="5" required>
+                                                <label class="btn btn-outline-success" for="q{{ $question->id }}_5">
+                                                    <strong>5</strong><small>Outstanding</small>
+                                                </label>
+                                                
+                                                <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                       id="q{{ $question->id }}_4" value="4" required>
+                                                <label class="btn btn-outline-info" for="q{{ $question->id }}_4">
+                                                    <strong>4</strong><small>Very Satisfactory</small>
+                                                </label>
+                                                
+                                                <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                       id="q{{ $question->id }}_3" value="3" required>
+                                                <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
+                                                    <strong>3</strong><small>Satisfactory</small>
+                                                </label>
+                                                
+                                                <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                       id="q{{ $question->id }}_2" value="2" required>
+                                                <label class="btn btn-outline-warning" for="q{{ $question->id }}_2">
+                                                    <strong>2</strong><small>Fair</small>
+                                                </label>
+                                                
+                                                <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
+                                                       id="q{{ $question->id }}_1" value="1" required>
+                                                <label class="btn btn-outline-danger" for="q{{ $question->id }}_1">
+                                                    <strong>1</strong><small>Poor</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
-                            </div>
                             @endforeach
                         </div>
-                        
-                        <!-- Navigation buttons for Tab 1 -->
-                        <div class="nav-buttons mt-4">
-                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev" disabled>
-                                <i class="fas fa-arrow-left me-2"></i>Previous
-                            </button>
-                            <button type="button" class="btn btn-nav btn-next" id="btnNext">
-                                Next<i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
+                        @endif
                     </div>
-                    @endif
                     
-                    <!-- Tab 2: Part 2 - Difficulty Level -->
-                    <div class="survey-tab" id="tab2">
-                        @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-nav btn-prev" id="step3Prev">
+                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-nav btn-next" id="step3Next">
+                            Next<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
+                <!-- Step 4: Part 2 - Difficulty Level -->
+                <div class="wizard-content" data-step="4">
+                    <div class="form-section">
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-chart-line me-2" style="color: var(--golden-orange);"></i>
+                            Part 2: Difficulty Level
+                        </h4>
+                        
+                        <div class="alert alert-warning mb-3">
+                            <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
+                        </div>
+                        
                         <div class="part-section part2">
-                                <h5 class="mb-3" style="color: var(--golden-orange); border-bottom: 2px solid var(--golden-orange); padding-bottom: 0.5rem;">
-                                    <i class="fas fa-chart-line me-2"></i>Part 2: Difficulty Level
-                            </h5>
-                                <div class="alert alert-warning mb-3">
-                                <strong>Rating Scale:</strong> 5 (Very Difficult) | 4 (Difficult) | 3 (Slightly Difficult) | 2 (Not Difficult) | 1 (Very Not Difficult)
-                            </div>
-                            
                             @foreach($questionsByPart['part2'] as $question)
                                 <div class="form-group mb-3">
                                     <label class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                </label>
+                                    </label>
                                     <div class="btn-group w-100" role="group">
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_5" value="5" required>
                                         <label class="btn btn-outline-danger" for="q{{ $question->id }}_5">
-                                            5<br><small>Very Difficult</small>
+                                            <strong>5</strong><small>Very Difficult</small>
                                         </label>
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_4" value="4" required>
                                         <label class="btn btn-outline-warning" for="q{{ $question->id }}_4">
-                                            4<br><small>Difficult</small>
+                                            <strong>4</strong><small>Difficult</small>
                                         </label>
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_3" value="3" required>
                                         <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
-                                            3<br><small>Slightly Difficult</small>
+                                            <strong>3</strong><small>Slightly Difficult</small>
                                         </label>
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_2" value="2" required>
                                         <label class="btn btn-outline-info" for="q{{ $question->id }}_2">
-                                            2<br><small>Not Difficult</small>
+                                            <strong>2</strong><small>Not Difficult</small>
                                         </label>
                                         
                                         <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
                                                id="q{{ $question->id }}_1" value="1" required>
                                         <label class="btn btn-outline-success" for="q{{ $question->id }}_1">
-                                            1<br><small>Very Not Difficult</small>
+                                            <strong>1</strong><small>Very Not Difficult</small>
                                         </label>
+                                    </div>
                                 </div>
-                            </div>
                             @endforeach
                         </div>
-                        
-                        <!-- Navigation buttons for Tab 2 -->
-                        <div class="nav-buttons mt-4">
-                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev2">
-                                <i class="fas fa-arrow-left me-2"></i>Previous
-                            </button>
-                            <button type="button" class="btn btn-nav btn-next" id="btnNext2">
-                                Next<i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                        @endif
                     </div>
                     
-                    <!-- Tab 3: Part 3 - Open Comments -->
-                    <div class="survey-tab" id="tab3">
-                        @if(isset($questionsByPart['part3']))
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-nav btn-prev" id="step4Prev">
+                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-nav btn-next" id="step4Next">
+                            Next<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+                @endif
+                
+                @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
+                <!-- Step 5: Part 3 - Open Comments -->
+                <div class="wizard-content" data-step="5">
+                    <div class="form-section">
+                        <h4 class="mb-3" style="color: var(--dark-gray);">
+                            <i class="fas fa-comments me-2" style="color: var(--light-blue);"></i>
+                            Part 3: Open Comments
+                        </h4>
+                        
+                        <div class="alert alert-info mb-3">
+                            <strong>Instructions:</strong> Please provide detailed responses to the following questions.
+                        </div>
+                        
                         <div class="part-section part3">
-                                <h5 class="mb-3" style="color: var(--light-blue); border-bottom: 2px solid var(--light-blue); padding-bottom: 0.5rem;">
-                                    <i class="fas fa-comments me-2"></i>Part 3: Open Comments
-                            </h5>
-                                <div class="alert alert-info mb-3">
-                                <strong>Instructions:</strong> Please provide detailed responses to the following questions.
-                            </div>
-                            
                             @foreach($questionsByPart['part3'] as $question)
                                 <div class="form-group mb-3">
                                     <label for="comment_{{ $question->id }}" class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                </label>
-                                <textarea class="form-control" 
-                                          id="comment_{{ $question->id }}" 
-                                          name="question_responses[{{ $question->id }}]" 
-                                          rows="3" 
-                                          placeholder="Please provide your response..."></textarea>
-                            </div>
+                                    </label>
+                                    <textarea class="form-control" 
+                                              id="comment_{{ $question->id }}" 
+                                              name="question_responses[{{ $question->id }}]" 
+                                              rows="3" 
+                                              placeholder="Please provide your response..."></textarea>
+                                </div>
                             @endforeach
                         </div>
-                        
-                        <!-- Navigation buttons for Tab 3 -->
-                        <div class="nav-buttons mt-4">
-                            <button type="button" class="btn btn-nav btn-prev" id="btnPrev3">
-                                <i class="fas fa-arrow-left me-2"></i>Previous
-                            </button>
-                            <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
-                                <i class="fas fa-paper-plane me-2"></i>Submit Survey
-                            </button>
-                        </div>
                     </div>
-                    @endif
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-nav btn-prev" id="step5Prev">
+                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-nav btn-next" id="step5Next">
+                            Next<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
                 </div>
-
+                @endif
+                
+                <!-- Step 6: Additional Comments -->
+                <div class="wizard-content" data-step="6">
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-comments me-2" style="color: var(--light-blue);"></i>
@@ -1132,6 +1688,16 @@
                             @enderror
                         </div>
                     </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-nav btn-prev" id="step6Prev">
+                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Survey
+                        </button>
+                    </div>
+                </div>
 
                 </form>
             </div>
@@ -1153,132 +1719,110 @@
 
     <script>
         $(document).ready(function() {
-            let currentTab = 1;
-            // Calculate total tabs dynamically based on available content
-            const totalTabs = $('.tab-dot').length;
+            let currentStep = 1;
+            const totalSteps = $('.wizard-step').length;
             
-            // Tab Navigation Functions
-            function showTab(tabNumber) {
-                // Hide all tabs
-                $('.survey-tab').removeClass('active');
-                // Show current tab
-                $(`#tab${tabNumber}`).addClass('active');
+            // Multi-Step Wizard Navigation Functions
+            function showStep(stepNumber) {
+                // Hide all wizard content
+                $('.wizard-content').removeClass('active');
+                // Show current step
+                $(`.wizard-content[data-step="${stepNumber}"]`).addClass('active');
                 
-                // Update tab dots
-                $('.tab-dot').removeClass('active');
-                $(`.tab-dot[data-tab="${tabNumber}"]`).addClass('active');
+                // Update wizard steps indicator
+                $('.wizard-step').removeClass('active');
+                $(`.wizard-step[data-step="${stepNumber}"]`).addClass('active');
                 
-                // Update navigation buttons
-                updateNavigationButtons();
-            }
-            
-            function updateNavigationButtons() {
-                // Hide all navigation button sets
-                $('.nav-buttons').hide();
-                
-                // Show navigation buttons for current tab
-                $(`#tab${currentTab} .nav-buttons`).show();
-                
-                // Update previous buttons
-                $('.btn-prev').prop('disabled', currentTab === 1);
-            }
-            
-            function validateCurrentTab() {
-                const currentTabElement = $(`#tab${currentTab}`);
-                let isValid = true;
-                
-                // Check if tab has any required fields to validate
-                const hasRequiredFields = currentTabElement.find('input[type="radio"]:required, textarea[required]').length > 0;
-                
-                // If no required fields, tab is automatically valid
-                if (!hasRequiredFields) {
-                    return true;
-                }
-                
-                // Check required radio buttons
-                currentTabElement.find('input[type="radio"]:required').each(function() {
-                    const name = $(this).attr('name');
-                    if (!$(`input[name="${name}"]:checked`).length) {
-                        isValid = false;
-                        return false; // break loop
+                // Mark previous steps as completed
+                $('.wizard-step').each(function() {
+                    const stepNum = parseInt($(this).data('step'));
+                    if (stepNum < stepNumber) {
+                        $(this).addClass('completed');
+                    } else if (stepNum > stepNumber) {
+                        $(this).removeClass('completed');
                     }
                 });
                 
-                // Check required textareas
-                currentTabElement.find('textarea[required]').each(function() {
-                    if (!$(this).val().trim()) {
-                        isValid = false;
-                        return false; // break loop
+                // Scroll to top
+                $('html, body').animate({
+                    scrollTop: $('.survey-container').offset().top - 20
+                }, 500);
+            }
+            
+            function validateCurrentStep() {
+                const currentStepElement = $(`.wizard-content[data-step="${currentStep}"]`);
+                let isValid = true;
+                
+                // Check required fields in current step
+                const requiredFields = currentStepElement.find('input[required], select[required], textarea[required]');
+                
+                requiredFields.each(function() {
+                    const $field = $(this);
+                    if ($field.attr('type') === 'radio') {
+                        const name = $field.attr('name');
+                        if (!$(`input[name="${name}"]:checked`).length) {
+                            isValid = false;
+                            return false;
+                        }
+                    } else if ($field.is('select')) {
+                        if (!$field.val()) {
+                            isValid = false;
+                            return false;
+                        }
+                    } else {
+                        if (!$field.val().trim()) {
+                            isValid = false;
+                            return false;
+                        }
                     }
                 });
                 
                 return isValid;
             }
             
-            // Navigation button handlers
-            $('.btn-next').click(function() {
-                if (validateCurrentTab()) {
-                    // Mark current tab as completed
-                    $(`.tab-dot[data-tab="${currentTab}"]`).addClass('completed');
-                    
-                    // Move to next available tab
-                    currentTab++;
-                    // Skip to next available tab if current one doesn't exist
-                    while (currentTab <= totalTabs && !$(`#tab${currentTab}`).length) {
-                        currentTab++;
-                    }
-                    
-                    if (currentTab <= totalTabs) {
-                    showTab(currentTab);
-                    
-                    // Scroll to top of new tab
-                    $('html, body').animate({
-                        scrollTop: $('.survey-tab.active').offset().top - 100
-                    }, 500);
+            function goToNextStep() {
+                if (validateCurrentStep()) {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showStep(currentStep);
                     }
                 } else {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Please Complete All Questions',
-                        text: 'Please answer all required questions in this section before proceeding.',
+                        title: 'Please Complete All Required Fields',
+                        text: 'Please fill in all required fields in this step before proceeding.',
                         confirmButtonColor: '#F5B445'
                     });
                 }
+            }
+            
+            function goToPrevStep() {
+                if (currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            }
+            
+            // Navigation button handlers
+            $('.btn-next').click(function() {
+                goToNextStep();
             });
             
             $('.btn-prev').click(function() {
-                currentTab--;
-                // Skip to previous available tab if current one doesn't exist
-                while (currentTab >= 1 && !$(`#tab${currentTab}`).length) {
-                    currentTab--;
-                }
-                
-                if (currentTab >= 1) {
-                showTab(currentTab);
-                
-                // Scroll to top of new tab
-                $('html, body').animate({
-                    scrollTop: $('.survey-tab.active').offset().top - 100
-                }, 500);
-                }
+                goToPrevStep();
             });
             
-            // Tab dot click handlers
-            $('.tab-dot').click(function() {
-                const tabNumber = parseInt($(this).data('tab'));
-                if (tabNumber < currentTab || validateCurrentTab()) {
-                    currentTab = tabNumber;
-                    showTab(currentTab);
-                    
-                    // Scroll to top of new tab
-                    $('html, body').animate({
-                        scrollTop: $('.survey-tab.active').offset().top - 100
-                    }, 500);
+            // Wizard step click handlers
+            $('.wizard-step').click(function() {
+                const stepNumber = parseInt($(this).data('step'));
+                if (stepNumber <= currentStep || validateCurrentStep()) {
+                    currentStep = stepNumber;
+                    showStep(currentStep);
                 } else {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Please Complete Current Section',
-                        text: 'Please complete all questions in the current section before jumping to another section.',
+                        title: 'Please Complete Current Step',
+                        text: 'Please complete all required fields in the current step before jumping to another step.',
                         confirmButtonColor: '#F5B445'
                     });
                 }
@@ -1286,24 +1830,21 @@
             
             // Submit button handler
             $('#btnSubmit').click(function() {
-                if (validateCurrentTab()) {
-                    // Mark current tab as completed
-                    $(`.tab-dot[data-tab="${currentTab}"]`).addClass('completed');
-                    
+                if (validateCurrentStep()) {
                     // Submit the form
                     $('#surveyForm').submit();
                 } else {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Please Complete All Questions',
-                        text: 'Please answer all required questions before submitting the survey.',
+                        title: 'Please Complete All Required Fields',
+                        text: 'Please fill in all required fields before submitting the survey.',
                         confirmButtonColor: '#F5B445'
                     });
                 }
             });
             
             // Initialize
-            updateNavigationButtons();
+            showStep(1);
             
             // Load subjects when teacher is selected
             $('#teacher_id').change(function() {
