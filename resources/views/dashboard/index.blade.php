@@ -696,7 +696,7 @@
                         </thead>
                         <tbody>
                             @forelse($recentSurveys as $survey)
-                                <tr>
+                                <tr class="survey-row" data-survey-id="{{ $survey->id }}" style="cursor: pointer;">
                                     <td>
                                         <strong style="color: #494850;">{{ $survey->subject->program ?? 'N/A' }}</strong>
                                     </td>
@@ -746,6 +746,37 @@
 </div>
 
 </div> <!-- Close dashboard-wrapper -->
+
+<!-- Survey Responses Modal -->
+<div class="modal fade" id="surveyResponsesModal" tabindex="-1" aria-labelledby="surveyResponsesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%); border-bottom: 2px solid rgba(152, 170, 231, 0.2); padding: 1.5rem;">
+                <h5 class="modal-title" id="surveyResponsesModalLabel" style="font-weight: 700; color: #494850; display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-clipboard-list" style="background: linear-gradient(135deg, #98AAE7 0%, #7a8cd6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.5rem;"></i>
+                    Survey Responses
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem; background: rgba(255, 255, 255, 0.95);">
+                <div id="surveyResponsesContent">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading survey responses...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background: linear-gradient(135deg, rgba(152, 170, 231, 0.05) 0%, rgba(143, 207, 168, 0.05) 100%); border-top: 1px solid rgba(152, 170, 231, 0.2); padding: 1.5rem;">
+                <button type="button" class="btn btn-secondary btn-modern" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -813,6 +844,57 @@ $(document).ready(function() {
             }
         }
     });
+
+    // Survey row click handler
+    $('.survey-row').click(function() {
+        const surveyId = $(this).data('survey-id');
+        const modal = $('#surveyResponsesModal');
+        
+        // Show modal with loading state
+        modal.modal('show');
+        
+        // Reset content to loading state
+        $('#surveyResponsesContent').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading survey responses...</p>
+            </div>
+        `);
+        
+        // Load survey responses via AJAX
+        $.ajax({
+            url: `/surveys/${surveyId}/responses`,
+            method: 'GET',
+            success: function(response) {
+                $('#surveyResponsesContent').html(response);
+            },
+            error: function(xhr) {
+                console.error('Survey responses error:', xhr);
+                let errorMessage = 'Failed to load survey responses. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                $('#surveyResponsesContent').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        ${errorMessage}
+                    </div>
+                `);
+            }
+        });
+    });
+
+    // Hover effect for survey rows
+    $('.survey-row').hover(
+        function() {
+            $(this).addClass('table-hover');
+        },
+        function() {
+            $(this).removeClass('table-hover');
+        }
+    );
 });
 </script>
 @endpush 

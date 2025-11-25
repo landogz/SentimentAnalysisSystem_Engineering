@@ -111,20 +111,20 @@ class SurveyController extends Controller
             $averageRating = $ratingCount > 0 ? $totalRating / $ratingCount : 0;
 
             // Analyze sentiment from all text responses
-            $sentiment = 'neutral';
+            $textSentiment = 'neutral';
             $sentimentRating = 3.0; // Default neutral rating
 
             if (!empty(trim($allTextResponses))) {
                 try {
-                    $sentiment = $this->sentimentService->analyzeSentiment($allTextResponses);
+                    $textSentiment = $this->sentimentService->analyzeSentiment($allTextResponses);
                 } catch (\Exception $e) {
                     // Fallback to neutral if sentiment analysis fails
-                    $sentiment = 'neutral';
+                    $textSentiment = 'neutral';
                     \Log::warning('Sentiment analysis failed: ' . $e->getMessage());
                 }
                 
                 // Convert sentiment to numerical rating
-                switch ($sentiment) {
+                switch ($textSentiment) {
                     case 'positive':
                         $sentimentRating = 4.5;
                         break;
@@ -148,6 +148,17 @@ class SurveyController extends Controller
 
             // Ensure rating is within 1.0 to 5.0 range
             $finalRating = max(1.0, min(5.0, round($finalRating, 1)));
+
+            // Determine final sentiment based on both text analysis and final rating
+            // If rating is very low (< 2.5), it's negative; if very high (> 4.0), it's positive
+            if ($finalRating < 2.5) {
+                $sentiment = 'negative';
+            } elseif ($finalRating > 4.0) {
+                $sentiment = 'positive';
+            } else {
+                // For middle ratings, use text sentiment if available, otherwise neutral
+                $sentiment = !empty(trim($allTextResponses)) ? $textSentiment : 'neutral';
+            }
 
             // Use database transaction to ensure data consistency
             try {
