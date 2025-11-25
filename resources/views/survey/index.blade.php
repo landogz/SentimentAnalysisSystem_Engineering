@@ -1338,7 +1338,7 @@
                     </div>
                     <div class="wizard-step" data-step="2">
                         <div class="step-number">2</div>
-                        <div class="step-label">Teacher & Subject</div>
+                        <div class="step-label">Program & Subject</div>
                     </div>
                     <div class="wizard-step" data-step="3">
                         <div class="step-number">3</div>
@@ -1397,24 +1397,13 @@
                         </h4>
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="student_name" class="form-label">Full Name (Optional)</label>
                                     <input type="text" class="form-control @error('student_name') is-invalid @enderror" 
                                            id="student_name" name="student_name" value="{{ old('student_name') }}" 
                                            placeholder="Enter your full name (optional)">
                                     @error('student_name')
-                                        <div class="error-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="student_email" class="form-label">Email Address (Optional)</label>
-                                    <input type="email" class="form-control @error('student_email') is-invalid @enderror" 
-                                           id="student_email" name="student_email" value="{{ old('student_email') }}" 
-                                           placeholder="Enter your email (optional)">
-                                    @error('student_email')
                                         <div class="error-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -1432,28 +1421,28 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Teacher & Subject Selection -->
+                <!-- Step 2: Program & Subject Selection -->
                 <div class="wizard-content" data-step="2">
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
-                            <i class="fas fa-chalkboard-teacher me-2" style="color: var(--light-blue);"></i>
-                            Teacher & Subject Selection
+                            <i class="fas fa-graduation-cap me-2" style="color: var(--light-blue);"></i>
+                            Program & Subject Selection
                         </h4>
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="teacher_id" class="form-label">Select Teacher</label>
-                                <select class="form-select @error('teacher_id') is-invalid @enderror" 
-                                        id="teacher_id" name="teacher_id" required>
-                                    <option value="">Choose a teacher...</option>
-                                    @foreach($teachers as $teacher)
-                                        <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                                            {{ $teacher->name }} - {{ $teacher->department }}
-                                        </option>
-                                    @endforeach
+                                <label for="program" class="form-label">Select Program</label>
+                                <select class="form-select @error('program') is-invalid @enderror" 
+                                        id="program" name="program" required>
+                                    <option value="">Choose a program...</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Mining Engineering">Mining Engineering</option>
+                                    <option value="Electrical Engineering">Electrical Engineering</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Computer Engineering">Computer Engineering</option>
                                 </select>
-                                @error('teacher_id')
+                                @error('program')
                                     <div class="error-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -1846,16 +1835,16 @@
             // Initialize
             showStep(1);
             
-            // Load subjects when teacher is selected
-            $('#teacher_id').change(function() {
-                const teacherId = $(this).val();
+            // Load subjects when program is selected
+            $('#program').change(function() {
+                const program = $(this).val();
                 const subjectSelect = $('#subject_id');
                 
-                if (teacherId) {
+                if (program) {
                     $.ajax({
-                        url: '{{ route("survey.subjects-by-teacher") }}',
+                        url: '{{ route("survey.subjects-by-program") }}',
                         method: 'GET',
-                        data: { teacher_id: teacherId },
+                        data: { program: program },
                         success: function(response) {
                             subjectSelect.empty().append('<option value="">Choose a subject...</option>');
                             response.forEach(function(subject) {
@@ -1906,10 +1895,18 @@
                     error: function(xhr) {
                         let errorMessage = 'An error occurred while submitting your feedback.';
                         
-                        if (xhr.responseJSON && xhr.responseJSON.errors) {
-                            const errors = xhr.responseJSON.errors;
-                            errorMessage = Object.values(errors).flat().join('\n');
+                        if (xhr.responseJSON) {
+                            if (xhr.responseJSON.errors) {
+                                const errors = xhr.responseJSON.errors;
+                                errorMessage = Object.values(errors).flat().join('\n');
+                            } else if (xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message;
+                            } else if (xhr.responseJSON.debug) {
+                                errorMessage = xhr.responseJSON.debug;
+                            }
                         }
+                        
+                        console.error('Survey submission error:', xhr.responseJSON || xhr);
                         
                         Swal.fire({
                             icon: 'error',

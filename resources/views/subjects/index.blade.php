@@ -160,11 +160,13 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <select class="form-select" id="teacherFilter">
-                                <option value="">All Teachers</option>
-                                @foreach($teachers as $teacher)
-                                    <option value="{{ $teacher->name }}">{{ $teacher->name }}</option>
-                                @endforeach
+                            <select class="form-select" id="programFilter">
+                                <option value="">All Programs</option>
+                                <option value="Civil Engineering">Civil Engineering</option>
+                                <option value="Mining Engineering">Mining Engineering</option>
+                                <option value="Electrical Engineering">Electrical Engineering</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                <option value="Computer Engineering">Computer Engineering</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -189,7 +191,7 @@
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Teachers</th>
+                                <th>Program</th>
                                 <th>Description</th>
                                 <th>Rating</th>
                                 <th>Surveys</th>
@@ -205,17 +207,10 @@
                                 </td>
                                 <td>{{ $subject->name }}</td>
                                 <td>
-                                    @if($subject->teachers->count() > 0)
-                                        @foreach($subject->teachers as $teacher)
-                                            <span class="badge badge-info">
-                                                {{ $teacher->name }}
-                                                @if($teacher->pivot->is_primary)
-                                                    <i class="fas fa-star text-warning"></i>
-                                                @endif
-                                            </span>
-                                        @endforeach
+                                    @if($subject->program)
+                                        <span class="badge badge-info">{{ $subject->program }}</span>
                                     @else
-                                        <span class="text-muted">No teachers assigned</span>
+                                        <span class="text-muted">Not specified</span>
                                     @endif
                                 </td>
                                 <td>
@@ -313,28 +308,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="teacher_ids">Assigned Teachers</label>
-                        <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
-                            @foreach($teachers as $teacher)
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input teacher-checkbox" 
-                                           id="teacher_{{ $teacher->id }}" 
-                                           name="teacher_ids[]" 
-                                           value="{{ $teacher->id }}">
-                                    <label class="form-check-label" for="teacher_{{ $teacher->id }}">
-                                        {{ $teacher->name }} ({{ $teacher->department }})
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <small class="text-muted">Select at least one teacher</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="primary_teacher_id">Primary Teacher</label>
-                        <select class="form-control" id="primary_teacher_id" name="primary_teacher_id" required>
-                            <option value="">Select Primary Teacher</option>
+                        <label for="program">Program/Course</label>
+                        <select class="form-control" id="program" name="program" required>
+                            <option value="">Select Program</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Mining Engineering">Mining Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Computer Engineering">Computer Engineering</option>
                         </select>
-                        <small class="text-muted">The primary teacher will be marked with a star</small>
+                        <small class="text-muted">Select the engineering program for this subject</small>
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
@@ -386,28 +369,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit_teacher_ids">Assigned Teachers</label>
-                        <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
-                            @foreach($teachers as $teacher)
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input teacher-checkbox" 
-                                           id="edit_teacher_{{ $teacher->id }}" 
-                                           name="teacher_ids[]" 
-                                           value="{{ $teacher->id }}">
-                                    <label class="form-check-label" for="edit_teacher_{{ $teacher->id }}">
-                                        {{ $teacher->name }} ({{ $teacher->department }})
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <small class="text-muted">Select at least one teacher</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_primary_teacher_id">Primary Teacher</label>
-                        <select class="form-control" id="edit_primary_teacher_id" name="primary_teacher_id" required>
-                            <option value="">Select Primary Teacher</option>
+                        <label for="edit_program">Program/Course</label>
+                        <select class="form-control" id="edit_program" name="program" required>
+                            <option value="">Select Program</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Mining Engineering">Mining Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Computer Engineering">Computer Engineering</option>
                         </select>
-                        <small class="text-muted">The primary teacher will be marked with a star</small>
+                        <small class="text-muted">Select the engineering program for this subject</small>
                     </div>
                     <div class="form-group">
                         <label for="edit_description">Description</label>
@@ -440,51 +411,21 @@ $(document).ready(function() {
     });
 
     // Filter functionality
-    $('#teacherFilter, #statusFilter').on('change', function() {
+    $('#programFilter, #statusFilter').on('change', function() {
         filterSubjects();
     });
 
     // Clear filters
     $('#clearFilters').click(function() {
         $('#searchInput').val('');
-        $('#teacherFilter').val('');
+        $('#programFilter').val('');
         $('#statusFilter').val('');
         filterSubjects();
-    });
-
-    // Handle teacher checkbox changes for primary teacher selection
-    $('.teacher-checkbox').on('change', function() {
-        updatePrimaryTeacherOptions.call(this);
-    });
-    
-    // Initialize primary teacher dropdown when modals are shown
-    $('#addSubjectModal').on('show.bs.modal', function() {
-        // Clear primary teacher dropdown
-        $('#primary_teacher_id').val('').find('option:not(:first)').remove();
-    });
-    
-    $('#editSubjectModal').on('show.bs.modal', function() {
-        // Clear primary teacher dropdown
-        $('#edit_primary_teacher_id').val('').find('option:not(:first)').remove();
     });
 
     // Add subject form
     $('#addSubjectForm').submit(function(e) {
         e.preventDefault();
-        
-        // Validate that at least one teacher is selected
-        const selectedTeachers = $('#addSubjectModal .teacher-checkbox:checked');
-        if (selectedTeachers.length === 0) {
-            showError('Please select at least one teacher.');
-            return;
-        }
-        
-        // Validate that primary teacher is selected
-        const primaryTeacher = $('#primary_teacher_id').val();
-        if (!primaryTeacher) {
-            showError('Please select a primary teacher.');
-            return;
-        }
         
         $.ajax({
             url: '{{ route("subjects.store") }}',
@@ -518,20 +459,6 @@ $(document).ready(function() {
     $('#editSubjectForm').submit(function(e) {
         e.preventDefault();
         
-        // Validate that at least one teacher is selected
-        const selectedTeachers = $('#editSubjectModal .teacher-checkbox:checked');
-        if (selectedTeachers.length === 0) {
-            showError('Please select at least one teacher.');
-            return;
-        }
-        
-        // Validate that primary teacher is selected
-        const primaryTeacher = $('#edit_primary_teacher_id').val();
-        if (!primaryTeacher) {
-            showError('Please select a primary teacher.');
-            return;
-        }
-        
         const subjectId = $('#edit_subject_id').val();
         
         $.ajax({
@@ -562,47 +489,16 @@ $(document).ready(function() {
     });
 });
 
-// Function to update primary teacher options based on selected teachers
-function updatePrimaryTeacherOptions() {
-    const modal = $(this).closest('.modal');
-    const selectedTeachers = modal.find('.teacher-checkbox:checked');
-    const primarySelect = modal.find('select[name*="primary_teacher_id"]');
-    
-    console.log('Updating primary teacher options:', {
-        modal: modal.attr('id'),
-        selectedCount: selectedTeachers.length,
-        primarySelect: primarySelect.attr('id')
-    });
-    
-    // Clear current options (keep the first "Select Primary Teacher" option)
-    primarySelect.find('option:not(:first)').remove();
-    
-    // Add options for selected teachers
-    selectedTeachers.each(function() {
-        const teacherId = $(this).val();
-        const teacherName = $(this).closest('.form-check').find('label').text().trim();
-        primarySelect.append(`<option value="${teacherId}">${teacherName}</option>`);
-    });
-    
-    // If only one teacher is selected, auto-select as primary
-    if (selectedTeachers.length === 1) {
-        primarySelect.val(selectedTeachers.val());
-    } else if (selectedTeachers.length === 0) {
-        // If no teachers selected, clear the primary teacher selection
-        primarySelect.val('');
-    }
-}
-
 function filterSubjects() {
     const search = $('#searchInput').val().toLowerCase();
-    const teacherId = $('#teacherFilter').val();
+    const program = $('#programFilter').val();
     const status = $('#statusFilter').val();
     
     $('#subjectsTable tbody tr').each(function() {
         const row = $(this);
         const code = row.find('td:first').text().toLowerCase();
         const name = row.find('td:nth-child(2)').text().toLowerCase();
-        const teacherCell = row.find('td:nth-child(3)');
+        const programCell = row.find('td:nth-child(3)');
         const isActive = row.find('td:nth-child(7)').text().includes('Active');
         
         let show = true;
@@ -612,18 +508,10 @@ function filterSubjects() {
             show = false;
         }
         
-        // Teacher filter
-        if (teacherId) {
-            let hasTeacher = false;
-            teacherCell.find('.badge').each(function() {
-                const teacherName = $(this).text().trim();
-                // Check if this teacher matches the selected teacher
-                if (teacherName.includes($('#teacherFilter option:selected').text())) {
-                    hasTeacher = true;
-                    return false; // break the loop
-                }
-            });
-            if (!hasTeacher) {
+        // Program filter
+        if (program) {
+            const programText = programCell.text().trim();
+            if (!programText.includes(program)) {
                 show = false;
             }
         }
@@ -653,37 +541,11 @@ function editSubject(id) {
         success: function(data) {
             console.log('Subject data received:', data); // Debug log
             $('#edit_subject_id').val(id);
-            $('#edit_subject_code').val(data.subject_code);
-            $('#edit_name').val(data.name);
+            $('#edit_subject_code').val(data.subject_code || '');
+            $('#edit_name').val(data.name || '');
+            $('#edit_program').val(data.program || '').trigger('change');
             $('#edit_description').val(data.description || '');
-            $('#edit_is_active').prop('checked', data.is_active);
-            
-            // Clear all teacher checkboxes in the edit modal first
-            $('#editSubjectModal .teacher-checkbox').prop('checked', false);
-            
-            // Check the assigned teachers
-            console.log('Teachers data:', data.teachers); // Debug log
-            if (data.teachers && data.teachers.length > 0) {
-                data.teachers.forEach(function(teacher) {
-                    console.log('Checking teacher:', teacher.id); // Debug log
-                    $(`#edit_teacher_${teacher.id}`).prop('checked', true);
-                });
-                
-                // Populate primary teacher dropdown
-                const primarySelect = $('#edit_primary_teacher_id');
-                primarySelect.find('option:not(:first)').remove();
-                
-                data.teachers.forEach(function(teacher) {
-                    const teacherName = $(`#edit_teacher_${teacher.id}`).closest('.form-check').find('label').text().trim();
-                    primarySelect.append(`<option value="${teacher.id}">${teacherName}</option>`);
-                });
-                
-                // Set primary teacher
-                const primaryTeacher = data.teachers.find(t => t.pivot.is_primary);
-                if (primaryTeacher) {
-                    primarySelect.val(primaryTeacher.id);
-                }
-            }
+            $('#edit_is_active').prop('checked', data.is_active == 1 || data.is_active === true);
             
             const modal = new bootstrap.Modal(document.getElementById('editSubjectModal'));
             modal.show();

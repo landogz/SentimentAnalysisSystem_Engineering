@@ -17,8 +17,8 @@
                         </h5>
                         <div class="row">
                             <div class="col-md-4">
-                                <small class="text-muted">Teacher</small><br>
-                                <strong class="text-primary">{{ $survey->teacher->name }}</strong>
+                                <small class="text-muted">Program</small><br>
+                                <strong class="text-primary">{{ $survey->subject->program ?? 'N/A' }}</strong>
                             </div>
                             <div class="col-md-4">
                                 <small class="text-muted">Subject</small><br>
@@ -155,20 +155,78 @@
                             </div>
                         </div>
 
+                        <!-- Rating Computation Breakdown -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="info-section">
+                                    <h6 class="text-muted mb-3">
+                                        <i class="fas fa-calculator me-2"></i>Rating Computation Breakdown
+                                    </h6>
+                                    <div class="computation-breakdown">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="computation-item">
+                                                    <small class="text-muted d-block mb-1">Part 1 Average (Instructor Evaluation)</small>
+                                                    <strong class="text-primary fs-5">{{ number_format($part1Average, 1) }}/5.0</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="computation-item">
+                                                    <small class="text-muted d-block mb-1">Part 2 Average (Difficulty Level)</small>
+                                                    <strong class="text-info fs-5">{{ number_format($part2Average, 1) }}/5.0</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="computation-item">
+                                                    <small class="text-muted d-block mb-1">Overall Option Average (Part 1 + Part 2)</small>
+                                                    <strong class="text-dark fs-5">{{ number_format($overallOptionAverage, 1) }}/5.0</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="computation-item">
+                                                    <small class="text-muted d-block mb-1">Part 3 Sentiment Score (Comments)</small>
+                                                    <strong class="text-success fs-5">{{ number_format($part3Score, 1) }}/5.0</strong>
+                                                    <span class="badge bg-secondary ms-2">{{ ucfirst($part3Sentiment) }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-3">
+                                        <div class="computation-formula">
+                                            <div class="formula-display bg-light p-3 rounded">
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                                    <div class="formula-text">
+                                                        <strong>Final Rating Formula:</strong><br>
+                                                        <small class="text-muted">
+                                                            (Overall Option Average × 70%) + (Part 3 Sentiment Score × 30%)
+                                                        </small>
+                                                    </div>
+                                                    <div class="formula-calculation text-end">
+                                                        <div class="calculation-step">
+                                                            <small class="text-muted">= ({{ number_format($overallOptionAverage, 1) }} × 0.7) + ({{ number_format($part3Score, 1) }} × 0.3)</small>
+                                                        </div>
+                                                        <div class="calculation-step mt-1">
+                                                            <small class="text-muted">= {{ number_format($overallOptionAverage * 0.7, 2) }} + {{ number_format($part3Score * 0.3, 2) }}</small>
+                                                        </div>
+                                                        <div class="calculation-result mt-2">
+                                                            <strong class="text-warning fs-4">= {{ number_format($calculatedFinalRating, 1) }}/5.0</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Student Information -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="info-section">
                                     <h6 class="text-muted mb-3">Student Information</h6>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <small class="text-muted">Name</small><br>
-                                            <strong>{{ $survey->student_name ?: 'Anonymous' }}</strong>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="text-muted">Email</small><br>
-                                            <strong>{{ $survey->student_email ?: 'Not provided' }}</strong>
-                                        </div>
+                                    <div>
+                                        <small class="text-muted">Name</small><br>
+                                        <strong>{{ $survey->student_name ?: 'Anonymous' }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -522,6 +580,35 @@
         background: linear-gradient(135deg, rgba(152, 170, 231, 0.05) 0%, rgba(143, 207, 168, 0.05) 100%);
         border-radius: 16px;
         border: 1px solid rgba(152, 170, 231, 0.2);
+    }
+
+    /* Computation Breakdown */
+    .computation-breakdown {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .computation-item {
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        border-left: 3px solid #98AAE7;
+    }
+
+    .formula-display {
+        background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%) !important;
+        border: 1px solid rgba(152, 170, 231, 0.3);
+    }
+
+    .calculation-step {
+        font-family: 'Courier New', monospace;
+    }
+
+    .calculation-result {
+        border-top: 2px solid rgba(152, 170, 231, 0.3);
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
     }
 
 .sentiment-display {

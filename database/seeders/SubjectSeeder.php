@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Subject;
-use App\Models\Teacher;
+use Illuminate\Support\Facades\DB;
 
 class SubjectSeeder extends Seeder
 {
@@ -13,172 +13,199 @@ class SubjectSeeder extends Seeder
      */
     public function run(): void
     {
-        $teachers = Teacher::all();
+        // Clear existing data - delete from pivot table first due to foreign key constraints
+        DB::table('teacher_subject')->delete();
+        DB::table('subjects')->delete();
         
         $subjects = [
-            [
-                'subject_code' => 'CE101',
-                'name' => 'Engineering Mechanics',
-                'description' => 'Fundamental principles of statics and dynamics for engineering applications.',
-                'teacher_ids' => [1, 2] // Civil and Mechanical Engineering
-            ],
-            [
-                'subject_code' => 'CE201',
-                'name' => 'Structural Analysis',
-                'description' => 'Analysis of structural systems, loads, and design principles.',
-                'teacher_ids' => [1]
-            ],
-            [
-                'subject_code' => 'ME101',
-                'name' => 'Thermodynamics',
-                'description' => 'Principles of energy conversion and thermodynamic cycles.',
-                'teacher_ids' => [2]
-            ],
-            [
-                'subject_code' => 'ME201',
-                'name' => 'Fluid Mechanics',
-                'description' => 'Study of fluid behavior and hydraulic systems.',
-                'teacher_ids' => [2, 7] // Mechanical and Environmental
-            ],
+            // ELECTRICAL ENGINEERING
             [
                 'subject_code' => 'EE101',
-                'name' => 'Circuit Analysis',
-                'description' => 'Fundamental electrical circuits and network analysis.',
-                'teacher_ids' => [3]
+                'name' => 'Fundamental Engineering Mathematics',
+                'program' => 'Electrical Engineering',
+                'description' => 'Fundamental mathematical concepts and techniques for electrical engineering applications.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'EE201',
-                'name' => 'Electronics',
-                'description' => 'Electronic devices and circuit design principles.',
-                'teacher_ids' => [3, 4] // Electrical and Computer Engineering
+                'subject_code' => 'EE102',
+                'name' => 'Engineering Data Analysis',
+                'program' => 'Electrical Engineering',
+                'description' => 'Statistical methods and data analysis techniques for engineering problems.',
+                'is_active' => true
             ],
+            [
+                'subject_code' => 'EE103',
+                'name' => 'Fluid Mechanics',
+                'program' => 'Electrical Engineering',
+                'description' => 'Principles of fluid behavior and hydraulic systems in electrical engineering context.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'EE104',
+                'name' => 'Electrical Systems Design',
+                'program' => 'Electrical Engineering',
+                'description' => 'Design principles and methodologies for electrical power systems.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'EE105',
+                'name' => 'Illumination Engineering Design',
+                'program' => 'Electrical Engineering',
+                'description' => 'Lighting system design, photometry, and illumination engineering principles.',
+                'is_active' => true
+            ],
+            
+            // COMPUTER ENGINEERING
             [
                 'subject_code' => 'CPE101',
-                'name' => 'Computer Architecture',
-                'description' => 'Digital logic design and computer system organization.',
-                'teacher_ids' => [4]
+                'name' => 'Computer Engineering as a Discipline',
+                'program' => 'Computer Engineering',
+                'description' => 'Introduction to computer engineering field, scope, and professional practice.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'CPE201',
-                'name' => 'Embedded Systems',
-                'description' => 'Design and programming of microcontroller-based systems.',
-                'teacher_ids' => [4]
+                'subject_code' => 'CPE102',
+                'name' => 'Fundamentals of Electrical Circuits',
+                'program' => 'Computer Engineering',
+                'description' => 'Basic electrical circuit theory and analysis for computer engineers.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'CHE101',
-                'name' => 'Chemical Process Principles',
-                'description' => 'Fundamental principles of chemical engineering processes.',
-                'teacher_ids' => [5]
+                'subject_code' => 'CPE103',
+                'name' => 'Fundamental of Mixed Signals and Sensors',
+                'program' => 'Computer Engineering',
+                'description' => 'Analog and digital signal processing, sensor technologies, and mixed-signal systems.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'CHE201',
-                'name' => 'Unit Operations',
-                'description' => 'Chemical engineering unit operations and equipment design.',
-                'teacher_ids' => [5, 8] // Chemical and Materials Engineering
+                'subject_code' => 'CPE104',
+                'name' => 'Computer Architecture and Organization',
+                'program' => 'Computer Engineering',
+                'description' => 'Computer system architecture, organization, and design principles.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'IE101',
-                'name' => 'Operations Research',
-                'description' => 'Mathematical optimization and decision-making methods.',
-                'teacher_ids' => [6]
+                'subject_code' => 'CPE105',
+                'name' => 'Embedded System',
+                'program' => 'Computer Engineering',
+                'description' => 'Design and development of embedded systems and microcontroller applications.',
+                'is_active' => true
+            ],
+            
+            // MECHANICAL ENGINEERING
+            [
+                'subject_code' => 'ME101',
+                'name' => 'Engineering Drawing',
+                'program' => 'Mechanical Engineering',
+                'description' => 'Technical drawing, CAD, and engineering graphics for mechanical design.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'IE201',
-                'name' => 'Quality Control',
-                'description' => 'Statistical quality control and process improvement.',
-                'teacher_ids' => [6]
+                'subject_code' => 'ME102',
+                'name' => 'Basic Electrical Engineering',
+                'program' => 'Mechanical Engineering',
+                'description' => 'Fundamental electrical principles and applications for mechanical engineers.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'ENVE101',
-                'name' => 'Environmental Engineering',
-                'description' => 'Environmental systems and pollution control principles.',
-                'teacher_ids' => [7]
+                'subject_code' => 'ME103',
+                'name' => 'DC and AC Machinery',
+                'program' => 'Mechanical Engineering',
+                'description' => 'Direct current and alternating current machines, motors, and generators.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'ENVE201',
-                'name' => 'Water Treatment',
-                'description' => 'Water purification and wastewater treatment technologies.',
-                'teacher_ids' => [7]
+                'subject_code' => 'ME104',
+                'name' => 'Power Plant Design with Renewable Energy',
+                'program' => 'Mechanical Engineering',
+                'description' => 'Power plant design incorporating renewable energy sources and sustainable practices.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'MATE101',
-                'name' => 'Materials Science',
-                'description' => 'Structure-property relationships in engineering materials.',
-                'teacher_ids' => [8]
+                'subject_code' => 'ME105',
+                'name' => 'Industrial Plant Engineering',
+                'program' => 'Mechanical Engineering',
+                'description' => 'Industrial facility design, plant layout, and manufacturing systems engineering.',
+                'is_active' => true
             ],
-            [
-                'subject_code' => 'MATE201',
-                'name' => 'Nanomaterials',
-                'description' => 'Advanced materials and nanotechnology applications.',
-                'teacher_ids' => [8]
-            ],
-            [
-                'subject_code' => 'AE101',
-                'name' => 'Aerodynamics',
-                'description' => 'Principles of flight and aerodynamic design.',
-                'teacher_ids' => [9]
-            ],
-            [
-                'subject_code' => 'AE201',
-                'name' => 'Aircraft Design',
-                'description' => 'Aircraft configuration and performance analysis.',
-                'teacher_ids' => [9]
-            ],
-            [
-                'subject_code' => 'BME101',
-                'name' => 'Biomechanics',
-                'description' => 'Mechanical principles applied to biological systems.',
-                'teacher_ids' => [10]
-            ],
-            [
-                'subject_code' => 'BME201',
-                'name' => 'Medical Device Design',
-                'description' => 'Design principles for healthcare technology and devices.',
-                'teacher_ids' => [10]
-            ],
-            [
-                'subject_code' => 'PE101',
-                'name' => 'Reservoir Engineering',
-                'description' => 'Petroleum reservoir characterization and management.',
-                'teacher_ids' => [11]
-            ],
-            [
-                'subject_code' => 'PE201',
-                'name' => 'Drilling Technology',
-                'description' => 'Oil and gas drilling operations and well design.',
-                'teacher_ids' => [11]
-            ],
+            
+            // MINING ENGINEERING
             [
                 'subject_code' => 'MINE101',
-                'name' => 'Mining Methods',
-                'description' => 'Surface and underground mining techniques.',
-                'teacher_ids' => [12]
+                'name' => 'Fundamental Engineering Mathematics',
+                'program' => 'Mining Engineering',
+                'description' => 'Mathematical foundations and applications in mining engineering.',
+                'is_active' => true
             ],
             [
-                'subject_code' => 'MINE201',
-                'name' => 'Mineral Processing',
-                'description' => 'Ore beneficiation and mineral extraction processes.',
-                'teacher_ids' => [12]
-            ]
+                'subject_code' => 'MINE102',
+                'name' => 'Underground Mining',
+                'program' => 'Mining Engineering',
+                'description' => 'Underground mining methods, techniques, and safety practices.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'MINE103',
+                'name' => 'Mechanics of Deformable Bodies',
+                'program' => 'Mining Engineering',
+                'description' => 'Stress, strain, and deformation analysis of materials and structures.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'MINE104',
+                'name' => 'Mine Research and Study',
+                'program' => 'Mining Engineering',
+                'description' => 'Research methodologies and case studies in mining engineering.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'MINE105',
+                'name' => 'Mine Management',
+                'program' => 'Mining Engineering',
+                'description' => 'Mining operations management, planning, and optimization strategies.',
+                'is_active' => true
+            ],
+            
+            // CIVIL ENGINEERING
+            [
+                'subject_code' => 'CE101',
+                'name' => 'Structural Engineering',
+                'program' => 'Civil Engineering',
+                'description' => 'Analysis and design of structures, load calculations, and structural systems.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'CE102',
+                'name' => 'Geotechnical Engineering',
+                'program' => 'Civil Engineering',
+                'description' => 'Soil mechanics, foundation design, and geotechnical analysis.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'CE103',
+                'name' => 'Construction Management',
+                'program' => 'Civil Engineering',
+                'description' => 'Project management, scheduling, and construction operations management.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'CE104',
+                'name' => 'Surveying and Transportation Engineering',
+                'program' => 'Civil Engineering',
+                'description' => 'Land surveying techniques and transportation infrastructure design.',
+                'is_active' => true
+            ],
+            [
+                'subject_code' => 'CE105',
+                'name' => 'Surveying and Survey Camp',
+                'program' => 'Civil Engineering',
+                'description' => 'Practical surveying exercises and field survey camp activities.',
+                'is_active' => true
+            ],
         ];
 
         foreach ($subjects as $subjectData) {
-            $teacherIds = $subjectData['teacher_ids'];
-            unset($subjectData['teacher_ids']);
-            
-            $subject = Subject::create($subjectData);
-            
-            // Attach teachers to the subject
-            $pivotData = [];
-            foreach ($teacherIds as $index => $teacherId) {
-                $pivotData[$teacherId] = [
-                    'is_primary' => ($index === 0), // First teacher is primary
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ];
-            }
-            
-            $subject->teachers()->attach($pivotData);
+            Subject::create($subjectData);
         }
     }
 }

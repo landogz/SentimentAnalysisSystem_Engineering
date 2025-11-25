@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Survey;
-use App\Models\Teacher;
 use App\Models\Subject;
 use App\Models\SurveyQuestion;
 use App\Models\SurveyResponse;
@@ -25,8 +24,7 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::active()->get();
-        $subjects = Subject::active()->with('teachers')->get();
+        $subjects = Subject::active()->get();
         
         // Load questions organized by parts
         $questions = SurveyQuestion::active()->orderBy('part')->orderBy('order_number')->get();
@@ -36,7 +34,7 @@ class SurveyController extends Controller
         $optionQuestions = $questions->where('question_type', 'option');
         $commentQuestions = $questions->where('question_type', 'comment');
         
-        return view('survey.index', compact('teachers', 'subjects', 'questionsByPart', 'optionQuestions', 'commentQuestions'));
+        return view('survey.index', compact('subjects', 'questionsByPart', 'optionQuestions', 'commentQuestions'));
     }
 
     /**
@@ -45,11 +43,10 @@ class SurveyController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'teacher_id' => 'required|exists:teachers,id',
             'subject_id' => 'required|exists:subjects,id',
+            'program' => 'required|string',
             'feedback_text' => 'nullable|string|max:1000',
             'student_name' => 'nullable|string|max:255',
-            'student_email' => 'nullable|email|max:255',
             'question_responses' => 'nullable|array'
         ]);
 
@@ -68,7 +65,7 @@ class SurveyController extends Controller
         try {
             // Debug: Log the incoming request data
             \Log::info('Survey submission data:', [
-                'teacher_id' => $request->teacher_id,
+                'program' => $request->program,
                 'subject_id' => $request->subject_id,
                 'question_responses' => $request->question_responses,
                 'feedback_text' => $request->feedback_text
@@ -155,15 +152,15 @@ class SurveyController extends Controller
             // Use database transaction to ensure data consistency
             try {
                 $survey = \DB::transaction(function() use ($request, $finalRating, $sentiment, $questionResponses) {
-                    // Create survey
+                    // Create survey - teacher_id is nullable now
                     $survey = Survey::create([
-                        'teacher_id' => $request->teacher_id,
+                        'teacher_id' => null,
                         'subject_id' => $request->subject_id,
                         'rating' => $finalRating,
                         'sentiment' => $sentiment,
                         'feedback_text' => $request->feedback_text,
                         'student_name' => $request->student_name,
-                        'student_email' => $request->student_email,
+                        'student_email' => null,
                         'ip_address' => $request->ip()
                     ]);
 
@@ -207,15 +204,13 @@ class SurveyController extends Controller
     }
 
     /**
-     * Get subjects for a specific teacher
+     * Get subjects for a specific program
      */
-    public function getSubjectsByTeacher(Request $request)
+    public function getSubjectsByProgram(Request $request)
     {
-        $teacherId = $request->get('teacher_id');
+        $program = $request->get('program');
         
-        $subjects = Subject::whereHas('teachers', function($query) use ($teacherId) {
-            $query->where('teachers.id', $teacherId);
-        })
+        $subjects = Subject::where('program', $program)
         ->active()
         ->get(['id', 'name', 'subject_code']);
         
@@ -257,12 +252,11 @@ class SurveyController extends Controller
     public function validateForm(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'teacher_id' => 'required|exists:teachers,id',
+            'program' => 'required|string',
             'subject_id' => 'required|exists:subjects,id',
             'rating' => 'required|numeric|min:1.0|max:5.0',
             'feedback_text' => 'nullable|string|max:1000',
             'student_name' => 'nullable|string|max:255',
-            'student_email' => 'nullable|email|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -284,55 +278,82 @@ class SurveyController extends Controller
     {
         $responses = $survey->responses()->with('question')->get();
         
-        // Group responses by part
-        $part1Responses = $responses->where('question.part', 'part1');
-        $part2Responses = $responses->where('question.part', 'part2');
-        $part3Responses = $responses->where('question.part', 'part3');
+        // Group responses by part - filter by the related question's part
+        $part1Responses = $responses->filter(function($response) {
+            return $response->question && $response->question->part === 'part1';
+        });
+        $part2Responses = $responses->filter(function($response) {
+            return $response->question && $response->question->part === 'part2';
+        });
+        $part3Responses = $responses->filter(function($response) {
+            return $response->question && $response->question->part === 'part3';
+        });
         
-        // Calculate part-specific averages
-        $part1Average = $part1Responses->count() > 0 ? $part1Responses->avg('answer') : 0;
-        $part2Average = $part2Responses->count() > 0 ? $part2Responses->avg('answer') : 0;
+        // Calculate part-specific averages - only for option questions (numeric answers)
+        $part1Average = $part1Responses->count() > 0 
+            ? $part1Responses->filter(function($r) { return is_numeric($r->answer); })->avg(function($r) { return (float)$r->answer; }) 
+            : 0;
+        $part2Average = $part2Responses->count() > 0 
+            ? $part2Responses->filter(function($r) { return is_numeric($r->answer); })->avg(function($r) { return (float)$r->answer; }) 
+            : 0;
+        
+        // Calculate overall option average (Part 1 + Part 2 combined)
+        $allOptionResponses = $part1Responses->merge($part2Responses);
+        $overallOptionAverage = $allOptionResponses->count() > 0
+            ? $allOptionResponses->filter(function($r) { return is_numeric($r->answer); })->avg(function($r) { return (float)$r->answer; })
+            : 0;
         
         // Analyze Part 3 sentiment and calculate score
         $part3Sentiment = 'neutral';
-        $part3Score = 0;
+        $part3Score = 3.0; // Default neutral score
         $part3Comments = $part3Responses->pluck('answer')->filter()->join(' ');
         
         if (!empty($part3Comments)) {
             $sentimentService = new \App\Services\SentimentAnalysisService();
-            $analysis = $sentimentService->analyzeSentimentWithScore($part3Comments);
-            $part3Sentiment = $analysis['sentiment'];
-            
-            // Convert sentiment to numerical score (1-5 scale)
-            switch ($part3Sentiment) {
-                case 'positive':
-                    $part3Score = 4.5; // High positive score
-                    break;
-                case 'negative':
-                    $part3Score = 1.5; // Low negative score
-                    break;
-                case 'neutral':
-                default:
-                    $part3Score = 3.0; // Neutral score
-                    break;
-            }
-            
-            // Adjust score based on sentiment intensity
-            if (isset($analysis['score'])) {
-                $sentimentIntensity = abs($analysis['score']);
-                if ($sentimentIntensity > 5) {
-                    // Very strong sentiment
-                    if ($part3Sentiment === 'positive') {
-                        $part3Score = min(5.0, $part3Score + 0.5);
-                    } elseif ($part3Sentiment === 'negative') {
-                        $part3Score = max(1.0, $part3Score - 0.5);
-                    }
-                } elseif ($sentimentIntensity < 2) {
-                    // Weak sentiment
-                    $part3Score = 3.0; // Move towards neutral
+            try {
+                $analysis = $sentimentService->analyzeSentimentWithScore($part3Comments);
+                $part3Sentiment = $analysis['sentiment'];
+                
+                // Convert sentiment to numerical score (1-5 scale)
+                switch ($part3Sentiment) {
+                    case 'positive':
+                        $part3Score = 4.5; // High positive score
+                        break;
+                    case 'negative':
+                        $part3Score = 1.5; // Low negative score
+                        break;
+                    case 'neutral':
+                    default:
+                        $part3Score = 3.0; // Neutral score
+                        break;
                 }
+                
+                // Adjust score based on sentiment intensity
+                if (isset($analysis['score'])) {
+                    $sentimentIntensity = abs($analysis['score']);
+                    if ($sentimentIntensity > 5) {
+                        // Very strong sentiment
+                        if ($part3Sentiment === 'positive') {
+                            $part3Score = min(5.0, $part3Score + 0.5);
+                        } elseif ($part3Sentiment === 'negative') {
+                            $part3Score = max(1.0, $part3Score - 0.5);
+                        }
+                    } elseif ($sentimentIntensity < 2) {
+                        // Weak sentiment
+                        $part3Score = 3.0; // Move towards neutral
+                    }
+                }
+            } catch (\Exception $e) {
+                // Fallback to neutral if sentiment analysis fails
+                $part3Sentiment = 'neutral';
+                $part3Score = 3.0;
             }
         }
+        
+        // Calculate final rating breakdown (same as in store method)
+        // Final Rating = (Overall Option Average * 0.7) + (Part 3 Sentiment Score * 0.3)
+        $calculatedFinalRating = ($overallOptionAverage * 0.7) + ($part3Score * 0.3);
+        $calculatedFinalRating = max(1.0, min(5.0, round($calculatedFinalRating, 1)));
         
         return view('surveys.responses', compact(
             'survey', 
@@ -342,7 +363,9 @@ class SurveyController extends Controller
             'part1Average',
             'part2Average',
             'part3Sentiment',
-            'part3Score'
+            'part3Score',
+            'overallOptionAverage',
+            'calculatedFinalRating'
         ));
     }
 }

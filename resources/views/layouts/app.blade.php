@@ -1100,12 +1100,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('teachers.index') }}" class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                <span>Teachers</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}">
                                 <i class="fas fa-book"></i>
                                 <span>Subjects</span>

@@ -397,12 +397,14 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <label for="teacher_filter" class="form-label fw-bold">Teacher</label>
-                                <select class="form-select" id="teacher_filter" name="teacher_id">
-                                    <option value="">All Teachers</option>
-                                    @foreach($teachers ?? [] as $teacher)
-                                        <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
-                                    @endforeach
+                                <label for="program_filter" class="form-label fw-bold">Program/Course</label>
+                                <select class="form-select" id="program_filter" name="program">
+                                    <option value="">All Programs</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Mining Engineering">Mining Engineering</option>
+                                    <option value="Electrical Engineering">Electrical Engineering</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Computer Engineering">Computer Engineering</option>
                                 </select>
                             </div>
                         </div>
@@ -552,143 +554,6 @@
         </div>
     </div>
 
-    <!-- Top Performers -->
-    <!-- <div class="col-lg-6">
-        <div class="card card-outline" style="border-color: var(--light-green);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--light-green) 0%, #7bb894 100%); color: white;">
-                <h3 class="card-title">
-                    <i class="fas fa-trophy mr-2"></i>
-                    Top Rated Teachers
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Teacher</th>
-                                <th>Department</th>
-                                <th>Rating</th>
-                                <th>Surveys</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($topTeachers as $teacher)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $teacher->name }}</strong>
-                                    </td>
-                                    <td>
-                                        <span class="badge" style="background-color: var(--light-blue); color: white;">{{ $teacher->department }}</span>
-                                    </td>
-                                    <td>
-                                        @if($teacher->surveys_avg_rating)
-                                            <div class="rating-stars">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <= $teacher->surveys_avg_rating)
-                                                        <i class="fas fa-star"></i>
-                                                    @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
-                                                        <i class="fas fa-star-half-alt"></i>
-                                                    @else
-                                                        <i class="far fa-star"></i>
-                                                    @endif
-                                                @endfor
-                                            </div>
-                                            <small class="text-muted">{{ number_format($teacher->surveys_avg_rating, 1) }}</small>
-                                        @else
-                                            <span class="text-muted">No ratings</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="badge" style="background-color: var(--dark-gray); color: white;">{{ $teacher->surveys_count }}</span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted">No teachers with surveys yet</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="card card-outline" style="border-color: var(--light-blue);">
-            <div class="card-header" style="background: linear-gradient(135deg, var(--light-blue) 0%, #7a8cd6 100%); color: white;">
-                <h3 class="card-title">
-                    <i class="fas fa-book mr-2"></i>
-                    Top Rated Subjects
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Subject</th>
-                                <th>Teachers</th>
-                                <th>Rating</th>
-                                <th>Surveys</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($topSubjects as $subject)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $subject->name }}</strong>
-                                        <br>
-                                        <small class="text-muted">{{ $subject->subject_code }}</small>
-                                    </td>
-                                    <td>
-                                        @if($subject->teachers->count() > 0)
-                                            @foreach($subject->teachers as $teacher)
-                                                <span class="badge" style="background-color: var(--light-blue); color: white;">
-                                                    {{ $teacher->name }}
-                                                    @if($teacher->pivot->is_primary)
-                                                        <i class="fas fa-star" style="color: var(--golden-orange);"></i>
-                                                    @endif
-                                                </span>
-                                            @endforeach
-                                        @else
-                                            <span class="text-muted">No teachers assigned</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($subject->surveys_avg_rating)
-                                            <div class="rating-stars">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <= $subject->surveys_avg_rating)
-                                                        <i class="fas fa-star"></i>
-                                                    @elseif($i - 0.5 <= $subject->surveys_avg_rating)
-                                                        <i class="fas fa-star-half-alt"></i>
-                                                    @else
-                                                        <i class="far fa-star"></i>
-                                                    @endif
-                                                @endfor
-                                            </div>
-                                            <small class="text-muted">{{ number_format($subject->surveys_avg_rating, 1) }}</small>
-                                        @else
-                                            <span class="text-muted">No ratings</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="badge" style="background-color: var(--dark-gray); color: white;">{{ $subject->surveys_count }}</span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted">No subjects with surveys yet</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
     <!-- Export Options -->
     <!-- <div class="col-12">

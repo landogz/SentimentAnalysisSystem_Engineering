@@ -356,21 +356,12 @@
                         <td>{{ $subject->name }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Teachers:</strong></td>
+                        <td><strong>Program:</strong></td>
                         <td>
-                            @if($subject->teachers->count() > 0)
-                                @foreach($subject->teachers as $teacher)
-                                    <span class="badge badge-info">
-                                        {{ $teacher->name }}
-                                        @if($teacher->pivot->is_primary)
-                                            <i class="fas fa-star text-warning"></i>
-                                        @endif
-                                    </span>
-                                    <br><small class="text-muted">{{ $teacher->department }}</small>
-                                    @if(!$loop->last)<br>@endif
-                                @endforeach
+                            @if($subject->program)
+                                <span class="badge badge-info">{{ $subject->program }}</span>
                             @else
-                                <span class="text-muted">No teachers assigned</span>
+                                <span class="text-muted">Not specified</span>
                             @endif
                         </td>
                     </tr>
@@ -481,86 +472,6 @@
     </div>
 </div>
 
-<!-- Assigned Teachers -->
-<div class="row">
-    <div class="col-12">
-        <div class="modern-card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    Assigned Teachers
-                </h3>
-            </div>
-            <div class="card-body">
-                @if($subject->teachers->count() > 0)
-                    @foreach($subject->teachers as $teacher)
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <h5>
-                                    {{ $teacher->name }}
-                                    @if($teacher->pivot->is_primary)
-                                        <span class="badge badge-warning">Primary</span>
-                                    @endif
-                                </h5>
-                                <p class="text-muted mb-2">{{ $teacher->department }}</p>
-                                @if($teacher->bio)
-                                    <p class="text-muted">{{ $teacher->bio }}</p>
-                                @endif
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <small class="text-muted">Email</small>
-                                        <p>{{ $teacher->email }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="text-muted">Phone</small>
-                                        <p>{{ $teacher->phone ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="text-muted">Status</small>
-                                        <p>
-                                            @if($teacher->is_active)
-                                                <span class="badge badge-success">Active</span>
-                                            @else
-                                                <span class="badge badge-danger">Inactive</span>
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div class="border rounded p-3">
-                                    <h6>Teacher Rating</h6>
-                                    @if($teacher->surveys_avg_rating)
-                                        <div class="rating-stars mb-2">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $teacher->surveys_avg_rating)
-                                                    <i class="fas fa-star"></i>
-                                                @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
-                                                    <i class="fas fa-star-half-alt"></i>
-                                                @else
-                                                    <i class="far fa-star"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
-                                        <h4>{{ number_format($teacher->surveys_avg_rating, 1) }}</h4>
-                                        <small class="text-muted">{{ $teacher->surveys_count }} surveys</small>
-                                    @else
-                                        <p class="text-muted">No ratings yet</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        @if(!$loop->last)
-                            <hr>
-                        @endif
-                    @endforeach
-                @else
-                    <p class="text-muted text-center">No teachers assigned to this subject.</p>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Recent Surveys -->
 <div class="row">
@@ -706,10 +617,15 @@ $(document).ready(function() {
                 $('#surveyResponsesContent').html(response);
             },
             error: function(xhr) {
+                console.error('Survey responses error:', xhr);
+                let errorMessage = 'Failed to load survey responses. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
                 $('#surveyResponsesContent').html(`
                     <div class="alert alert-danger">
                         <i class="fas fa-exclamation-circle me-2"></i>
-                        Failed to load survey responses. Please try again.
+                        ${errorMessage}
                     </div>
                 `);
             }

@@ -491,10 +491,10 @@
     <div class="col-lg-3 col-6">
         <div class="stat-card danger">
             <div class="stat-icon">
-                <i class="fas fa-chalkboard-teacher"></i>
+                <i class="fas fa-graduation-cap"></i>
             </div>
-            <div class="stat-value">{{ number_format($totalTeachers) }}</div>
-            <div class="stat-label">Total Teachers</div>
+            <div class="stat-value">{{ number_format($totalPrograms) }}</div>
+            <div class="stat-label">Total Programs</div>
         </div>
     </div>
 
@@ -589,37 +589,37 @@
 </div>
 
 <div class="row">
-    <!-- Top Teachers -->
+    <!-- Top Programs -->
     <div class="col-lg-6">
         <div class="modern-card">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-trophy"></i>
-                    Top Rated Teachers
+                    Top Rated Programs
                 </h3>
             </div>
             <div class="card-body">
-                @if($topTeachers->count() > 0)
-                    @foreach($topTeachers as $index => $teacher)
+                @if($topPrograms->count() > 0)
+                    @foreach($topPrograms as $index => $program)
                         <div class="top-rated-item">
                             <div class="rank-badge">{{ $index + 1 }}</div>
                             <div style="flex: 1;">
-                                <h6 class="mb-1" style="font-weight: 600; color: #494850;">{{ $teacher->name }}</h6>
-                                <small class="text-muted">{{ $teacher->department }}</small>
+                                <h6 class="mb-1" style="font-weight: 600; color: #494850;">{{ $program->program }}</h6>
+                                <small class="text-muted">{{ $program->subjects_count }} subjects</small>
                             </div>
                             <div class="text-right">
                                 <div class="rating-stars mb-1">
                                     @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= $teacher->surveys_avg_rating)
+                                        @if($i <= $program->avg_rating)
                                             <i class="fas fa-star"></i>
-                                        @elseif($i - 0.5 <= $teacher->surveys_avg_rating)
+                                        @elseif($i - 0.5 <= $program->avg_rating)
                                             <i class="fas fa-star-half-alt"></i>
                                         @else
                                             <i class="far fa-star"></i>
                                         @endif
                                     @endfor
                                 </div>
-                                <small class="text-muted" style="font-weight: 600;">{{ number_format($teacher->surveys_avg_rating, 1) }}</small>
+                                <small class="text-muted" style="font-weight: 600;">{{ number_format($program->avg_rating, 1) }}</small>
                             </div>
                         </div>
                     @endforeach
@@ -687,7 +687,7 @@
                     <table class="table modern-table">
                         <thead>
                             <tr>
-                                <th>Teacher</th>
+                                <th>Program</th>
                                 <th>Subject</th>
                                 <th>Rating</th>
                                 <th>Sentiment</th>
@@ -698,9 +698,7 @@
                             @forelse($recentSurveys as $survey)
                                 <tr>
                                     <td>
-                                        <strong style="color: #494850;">{{ $survey->teacher->name }}</strong>
-                                        <br>
-                                        <small class="text-muted">{{ $survey->teacher->department }}</small>
+                                        <strong style="color: #494850;">{{ $survey->subject->program ?? 'N/A' }}</strong>
                                     </td>
                                     <td>
                                         <strong style="color: #494850;">{{ $survey->subject->name }}</strong>

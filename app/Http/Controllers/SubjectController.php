@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
-use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +13,7 @@ class SubjectController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Subject::with('teachers');
+        $query = Subject::query();
         
         // Search functionality
         if ($request->filled('search')) {
@@ -26,11 +25,9 @@ class SubjectController extends Controller
             });
         }
         
-        // Filter by teacher
-        if ($request->filled('teacher_id')) {
-            $query->whereHas('teachers', function($q) use ($request) {
-                $q->where('teachers.id', $request->get('teacher_id'));
-            });
+        // Filter by program
+        if ($request->filled('program')) {
+            $query->where('program', $request->get('program'));
         }
         
         // Filter by status
@@ -40,12 +37,11 @@ class SubjectController extends Controller
         
         $subjects = $query->withCount('surveys')
             ->withAvg('surveys', 'rating')
+            ->orderBy('program')
             ->orderBy('name')
             ->paginate(15);
         
-        $teachers = Teacher::active()->get();
-        
-        return view('subjects.index', compact('subjects', 'teachers'));
+        return view('subjects.index', compact('subjects'));
     }
 
     /**
@@ -53,8 +49,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        $teachers = Teacher::active()->get();
-        return view('subjects.create', compact('teachers'));
+        return view('subjects.create');
     }
 
     /**
@@ -65,9 +60,8 @@ class SubjectController extends Controller
         $validator = Validator::make($request->all(), [
             'subject_code' => 'required|string|max:50|unique:subjects,subject_code',
             'name' => 'required|string|max:255',
+            'program' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'teacher_ids' => 'required|array|min:1',
-            'teacher_ids.*' => 'exists:teachers,id',
             'is_active' => 'nullable|boolean'
         ]);
 
@@ -82,29 +76,15 @@ class SubjectController extends Controller
             $subject = Subject::create([
                 'subject_code' => $request->subject_code,
                 'name' => $request->name,
+                'program' => $request->program,
                 'description' => $request->description,
                 'is_active' => $request->has('is_active')
             ]);
-
-            // Attach teachers to the subject
-            $teacherIds = $request->teacher_ids;
-            $primaryTeacherId = $request->primary_teacher_id ?? $teacherIds[0];
-            
-            $pivotData = [];
-            foreach ($teacherIds as $teacherId) {
-                $pivotData[$teacherId] = [
-                    'is_primary' => ($teacherId == $primaryTeacherId),
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ];
-            }
-            
-            $subject->teachers()->attach($pivotData);
             
             return response()->json([
                 'success' => true,
                 'message' => 'Subject created successfully!',
-                'subject' => $subject->load('teachers')
+                'subject' => $subject
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -119,10 +99,7 @@ class SubjectController extends Controller
      */
     public function show(string $id)
     {
-        $subject = Subject::with(['teachers' => function($query) {
-                $query->withCount('surveys')
-                      ->withAvg('surveys', 'rating');
-            }, 'surveys'])
+        $subject = Subject::with('surveys')
             ->withCount('surveys')
             ->withAvg('surveys', 'rating')
             ->findOrFail($id);
@@ -141,11 +118,10 @@ class SubjectController extends Controller
         
         // Return JSON for AJAX requests
         if (request()->ajax()) {
-            return response()->json($subject->load('teachers'));
+            return response()->json($subject);
         }
         
-        $teachers = Teacher::active()->get();
-        return view('subjects.edit', compact('subject', 'teachers'));
+        return view('subjects.edit', compact('subject'));
     }
 
     /**
@@ -161,9 +137,8 @@ class SubjectController extends Controller
         $validator = Validator::make($request->all(), [
             'subject_code' => 'required|string|max:50|unique:subjects,subject_code,' . $id,
             'name' => 'required|string|max:255',
+            'program' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'teacher_ids' => 'required|array|min:1',
-            'teacher_ids.*' => 'exists:teachers,id',
             'is_active' => 'nullable|boolean'
         ]);
 
@@ -179,28 +154,15 @@ class SubjectController extends Controller
             $subject->update([
                 'subject_code' => $request->subject_code,
                 'name' => $request->name,
+                'program' => $request->program,
                 'description' => $request->description,
                 'is_active' => $request->has('is_active')
             ]);
-
-            // Sync teachers for the subject
-            $teacherIds = $request->teacher_ids;
-            $primaryTeacherId = $request->primary_teacher_id ?? $teacherIds[0];
-            
-            $pivotData = [];
-            foreach ($teacherIds as $teacherId) {
-                $pivotData[$teacherId] = [
-                    'is_primary' => ($teacherId == $primaryTeacherId),
-                    'updated_at' => now()
-                ];
-            }
-            
-            $subject->teachers()->sync($pivotData);
             
             return response()->json([
                 'success' => true,
                 'message' => 'Subject updated successfully!',
-                'subject' => $subject->load('teachers')
+                'subject' => $subject
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -245,19 +207,17 @@ class SubjectController extends Controller
      */
     public function getSubjects(Request $request)
     {
-        $query = Subject::active()->with('teachers');
+        $query = Subject::active();
         
-        if ($request->filled('teacher_id')) {
-            $query->whereHas('teachers', function($q) use ($request) {
-                $q->where('teachers.id', $request->teacher_id);
-            });
+        if ($request->filled('program')) {
+            $query->where('program', $request->program);
         }
         
         if ($request->filled('search')) {
             $query->where('name', 'like', "%{$request->search}%");
         }
         
-        $subjects = $query->get(['id', 'name', 'subject_code']);
+        $subjects = $query->get(['id', 'name', 'subject_code', 'program']);
         
         return response()->json($subjects);
     }

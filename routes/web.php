@@ -85,7 +85,7 @@ Route::prefix('survey')->name('survey.')->group(function () {
     Route::post('/store', [SurveyController::class, 'store'])->name('store');
     Route::get('/results', [SurveyController::class, 'results'])->name('results');
     Route::post('/validate', [SurveyController::class, 'validateForm'])->name('validate');
-    Route::get('/subjects-by-teacher', [SurveyController::class, 'getSubjectsByTeacher'])->name('subjects-by-teacher');
+    Route::get('/subjects-by-program', [SurveyController::class, 'getSubjectsByProgram'])->name('subjects-by-program');
 });
 
 // Authentication routes

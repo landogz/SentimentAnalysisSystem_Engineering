@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Survey;
-use App\Models\Teacher;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +16,7 @@ class DashboardController extends Controller
     {
         // Get total statistics
         $totalSurveys = Survey::count();
-        $totalTeachers = Teacher::count();
+        $totalPrograms = Subject::distinct('program')->whereNotNull('program')->count('program');
         $totalSubjects = Subject::count();
         
         // Get average rating
@@ -30,13 +29,29 @@ class DashboardController extends Controller
             'neutral' => Survey::where('sentiment', 'neutral')->count(),
         ];
         
-        // Get top rated teachers
-        $topTeachers = Teacher::withCount('surveys')
-            ->withAvg('surveys', 'rating')
-            ->having('surveys_count', '>', 0)
-            ->orderBy('surveys_avg_rating', 'desc')
-            ->limit(5)
-            ->get();
+        // Get top rated programs
+        $topPrograms = Subject::whereNotNull('program')
+            ->whereHas('surveys')
+            ->get()
+            ->groupBy('program')
+            ->map(function($subjects, $program) {
+                $totalRating = 0;
+                $totalSurveys = 0;
+                foreach ($subjects as $subject) {
+                    $avgRating = $subject->surveys()->avg('rating') ?? 0;
+                    $surveyCount = $subject->surveys()->count();
+                    $totalRating += $avgRating * $surveyCount;
+                    $totalSurveys += $surveyCount;
+                }
+                return (object)[
+                    'program' => $program,
+                    'subjects_count' => $subjects->count(),
+                    'avg_rating' => $totalSurveys > 0 ? $totalRating / $totalSurveys : 0
+                ];
+            })
+            ->sortByDesc('avg_rating')
+            ->take(5)
+            ->values();
         
         // Get top rated subjects
         $topSubjects = Subject::withCount('surveys')
@@ -47,7 +62,7 @@ class DashboardController extends Controller
             ->get();
         
         // Get recent surveys
-        $recentSurveys = Survey::with(['teacher', 'subject'])
+        $recentSurveys = Survey::with(['subject'])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
@@ -79,11 +94,11 @@ class DashboardController extends Controller
         
         return view('dashboard.index', compact(
             'totalSurveys',
-            'totalTeachers', 
+            'totalPrograms', 
             'totalSubjects',
             'averageRating',
             'sentimentStats',
-            'topTeachers',
+            'topPrograms',
             'topSubjects',
             'recentSurveys',
             'monthlyTrends'
@@ -95,13 +110,15 @@ class DashboardController extends Controller
      */
     public function getStats(Request $request)
     {
-        $teacherId = $request->get('teacher_id');
+        $program = $request->get('program');
         $subjectId = $request->get('subject_id');
         
         $query = Survey::query();
         
-        if ($teacherId) {
-            $query->where('teacher_id', $teacherId);
+        if ($program) {
+            $query->whereHas('subject', function($q) use ($program) {
+                $q->where('program', $program);
+            });
         }
         
         if ($subjectId) {
