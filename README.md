@@ -4,11 +4,21 @@ A modern, professional Laravel-based system for collecting and analyzing student
 
 ## 🆕 Recent Updates & Features
 
-### **Latest Enhancements (v3.3)**
+### **Latest Enhancements (v3.4)**
+- **Streamlined Survey Structure**: Removed Part 1 (Instructor Evaluation) for a more focused survey experience
+- **Enhanced Course Evaluation**: Expanded Part 2 from 5 to 15 questions organized into 3 sections (Home School and Environment Support, Exposure to Resources and Motivation, Other Questions)
+- **Renamed Survey Sections**: "Part 2: Difficulty Level" renamed to "Course Evaluation" and "Part 3: Open Comments" renamed to "Open Ended Questions"
+- **Total Surveys Modal**: Clickable Total Surveys card on dashboard opens modal with all surveys, pagination, and quick access to survey responses
+- **BS Program Prefix**: All program selections and displays now include "BS" prefix (e.g., "BS Civil Engineering", "BS Mining Engineering")
+- **Improved Modal Stacking**: Enhanced modal management allowing multiple modals to remain open simultaneously
+- **Updated Rating Calculation**: Simplified formula using Course Evaluation (70%) and Open Ended Questions sentiment (30%)
+- **Enhanced Survey Seeder**: Updated to reflect new structure with 15 Course Evaluation questions across 3 sections
+
+### **Previous Enhancements (v3.3)**
 - **Engineering-Focused System**: Complete rebranding from CCIT to PRMSU ENGINEERING
 - **Comprehensive Engineering Faculty**: 12 engineering professors across all major engineering disciplines
 - **Engineering Curriculum**: 24 engineering subjects covering Civil, Mechanical, Electrical, Computer, Chemical, Industrial, Environmental, Materials, Aerospace, Biomedical, Petroleum, and Mining Engineering
-- **Updated Survey Questions**: Part 1 now focuses on student evaluation with 4 sections (Commitment, Academic Challenges, Learning Experiences, Assignments and Exams)
+- **Updated Survey Questions**: Part 1 focused on student evaluation with 4 sections (Commitment, Academic Challenges, Learning Experiences, Assignments and Exams)
 - **Enhanced Part 3 Questions**: 3 new engineering-focused open-ended questions about motivation, challenges, and overall experience
 - **Engineering Sample Data**: Realistic survey data with engineering student names and engineering-focused feedback
 - **Philippine Context**: Updated contact information and domain names to reflect Philippine educational institution
@@ -38,37 +48,32 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Session Management**: 30-minute timeout with SweetAlert notifications
 - **DataTables Integration**: Advanced table features with search, sort, and pagination
 
-### **Part-Specific Survey Structure**
-- **Part 1: Student Evaluation**: 20 questions with 1-5 rating scale (Strongly Agree to Strongly Disagree)
-  - **Section A: Commitment** (5 questions): Clarity, critical thinking, motivation, relevance, workload management
-  - **Section B: Academic Challenges** (5 questions): Difficulty understanding, workload pressure, stress, balance, theoretical vs practical
-  - **Section C: Learning Experiences** (5 questions): Instructor clarity, teaching strategies, learning materials, critical thinking, question comfort
-  - **Section D: Assignments and Exams** (5 questions): Homework difficulty, exam preparation, assignment management, critical thinking, academic expectations
-- **Part 2: Difficulty Level**: 5 questions with 1-5 rating scale (Very Difficult to Very Not Difficult)
-- **Part 3: Open Comments**: 3 engineering-focused questions with sentiment analysis
+### **Survey Structure**
+- **Step 1: Student Information**: Basic student details collection
+- **Step 2: Program & Subject Selection**: Program selection with "BS" prefix and subject assignment
+- **Step 3: Course Evaluation**: 15 questions with 1-5 rating scale (Very Difficult to Very Not Difficult)
+  - **Section A: Home School and Environment Support** (Questions 1-5): Understanding concepts, assignments/projects, quizzes/exams, practical activities, lesson pace
+  - **Section B: Exposure to Resources and Motivation** (Questions 6-10): Resource availability, learning materials, motivation factors, support systems, engagement
+  - **Section C: Other Questions** (Questions 11-15): Additional course evaluation metrics and feedback
+- **Step 4: Open Ended Questions**: 3 engineering-focused questions with sentiment analysis
   - Engineering program motivation and interest
   - Academic challenges and coping strategies
   - Overall experience and factors affecting performance
-- **Professional Tabbed Interface**: Overview, Part 1, Part 2, Part 3 tabs with detailed analysis
-- **Sentiment Score Conversion**: Part 3 comments converted to 1-5 numerical scale
+- **Professional Tabbed Interface**: Overview, Course Evaluation, and Open Ended Questions tabs with detailed analysis
+- **Sentiment Score Conversion**: Open Ended Questions comments converted to 1-5 numerical scale
 - **Comprehensive Analysis**: Part-specific averages and overall sentiment analysis
 
 ### **Enhanced Survey Responses Modal**
 - **Professional Design**: Modern tabbed interface with color-coded sections
-- **Overview Tab**: Summary cards with part-specific scores and sentiment analysis
-- **Part-Specific Tabs**: Detailed breakdown of each survey part
+- **Overview Tab**: Summary cards with Course Evaluation and Open Ended Questions scores and sentiment analysis
+- **Part-Specific Tabs**: Detailed breakdown of Course Evaluation and Open Ended Questions
 - **Visual Analysis**: Color-coded cards with icons and scores
 - **Responsive Layout**: Works perfectly on desktop and mobile devices
 - **Interactive Elements**: Hover effects and smooth transitions
+- **Modal Stacking**: Supports multiple modals open simultaneously (All Surveys + Survey Responses)
 
 ### **Enhanced Button Styling & Visibility**
-- **Part 1 Color Scheme**: Performance-based gradient (Green → Light Blue → Gray → Orange → Red)
-  - 5 (Outstanding): Green - represents excellent performance
-  - 4 (Very Satisfactory): Light Blue - represents very good performance
-  - 3 (Satisfactory): Gray - represents acceptable performance
-  - 2 (Fair): Orange - represents below average performance
-  - 1 (Poor): Red - represents poor performance
-- **Part 2 Color Scheme**: Difficulty-based gradient (Red → Orange → Gray → Light Blue → Green)
+- **Course Evaluation Color Scheme**: Difficulty-based gradient (Red → Orange → Gray → Light Blue → Green)
   - 5 (Very Difficult): Red - represents highest difficulty
   - 4 (Difficult): Orange - represents high difficulty
   - 3 (Slightly Difficult): Gray - represents medium difficulty
@@ -209,6 +214,8 @@ The system comes pre-loaded with:
 
 ### **Interactive Dashboard**
 - **Statistics Cards**: Real-time data with custom color coding
+- **Clickable Total Surveys Card**: Opens modal with all surveys, pagination, and quick access to detailed responses
+- **All Surveys Modal**: Comprehensive list view with program (BS prefix), subject, rating, sentiment, and date
 - **Sentiment Analysis Pie Chart**: Interactive Chart.js visualization
 - **Equal Height Cards**: Responsive flexbox layout
 - **Top Teachers & Subjects**: Performance rankings with ratings
@@ -219,7 +226,8 @@ The system comes pre-loaded with:
 
 ### **Dynamic CRUD System**
 - **Question Types**: Support for option questions (1-5 scale) and comment questions (text input)
-- **Part Categorization**: Questions organized into Part 1, Part 2, Part 3
+- **Part Categorization**: Questions organized into Course Evaluation (Part 2) and Open Ended Questions (Part 3)
+- **Section Organization**: Course Evaluation questions organized into 3 sections (A, B, C)
 - **Order Management**: Flexible question ordering with drag-and-drop capability
 - **Active/Inactive Toggle**: Easy activation/deactivation of questions
 - **AJAX Operations**: Smooth create, read, update, delete operations without page reloads
@@ -228,33 +236,31 @@ The system comes pre-loaded with:
 
 ### **Enhanced Survey Responses Viewer**
 - **Professional Tabbed Modal**: Modern interface with overview and part-specific tabs
-- **Overview Tab**: Summary cards showing part-specific scores and sentiment analysis
-- **Part 1 Tab**: Instructor evaluation responses with star ratings
-- **Part 2 Tab**: Difficulty level responses with visual indicators
-- **Part 3 Tab**: Open comments with sentiment analysis results
-- **Color-Coded Sections**: Blue (Part 1), Info (Part 2), Green (Part 3)
+- **Overview Tab**: Summary cards showing Course Evaluation and Open Ended Questions scores and sentiment analysis
+- **Course Evaluation Tab**: 15 questions organized into 3 sections with visual indicators
+- **Open Ended Questions Tab**: 3 questions with sentiment analysis results
+- **Color-Coded Sections**: Info (Course Evaluation), Green (Open Ended Questions)
 - **Interactive Elements**: Hover effects and smooth transitions
 - **Responsive Design**: Works perfectly on all device sizes
 
 ### **Part-Specific Analysis**
-- **Part 1 Analysis**: Instructor evaluation average (1-5 scale)
-- **Part 2 Analysis**: CCIT difficulty level average (1-5 scale)
-  - **General Difficulty Questions**: 5 questions about subject difficulty assessment
-- **Question Topics**: Understanding concepts, assignments/projects, quizzes/exams, practical activities, lesson pace
-- **Difficulty Assessment**: Comprehensive evaluation of learning experience across all engineering subjects
-- **Part 3 Analysis**: Sentiment score conversion (1-5 scale)
-- **Overall Analysis**: Combined rating with sentiment breakdown
+- **Course Evaluation Analysis**: Course evaluation average (1-5 scale)
+  - **Section A: Home School and Environment Support** (5 questions): Understanding concepts, assignments/projects, quizzes/exams, practical activities, lesson pace
+  - **Section B: Exposure to Resources and Motivation** (5 questions): Resource availability, learning materials, motivation factors, support systems, engagement
+  - **Section C: Other Questions** (5 questions): Additional course evaluation metrics
+- **Open Ended Questions Analysis**: Sentiment score conversion (1-5 scale)
+- **Overall Analysis**: Combined rating with Course Evaluation (70%) and Open Ended Questions sentiment (30%)
 - **Visual Indicators**: Color-coded cards with icons and scores
-- **Detailed Breakdown**: Individual question responses with ratings
+- **Detailed Breakdown**: Individual question responses with ratings organized by section
 
 ### **Smart Rating Calculation**
-- **Automatic Algorithm**: Calculates overall rating from multiple data sources
-- **Option Questions Weight**: 70% weight from 1-5 scale question responses
-- **Sentiment Analysis Weight**: 30% weight from text sentiment analysis
+- **Automatic Algorithm**: Calculates overall rating from Course Evaluation and Open Ended Questions
+- **Course Evaluation Weight**: 70% weight from Course Evaluation responses (15 questions, 1-5 scale)
+- **Open Ended Questions Weight**: 30% weight from sentiment analysis of text responses
 - **Sentiment Conversion**: Positive (4.5), Neutral (3.0), Negative (1.5) ratings
 - **Range Validation**: Ensures final rating stays within 1.0-5.0 range
 - **Precision Control**: Rounds to 1 decimal place for consistency
-- **Part-Specific Averages**: Individual averages for each survey part
+- **Part-Specific Averages**: Individual averages for Course Evaluation and Open Ended Questions
 
 ### **Advanced Reporting System**
 - **Multi-Format Export**: PDF, Excel, and CSV export capabilities
@@ -520,4 +526,4 @@ For support and questions, please contact the development team or create an issu
 
 **PRMSU ENGINEERING Student Feedback & Sentiment Analysis System** - Empowering educational institutions with modern feedback collection and analysis tools.
 
-*Version 3.3 - Enhanced with comprehensive engineering faculty and curriculum, updated survey questions focusing on student evaluation, engineering-focused Part 3 questions, and realistic engineering sample data.*
+*Version 3.4 - Streamlined survey structure with Course Evaluation (15 questions across 3 sections) and Open Ended Questions, removed Part 1, added Total Surveys modal, BS program prefix, and enhanced modal stacking capabilities.*
