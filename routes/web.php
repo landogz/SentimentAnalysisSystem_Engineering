@@ -94,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
     Route::get('/dashboard/chart-data', [DashboardController::class, 'getChartData'])->name('dashboard.chart-data');
+    Route::get('/dashboard/surveys', [DashboardController::class, 'getAllSurveys'])->name('dashboard.surveys');
     
     // Teacher management
     Route::resource('teachers', TeacherController::class);

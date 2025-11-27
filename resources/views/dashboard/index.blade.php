@@ -70,6 +70,38 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     }
 
+    #totalSurveysCard {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #totalSurveysCard:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Modal stacking support */
+    .modal-backdrop {
+        z-index: 1040;
+    }
+
+    .modal-backdrop.show {
+        z-index: 1040;
+    }
+
+    #allSurveysModal {
+        z-index: 1055;
+    }
+
+    #surveyResponsesModal {
+        z-index: 1060;
+    }
+
+    /* Ensure modals can stack */
+    .modal.show {
+        display: block !important;
+    }
+
     .stat-card:hover::before {
         opacity: 1;
     }
@@ -479,7 +511,7 @@
 <div class="row">
     <!-- Statistics Cards -->
     <div class="col-lg-3 col-6">
-        <div class="stat-card success">
+        <div class="stat-card success" id="totalSurveysCard">
             <div class="stat-icon">
                 <i class="fas fa-clipboard-list"></i>
             </div>
@@ -604,7 +636,7 @@
                         <div class="top-rated-item">
                             <div class="rank-badge">{{ $index + 1 }}</div>
                             <div style="flex: 1;">
-                                <h6 class="mb-1" style="font-weight: 600; color: #494850;">{{ $program->program }}</h6>
+                                <h6 class="mb-1" style="font-weight: 600; color: #494850;">BS {{ $program->program }}</h6>
                                 <small class="text-muted">{{ $program->subjects_count }} subjects</small>
                             </div>
                             <div class="text-right">
@@ -698,7 +730,7 @@
                             @forelse($recentSurveys as $survey)
                                 <tr class="survey-row" data-survey-id="{{ $survey->id }}" style="cursor: pointer;">
                                     <td>
-                                        <strong style="color: #494850;">{{ $survey->subject->program ?? 'N/A' }}</strong>
+                                        <strong style="color: #494850;">{{ $survey->subject->program ? 'BS ' . $survey->subject->program : 'N/A' }}</strong>
                                     </td>
                                     <td>
                                         <strong style="color: #494850;">{{ $survey->subject->name }}</strong>
@@ -746,6 +778,36 @@
 </div>
 
 </div> <!-- Close dashboard-wrapper -->
+
+<!-- All Surveys Modal -->
+<div class="modal fade" id="allSurveysModal" tabindex="-1" aria-labelledby="allSurveysModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(143, 207, 168, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%); border-bottom: 2px solid rgba(143, 207, 168, 0.2); padding: 1.5rem;">
+                <h5 class="modal-title" id="allSurveysModalLabel" style="font-weight: 700; color: #494850; display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-clipboard-list" style="background: linear-gradient(135deg, #8FCFA8 0%, #7bb894 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.5rem;"></i>
+                    All Surveys
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem; background: rgba(255, 255, 255, 0.95);">
+                <div id="allSurveysContent">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading surveys...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background: linear-gradient(135deg, rgba(143, 207, 168, 0.05) 0%, rgba(143, 207, 168, 0.05) 100%); border-top: 1px solid rgba(143, 207, 168, 0.2); padding: 1.5rem;">
+                <button type="button" class="btn btn-secondary btn-modern" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Survey Responses Modal -->
 <div class="modal fade" id="surveyResponsesModal" tabindex="-1" aria-labelledby="surveyResponsesModalLabel" aria-hidden="true">
@@ -895,6 +957,139 @@ $(document).ready(function() {
             $(this).removeClass('table-hover');
         }
     );
+
+    // Function to open survey responses modal (global scope)
+    function openSurveyResponsesModal(surveyId) {
+        const responsesModal = $('#surveyResponsesModal');
+        const allSurveysModal = $('#allSurveysModal');
+        
+        // Prevent Bootstrap from closing the first modal
+        const bsAllSurveysModal = bootstrap.Modal.getInstance(allSurveysModal[0]);
+        if (bsAllSurveysModal) {
+            // Temporarily prevent hide event
+            allSurveysModal.off('hide.bs.modal').on('hide.bs.modal', function(e) {
+                // Only allow closing if the responses modal is not open
+                if (responsesModal.hasClass('show')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
+        
+        // Show responses modal with loading state
+        const bsResponsesModal = new bootstrap.Modal(responsesModal[0], {
+            backdrop: true,
+            keyboard: true
+        });
+        bsResponsesModal.show();
+        
+        // Ensure proper z-index stacking
+        setTimeout(function() {
+            responsesModal.css('z-index', 1060);
+            allSurveysModal.css('z-index', 1055);
+            // Adjust backdrop z-index
+            $('.modal-backdrop').last().css('z-index', 1055);
+        }, 150);
+        
+        $('#surveyResponsesContent').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading survey responses...</p>
+            </div>
+        `);
+        
+        // Load survey responses via AJAX
+        $.ajax({
+            url: `/surveys/${surveyId}/responses`,
+            method: 'GET',
+            success: function(response) {
+                $('#surveyResponsesContent').html(response);
+            },
+            error: function(xhr) {
+                console.error('Survey responses error:', xhr);
+                let errorMessage = 'Failed to load survey responses. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                $('#surveyResponsesContent').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        ${errorMessage}
+                    </div>
+                `);
+            }
+        });
+    }
+
+    // When responses modal is closed, restore normal behavior of all surveys modal
+    $('#surveyResponsesModal').on('hidden.bs.modal', function() {
+        const allSurveysModal = $('#allSurveysModal');
+        // Re-enable normal close behavior
+        allSurveysModal.off('hide.bs.modal');
+    });
+
+    // Total Surveys card click handler
+    $('#totalSurveysCard').click(function() {
+        const modal = $('#allSurveysModal');
+        
+        // Show modal with loading state
+        modal.modal('show');
+        
+        // Reset content to loading state
+        $('#allSurveysContent').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading surveys...</p>
+            </div>
+        `);
+        
+        // Load all surveys via AJAX
+        $.ajax({
+            url: '{{ route("dashboard.surveys") }}',
+            method: 'GET',
+            success: function(response) {
+                $('#allSurveysContent').html(response);
+                
+                // Re-attach click handlers for survey rows in the modal
+                $(document).off('click', '#allSurveysContent .survey-row').on('click', '#allSurveysContent .survey-row', function(e) {
+                    // Don't trigger if clicking on the view button or inside the button
+                    if ($(e.target).closest('.view-survey-btn').length || $(e.target).hasClass('view-survey-btn')) {
+                        return;
+                    }
+                    
+                    const surveyId = $(this).data('survey-id');
+                    openSurveyResponsesModal(surveyId);
+                });
+
+                // Handle view button clicks
+                $(document).off('click', '#allSurveysContent .view-survey-btn').on('click', '#allSurveysContent .view-survey-btn', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const surveyId = $(this).data('survey-id');
+                    if (surveyId) {
+                        openSurveyResponsesModal(surveyId);
+                    }
+                });
+            },
+            error: function(xhr) {
+                console.error('Surveys loading error:', xhr);
+                let errorMessage = 'Failed to load surveys. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage,
+                    confirmButtonColor: '#F16E70'
+                });
+            }
+        });
+    });
 });
 </script>
 @endpush 

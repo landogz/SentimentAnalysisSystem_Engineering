@@ -167,4 +167,20 @@ class DashboardController extends Controller
             'monthly' => $monthlyData
         ]);
     }
+
+    /**
+     * Get all surveys for modal display
+     */
+    public function getAllSurveys(Request $request)
+    {
+        $surveys = Survey::with(['subject'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+        
+        if ($request->ajax()) {
+            return view('dashboard.surveys-list', compact('surveys'))->render();
+        }
+        
+        return response()->json($surveys);
+    }
 }

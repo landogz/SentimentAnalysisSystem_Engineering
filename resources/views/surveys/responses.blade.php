@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <small class="text-muted">Program</small><br>
-                                <strong class="text-primary">{{ $survey->subject->program ?? 'N/A' }}</strong>
+                                <strong class="text-primary">{{ $survey->subject->program ? 'BS ' . $survey->subject->program : 'N/A' }}</strong>
                             </div>
                             <div class="col-md-4">
                                 <small class="text-muted">Subject</small><br>
@@ -68,20 +68,14 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="part1-tab" data-bs-toggle="tab" data-bs-target="#part1" type="button" role="tab">
-                    <i class="fas fa-chalkboard-teacher me-2"></i>Part 1
-                    <span class="badge bg-primary ms-1">{{ $part1Responses->count() }}</span>
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="part2-tab" data-bs-toggle="tab" data-bs-target="#part2" type="button" role="tab">
-                    <i class="fas fa-chart-line me-2"></i>Part 2
+                    <i class="fas fa-chart-line me-2"></i>Course Evaluation
                     <span class="badge bg-info ms-1">{{ $part2Responses->count() }}</span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="part3-tab" data-bs-toggle="tab" data-bs-target="#part3" type="button" role="tab">
-                    <i class="fas fa-comments me-2"></i>Part 3
+                    <i class="fas fa-comments me-2"></i>Open Ended Questions
                     <span class="badge bg-success ms-1">{{ $part3Responses->count() }}</span>
                 </button>
             </li>
@@ -105,43 +99,31 @@
                     <div class="card-body">
                         <!-- Analysis Cards -->
                         <div class="row g-3 mb-4">
-                            <div class="col-md-3">
-                                <div class="analysis-card analysis-card-primary">
-                                    <div class="text-center p-3">
-                                        <div class="analysis-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
-                                            <i class="fas fa-chalkboard-teacher"></i>
-                                        </div>
-                                        <h4 class="text-primary mb-1">{{ number_format($part1Average, 1) }}</h4>
-                                        <p class="mb-0 fw-bold text-dark">Part 1: Instructor</p>
-                                        <small class="text-muted">Evaluation Score</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="analysis-card analysis-card-info">
                                     <div class="text-center p-3">
                                         <div class="analysis-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
                                             <i class="fas fa-chart-line"></i>
                                         </div>
                                         <h4 class="text-info mb-1">{{ number_format($part2Average, 1) }}</h4>
-                                        <p class="mb-0 fw-bold text-dark">Part 2: Difficulty</p>
+                                        <p class="mb-0 fw-bold text-dark">Course Evaluation</p>
                                         <small class="text-muted">Level Score</small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="analysis-card analysis-card-success">
                                     <div class="text-center p-3">
                                         <div class="analysis-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
                                             <i class="fas fa-comments"></i>
                                         </div>
                                         <h4 class="text-success mb-1">{{ number_format($part3Score, 1) }}</h4>
-                                        <p class="mb-0 fw-bold text-dark">Part 3: Comments</p>
+                                        <p class="mb-0 fw-bold text-dark">Open Ended Questions</p>
                                         <small class="text-muted">Sentiment Score</small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="analysis-card analysis-card-warning">
                                     <div class="text-center p-3">
                                         <div class="analysis-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
@@ -166,25 +148,13 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <div class="computation-item">
-                                                    <small class="text-muted d-block mb-1">Part 1 Average (Instructor Evaluation)</small>
-                                                    <strong class="text-primary fs-5">{{ number_format($part1Average, 1) }}/5.0</strong>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="computation-item">
-                                                    <small class="text-muted d-block mb-1">Part 2 Average (Difficulty Level)</small>
+                                                    <small class="text-muted d-block mb-1">Course Evaluation Average</small>
                                                     <strong class="text-info fs-5">{{ number_format($part2Average, 1) }}/5.0</strong>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="computation-item">
-                                                    <small class="text-muted d-block mb-1">Overall Option Average (Part 1 + Part 2)</small>
-                                                    <strong class="text-dark fs-5">{{ number_format($overallOptionAverage, 1) }}/5.0</strong>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="computation-item">
-                                                    <small class="text-muted d-block mb-1">Part 3 Sentiment Score (Comments)</small>
+                                                    <small class="text-muted d-block mb-1">Open Ended Questions Sentiment Score</small>
                                                     <strong class="text-success fs-5">{{ number_format($part3Score, 1) }}/5.0</strong>
                                                     <span class="badge bg-secondary ms-2">{{ ucfirst($part3Sentiment) }}</span>
                                                 </div>
@@ -197,15 +167,15 @@
                                                     <div class="formula-text">
                                                         <strong>Final Rating Formula:</strong><br>
                                                         <small class="text-muted">
-                                                            (Overall Option Average × 70%) + (Part 3 Sentiment Score × 30%)
+                                                            (Course Evaluation Average × 70%) + (Open Ended Questions Sentiment Score × 30%)
                                                         </small>
                                                     </div>
                                                     <div class="formula-calculation text-end">
                                                         <div class="calculation-step">
-                                                            <small class="text-muted">= ({{ number_format($overallOptionAverage, 1) }} × 0.7) + ({{ number_format($part3Score, 1) }} × 0.3)</small>
+                                                            <small class="text-muted">= ({{ number_format($part2Average, 1) }} × 0.7) + ({{ number_format($part3Score, 1) }} × 0.3)</small>
                                                         </div>
                                                         <div class="calculation-step mt-1">
-                                                            <small class="text-muted">= {{ number_format($overallOptionAverage * 0.7, 2) }} + {{ number_format($part3Score * 0.3, 2) }}</small>
+                                                            <small class="text-muted">= {{ number_format($part2Average * 0.7, 2) }} + {{ number_format($part3Score * 0.3, 2) }}</small>
                                                         </div>
                                                         <div class="calculation-result mt-2">
                                                             <strong class="text-warning fs-4">= {{ number_format($calculatedFinalRating, 1) }}/5.0</strong>
@@ -248,54 +218,6 @@
         </div>
     </div>
 
-    <!-- Part 1 Tab -->
-    <div class="tab-pane fade" id="part1" role="tabpanel">
-        <div class="row">
-            <div class="col-12">
-                <div class="modern-card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                            Part 1: Instructor Evaluation
-                            <span class="badge bg-primary ms-2">{{ number_format($part1Average, 1) }}/5.0</span>
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        @if($part1Responses->count() > 0)
-                            <div class="row">
-                                @foreach($part1Responses as $response)
-                                <div class="col-md-6 mb-3">
-                                    <div class="response-card border rounded p-3">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <span class="badge bg-primary">Q{{ $response->question->order_number }}</span>
-                                            <span class="badge bg-secondary">{{ $response->answer }}/5</span>
-                                        </div>
-                                        <p class="mb-2 text-muted small">{{ $response->question->question_text }}</p>
-                                        <div class="rating-display">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $response->answer)
-                                                    <i class="fas fa-star text-warning"></i>
-                                                @else
-                                                    <i class="far fa-star text-warning"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-5">
-                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No Part 1 responses available</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Part 2 Tab -->
     <div class="tab-pane fade" id="part2" role="tabpanel">
         <div class="row">
@@ -304,7 +226,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-chart-line"></i>
-                            Part 2: Difficulty Level
+                            Course Evaluation
                             <span class="badge bg-info ms-2">{{ number_format($part2Average, 1) }}/5.0</span>
                         </h3>
                     </div>
@@ -335,7 +257,7 @@
                         @else
                             <div class="text-center py-5">
                                 <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No Part 2 responses available</p>
+                                <p class="text-muted">No Course Evaluation responses available</p>
                             </div>
                         @endif
                     </div>
@@ -352,7 +274,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-comments"></i>
-                            Part 3: Open Comments
+                            Open Ended Questions
                             <span class="badge bg-success ms-2">Sentiment: {{ ucfirst($part3Sentiment) }}</span>
                         </h3>
                     </div>
@@ -379,7 +301,7 @@
                         @else
                             <div class="text-center py-5">
                                 <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No Part 3 responses available</p>
+                                <p class="text-muted">No Open Ended Questions responses available</p>
                             </div>
                         @endif
                     </div>

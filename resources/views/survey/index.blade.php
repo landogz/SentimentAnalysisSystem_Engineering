@@ -896,7 +896,7 @@
             color: white;
         }
         
-        /* Part 2 Button Styling - Difficulty Level */
+        /* Part 2 Button Styling - Course Evaluation */
         .part2 .btn-outline-success {
             color: #198754;
             border-color: #198754;
@@ -1340,26 +1340,18 @@
                         <div class="step-number">2</div>
                         <div class="step-label">Program & Subject</div>
                     </div>
+                    @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
                     <div class="wizard-step" data-step="3">
                         <div class="step-number">3</div>
-                        <div class="step-label">Part 1</div>
-                    </div>
-                    @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
-                    <div class="wizard-step" data-step="4">
-                        <div class="step-number">4</div>
-                        <div class="step-label">Part 2</div>
+                        <div class="step-label">Course Evaluation</div>
                     </div>
                     @endif
                     @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
-                    <div class="wizard-step" data-step="5">
-                        <div class="step-number">5</div>
-                        <div class="step-label">Part 3</div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Open Ended Questions</div>
                     </div>
                     @endif
-                    <div class="wizard-step" data-step="6">
-                        <div class="step-number">6</div>
-                        <div class="step-label">Comments</div>
-                    </div>
                 </div>
                
         </div>
@@ -1436,11 +1428,11 @@
                                 <select class="form-select @error('program') is-invalid @enderror" 
                                         id="program" name="program" required>
                                     <option value="">Choose a program...</option>
-                                    <option value="Civil Engineering">Civil Engineering</option>
-                                    <option value="Mining Engineering">Mining Engineering</option>
-                                    <option value="Electrical Engineering">Electrical Engineering</option>
-                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                    <option value="Computer Engineering">Computer Engineering</option>
+                                    <option value="Civil Engineering">BS Civil Engineering</option>
+                                    <option value="Mining Engineering">BS Mining Engineering</option>
+                                    <option value="Electrical Engineering">BS Electrical Engineering</option>
+                                    <option value="Mechanical Engineering">BS Mechanical Engineering</option>
+                                    <option value="Computer Engineering">BS Computer Engineering</option>
                                 </select>
                                 @error('program')
                                     <div class="error-feedback">{{ $message }}</div>
@@ -1466,37 +1458,48 @@
                         <button type="button" class="btn btn-nav btn-prev" id="step2Prev">
                             <i class="fas fa-arrow-left me-2"></i>Previous
                         </button>
+                        @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
                         <button type="button" class="btn btn-nav btn-next" id="step2Next">
                             Next<i class="fas fa-arrow-right ms-2"></i>
                         </button>
+                        @elseif(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
+                        <button type="button" class="btn btn-nav btn-next" id="step2Next">
+                            Next<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                        @else
+                        <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Survey
+                        </button>
+                        @endif
                     </div>
                 </div>
-
-                <!-- Step 3: Part 1 - Instructor Evaluation -->
+                
+                @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
+                <!-- Step 3: Part 2 - Course Evaluation -->
                 <div class="wizard-content" data-step="3">
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
-                            <i class="fas fa-star me-2" style="color: var(--light-blue);"></i>
-                            Part 1: Instructor Evaluation
+                            <i class="fas fa-chart-line me-2" style="color: var(--golden-orange);"></i>
+                            Course Evaluation
                         </h4>
                         
-                        <div class="alert alert-info mb-3">
+                        <div class="alert alert-warning mb-3">
                             <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Satisfactory) | 3 (Neutral) | 2 (Unsatisfactory) | 1 (Poor)
                         </div>
                         
-                        @if(isset($questionsByPart['part1']))
-                        <div class="part-section">
+                        @if(isset($questionsByPart['part2']))
+                        <div class="part-section part2">
                             @php
-                                $part1Questions = $questionsByPart['part1'];
+                                $part2Questions = $questionsByPart['part2'];
                                 $sections = [
-                                    'A. Commitment' => $part1Questions->where('order_number', '<=', 5),
-                                    'B. Knowledge of Subject' => $part1Questions->where('order_number', '>', 5)->where('order_number', '<=', 10),
-                                    'C. Teaching for Independent Learning' => $part1Questions->where('order_number', '>', 10)->where('order_number', '<=', 15),
-                                    'D. Management of Learning' => $part1Questions->where('order_number', '>', 15)->where('order_number', '<=', 20)
+                                    'A. Home School and Environment Support' => $part2Questions->where('order_number', '>=', 1)->where('order_number', '<=', 5),
+                                    'B. Exposure to Resources and Motivation' => $part2Questions->where('order_number', '>=', 6)->where('order_number', '<=', 10),
+                                    'C. Other Questions' => $part2Questions->where('order_number', '>=', 11)->where('order_number', '<=', 15)
                                 ];
                             @endphp
                             
                             @foreach($sections as $sectionName => $sectionQuestions)
+                                @if($sectionQuestions->count() > 0)
                                 <div class="mb-4">
                                     <div class="section-subtitle">{{ $sectionName }}</div>
                                     @foreach($sectionQuestions as $question)
@@ -1538,6 +1541,7 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                @endif
                             @endforeach
                         </div>
                         @endif
@@ -1547,85 +1551,26 @@
                         <button type="button" class="btn btn-nav btn-prev" id="step3Prev">
                             <i class="fas fa-arrow-left me-2"></i>Previous
                         </button>
+                        @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
                         <button type="button" class="btn btn-nav btn-next" id="step3Next">
                             Next<i class="fas fa-arrow-right ms-2"></i>
                         </button>
-                    </div>
-                </div>
-                
-                @if(isset($questionsByPart['part2']) && $questionsByPart['part2']->count() > 0)
-                <!-- Step 4: Part 2 - Difficulty Level -->
-                <div class="wizard-content" data-step="4">
-                    <div class="form-section">
-                        <h4 class="mb-3" style="color: var(--dark-gray);">
-                            <i class="fas fa-chart-line me-2" style="color: var(--golden-orange);"></i>
-                            Part 2: Difficulty Level
-                        </h4>
-                        
-                        <div class="alert alert-warning mb-3">
-                            <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Satisfactory) | 3 (Neutral) | 2 (Unsatisfactory) | 1 (Poor)
-                        </div>
-                        
-                        <div class="part-section part2">
-                            @foreach($questionsByPart['part2'] as $question)
-                                <div class="form-group mb-3">
-                                    <label class="question-label">
-                                        <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
-                                    </label>
-                                    <div class="btn-group w-100" role="group">
-                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                               id="q{{ $question->id }}_5" value="5" required>
-                                        <label class="btn btn-outline-success" for="q{{ $question->id }}_5">
-                                            <strong>5</strong><small>Outstanding</small>
-                                        </label>
-                                        
-                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                               id="q{{ $question->id }}_4" value="4" required>
-                                        <label class="btn btn-outline-info" for="q{{ $question->id }}_4">
-                                            <strong>4</strong><small>Satisfactory</small>
-                                        </label>
-                                        
-                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                               id="q{{ $question->id }}_3" value="3" required>
-                                        <label class="btn btn-outline-secondary" for="q{{ $question->id }}_3">
-                                            <strong>3</strong><small>Neutral</small>
-                                        </label>
-                                        
-                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                               id="q{{ $question->id }}_2" value="2" required>
-                                        <label class="btn btn-outline-warning" for="q{{ $question->id }}_2">
-                                            <strong>2</strong><small>Unsatisfactory</small>
-                                        </label>
-                                        
-                                        <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
-                                               id="q{{ $question->id }}_1" value="1" required>
-                                        <label class="btn btn-outline-danger" for="q{{ $question->id }}_1">
-                                            <strong>1</strong><small>Poor</small>
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    
-                    <div class="nav-buttons">
-                        <button type="button" class="btn btn-nav btn-prev" id="step4Prev">
-                            <i class="fas fa-arrow-left me-2"></i>Previous
+                        @else
+                        <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Survey
                         </button>
-                        <button type="button" class="btn btn-nav btn-next" id="step4Next">
-                            Next<i class="fas fa-arrow-right ms-2"></i>
-                        </button>
+                        @endif
                     </div>
                 </div>
                 @endif
                 
                 @if(isset($questionsByPart['part3']) && $questionsByPart['part3']->count() > 0)
-                <!-- Step 5: Part 3 - Open Comments -->
-                <div class="wizard-content" data-step="5">
+                <!-- Step 4: Part 3 - Open Ended Questions -->
+                <div class="wizard-content" data-step="4">
                     <div class="form-section">
                         <h4 class="mb-3" style="color: var(--dark-gray);">
                             <i class="fas fa-comments me-2" style="color: var(--light-blue);"></i>
-                            Part 3: Open Comments
+                            Open Ended Questions
                         </h4>
                         
                         <div class="alert alert-info mb-3">
@@ -1649,37 +1594,7 @@
                     </div>
                     
                     <div class="nav-buttons">
-                        <button type="button" class="btn btn-nav btn-prev" id="step5Prev">
-                            <i class="fas fa-arrow-left me-2"></i>Previous
-                        </button>
-                        <button type="button" class="btn btn-nav btn-next" id="step5Next">
-                            Next<i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </div>
-                @endif
-                
-                <!-- Step 6: Additional Comments -->
-                <div class="wizard-content" data-step="6">
-                    <div class="form-section">
-                        <h4 class="mb-3" style="color: var(--dark-gray);">
-                            <i class="fas fa-comments me-2" style="color: var(--light-blue);"></i>
-                            Additional Comments
-                        </h4>
-                        
-                        <div class="form-group">
-                            <label for="feedback_text" class="form-label">Any additional feedback or suggestions</label>
-                            <textarea class="form-control @error('feedback_text') is-invalid @enderror" 
-                                      id="feedback_text" name="feedback_text" rows="4" 
-                                      placeholder="Share any additional thoughts or suggestions...">{{ old('feedback_text') }}</textarea>
-                            @error('feedback_text')
-                                <div class="error-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    
-                    <div class="nav-buttons">
-                        <button type="button" class="btn btn-nav btn-prev" id="step6Prev">
+                        <button type="button" class="btn btn-nav btn-prev" id="step4Prev">
                             <i class="fas fa-arrow-left me-2"></i>Previous
                         </button>
                         <button type="button" class="btn btn-nav btn-submit-final" id="btnSubmit">
@@ -1687,6 +1602,7 @@
                         </button>
                     </div>
                 </div>
+                @endif
 
                 </form>
             </div>

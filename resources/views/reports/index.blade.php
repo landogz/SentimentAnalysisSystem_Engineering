@@ -400,11 +400,11 @@
                                 <label for="program_filter" class="form-label fw-bold">Program/Course</label>
                                 <select class="form-select" id="program_filter" name="program">
                                     <option value="">All Programs</option>
-                                    <option value="Civil Engineering">Civil Engineering</option>
-                                    <option value="Mining Engineering">Mining Engineering</option>
-                                    <option value="Electrical Engineering">Electrical Engineering</option>
-                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                    <option value="Computer Engineering">Computer Engineering</option>
+                                    <option value="Civil Engineering">BS Civil Engineering</option>
+                                    <option value="Mining Engineering">BS Mining Engineering</option>
+                                    <option value="Electrical Engineering">BS Electrical Engineering</option>
+                                    <option value="Mechanical Engineering">BS Mechanical Engineering</option>
+                                    <option value="Computer Engineering">BS Computer Engineering</option>
                                 </select>
                             </div>
                         </div>

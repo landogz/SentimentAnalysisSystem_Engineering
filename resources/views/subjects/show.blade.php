@@ -359,7 +359,7 @@
                         <td><strong>Program:</strong></td>
                         <td>
                             @if($subject->program)
-                                <span class="badge badge-info">{{ $subject->program }}</span>
+                                <span class="badge badge-info">BS {{ $subject->program }}</span>
                             @else
                                 <span class="text-muted">Not specified</span>
                             @endif

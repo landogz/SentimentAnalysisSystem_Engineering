@@ -149,16 +149,13 @@
                 </button>
             </div>
             <div class="card-body">
-                <!-- Part 1: Instructor Evaluation -->
+                <!-- Part 2: Course Evaluation -->
                 <div class="part-section">
-                    <h4 class="text-primary mb-3">
-                        <i class="fas fa-star"></i>
-                        Part 1: Instructor Evaluation
-                        <span class="badge badge-primary ms-2">{{ isset($questionsByPart['part1']) ? $questionsByPart['part1']->count() : 0 }} Questions</span>
+                    <h4 class="text-warning mb-3">
+                        <i class="fas fa-chart-line"></i>
+                        Course Evaluation
+                        <span class="badge badge-warning ms-2">{{ isset($questionsByPart['part2']) ? $questionsByPart['part2']->count() : 0 }} Questions</span>
                     </h4>
-                    <div class="alert alert-info" style="border-radius: 12px; border: none; background: linear-gradient(135deg, rgba(152, 170, 231, 0.1) 0%, rgba(143, 207, 168, 0.1) 100%);">
-                        <strong>Rating Scale:</strong> 5 (Outstanding) | 4 (Very Satisfactory) | 3 (Satisfactory) | 2 (Fair) | 1 (Poor)
-                    </div>
                     <div class="table-responsive">
                         <table class="table modern-table">
                             <thead>
@@ -172,21 +169,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(isset($questionsByPart['part1']))
-                                    @foreach($questionsByPart['part1'] as $question)
+                                @if(isset($questionsByPart['part2']))
+                                    @foreach($questionsByPart['part2'] as $question)
                                     @php
                                         $section = '';
-                                        if ($question->order_number <= 5) {
-                                            $section = 'A. Commitment';
-                                        } elseif ($question->order_number <= 10) {
-                                            $section = 'B. Knowledge of Subject';
-                                        } elseif ($question->order_number <= 15) {
-                                            $section = 'C. Teaching for Independent Learning';
-                                        } else {
-                                            $section = 'D. Management of Learning';
+                                        if ($question->order_number >= 1 && $question->order_number <= 5) {
+                                            $section = 'A. Home School and Environment Support';
+                                        } elseif ($question->order_number >= 6 && $question->order_number <= 10) {
+                                            $section = 'B. Exposure to Resources and Motivation';
+                                        } elseif ($question->order_number >= 11 && $question->order_number <= 15) {
+                                            $section = 'C. Other Questions';
                                         }
                                     @endphp
-                                    <tr data-question-id="{{ $question->id }}" 
+                                    <tr data-question-id="{{ $question->id }}"
                                         data-question-text="{{ $question->question_text }}"
                                         data-question-type="{{ $question->question_type }}"
                                         data-part="{{ $question->part }}"
@@ -227,7 +222,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="6" class="text-center text-muted">No questions in Part 1</td>
+                                        <td colspan="6" class="text-center text-muted">No questions in Course Evaluation</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -235,80 +230,11 @@
                     </div>
                 </div>
 
-                <!-- Part 2: Difficulty Level -->
-                <div class="part-section">
-                    <h4 class="text-warning mb-3">
-                        <i class="fas fa-chart-line"></i>
-                        Part 2: Difficulty Level
-                        <span class="badge badge-warning ms-2">{{ isset($questionsByPart['part2']) ? $questionsByPart['part2']->count() : 0 }} Questions</span>
-                    </h4>
-                    <div class="table-responsive">
-                        <table class="table modern-table">
-                            <thead>
-                                <tr>
-                                    <th width="80">Order</th>
-                                    <th>Question</th>
-                                    <th width="120">Type</th>
-                                    <th width="100">Status</th>
-                                    <th width="150">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if(isset($questionsByPart['part2']))
-                                    @foreach($questionsByPart['part2'] as $question)
-                                    <tr data-question-id="{{ $question->id }}"
-                                        data-question-text="{{ $question->question_text }}"
-                                        data-question-type="{{ $question->question_type }}"
-                                        data-part="{{ $question->part }}"
-                                        data-order="{{ $question->order_number }}"
-                                        data-active="{{ $question->is_active ? '1' : '0' }}">
-                                        <td>{{ $question->order_number }}</td>
-                                        <td>{{ $question->question_text }}</td>
-                                        <td>
-                                            <span class="badge {{ $question->question_type === 'option' ? 'badge-primary' : 'badge-info' }}">
-                                                {{ $question->question_type_label }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge {{ $question->status_badge_class }}">
-                                                {{ $question->status_label }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary edit-question" 
-                                                        data-question="{{ $question->id }}" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editQuestionModal">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-success toggle-status" 
-                                                        data-question="{{ $question->id }}">
-                                                    <i class="fas fa-toggle-on"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger delete-question" 
-                                                        data-question="{{ $question->id }}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted">No questions in Part 2</td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Part 3: Open Comments -->
+                <!-- Part 3: Open Ended Questions -->
                 <div class="part-section">
                     <h4 class="text-info mb-3">
                         <i class="fas fa-comments"></i>
-                        Part 3: Open Comments
+                        Open Ended Questions
                         <span class="badge badge-info ms-2">{{ isset($questionsByPart['part3']) ? $questionsByPart['part3']->count() : 0 }} Questions</span>
                     </h4>
                     <div class="table-responsive">
@@ -365,7 +291,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">No questions in Part 2</td>
+                                        <td colspan="5" class="text-center text-muted">No questions in Part 3</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -414,9 +340,8 @@
                                 <label for="create_part" class="form-label">Part</label>
                                 <select class="form-select" id="create_part" name="part" required>
                                     <option value="">Select Part</option>
-                                    <option value="part1">Part 1 - Instructor Evaluation</option>
-                                    <option value="part2">Part 2 - Difficulty Level</option>
-                                    <option value="part3">Part 3 - Open Comments</option>
+                                    <option value="part2">Course Evaluation</option>
+                                    <option value="part3">Open Ended Questions</option>
                                 </select>
                             </div>
                         </div>
@@ -487,9 +412,8 @@
                                 <label for="edit_part" class="form-label">Part</label>
                                 <select class="form-select" id="edit_part" name="part" required>
                                     <option value="">Select Part</option>
-                                    <option value="part1">Part 1 - Instructor Evaluation</option>
-                                    <option value="part2">Part 2 - Difficulty Level</option>
-                                    <option value="part3">Part 3 - Open Comments</option>
+                                    <option value="part2">Course Evaluation</option>
+                                    <option value="part3">Open Ended Questions</option>
                                 </select>
                             </div>
                         </div>

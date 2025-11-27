@@ -162,11 +162,11 @@
                         <div class="col-md-3">
                             <select class="form-select" id="programFilter">
                                 <option value="">All Programs</option>
-                                <option value="Civil Engineering">Civil Engineering</option>
-                                <option value="Mining Engineering">Mining Engineering</option>
-                                <option value="Electrical Engineering">Electrical Engineering</option>
-                                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Civil Engineering">BS Civil Engineering</option>
+                                <option value="Mining Engineering">BS Mining Engineering</option>
+                                <option value="Electrical Engineering">BS Electrical Engineering</option>
+                                <option value="Mechanical Engineering">BS Mechanical Engineering</option>
+                                <option value="Computer Engineering">BS Computer Engineering</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -208,7 +208,7 @@
                                 <td>{{ $subject->name }}</td>
                                 <td>
                                     @if($subject->program)
-                                        <span class="badge badge-info">{{ $subject->program }}</span>
+                                        <span class="badge badge-info">BS {{ $subject->program }}</span>
                                     @else
                                         <span class="text-muted">Not specified</span>
                                     @endif
@@ -311,11 +311,11 @@
                         <label for="program">Program/Course</label>
                         <select class="form-control" id="program" name="program" required>
                             <option value="">Select Program</option>
-                            <option value="Civil Engineering">Civil Engineering</option>
-                            <option value="Mining Engineering">Mining Engineering</option>
-                            <option value="Electrical Engineering">Electrical Engineering</option>
-                            <option value="Mechanical Engineering">Mechanical Engineering</option>
-                            <option value="Computer Engineering">Computer Engineering</option>
+                            <option value="Civil Engineering">BS Civil Engineering</option>
+                            <option value="Mining Engineering">BS Mining Engineering</option>
+                            <option value="Electrical Engineering">BS Electrical Engineering</option>
+                            <option value="Mechanical Engineering">BS Mechanical Engineering</option>
+                            <option value="Computer Engineering">BS Computer Engineering</option>
                         </select>
                         <small class="text-muted">Select the engineering program for this subject</small>
                     </div>
@@ -372,11 +372,11 @@
                         <label for="edit_program">Program/Course</label>
                         <select class="form-control" id="edit_program" name="program" required>
                             <option value="">Select Program</option>
-                            <option value="Civil Engineering">Civil Engineering</option>
-                            <option value="Mining Engineering">Mining Engineering</option>
-                            <option value="Electrical Engineering">Electrical Engineering</option>
-                            <option value="Mechanical Engineering">Mechanical Engineering</option>
-                            <option value="Computer Engineering">Computer Engineering</option>
+                            <option value="Civil Engineering">BS Civil Engineering</option>
+                            <option value="Mining Engineering">BS Mining Engineering</option>
+                            <option value="Electrical Engineering">BS Electrical Engineering</option>
+                            <option value="Mechanical Engineering">BS Mechanical Engineering</option>
+                            <option value="Computer Engineering">BS Computer Engineering</option>
                         </select>
                         <small class="text-muted">Select the engineering program for this subject</small>
                     </div>

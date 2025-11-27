@@ -308,11 +308,8 @@ class SurveyController extends Controller
             ? $part2Responses->filter(function($r) { return is_numeric($r->answer); })->avg(function($r) { return (float)$r->answer; }) 
             : 0;
         
-        // Calculate overall option average (Part 1 + Part 2 combined)
-        $allOptionResponses = $part1Responses->merge($part2Responses);
-        $overallOptionAverage = $allOptionResponses->count() > 0
-            ? $allOptionResponses->filter(function($r) { return is_numeric($r->answer); })->avg(function($r) { return (float)$r->answer; })
-            : 0;
+        // Overall option average is now just Part 2 (Course Evaluation) since Part 1 is removed
+        $overallOptionAverage = $part2Average;
         
         // Analyze Part 3 sentiment and calculate score
         $part3Sentiment = 'neutral';
@@ -361,9 +358,9 @@ class SurveyController extends Controller
             }
         }
         
-        // Calculate final rating breakdown (same as in store method)
-        // Final Rating = (Overall Option Average * 0.7) + (Part 3 Sentiment Score * 0.3)
-        $calculatedFinalRating = ($overallOptionAverage * 0.7) + ($part3Score * 0.3);
+        // Calculate final rating breakdown
+        // Final Rating = (Course Evaluation Average * 0.7) + (Part 3 Sentiment Score * 0.3)
+        $calculatedFinalRating = ($part2Average * 0.7) + ($part3Score * 0.3);
         $calculatedFinalRating = max(1.0, min(5.0, round($calculatedFinalRating, 1)));
         
         return view('surveys.responses', compact(
