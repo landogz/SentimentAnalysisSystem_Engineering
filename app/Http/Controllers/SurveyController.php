@@ -42,23 +42,81 @@ class SurveyController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // Get all active part3 (Open Ended Questions) questions
+        $part3Questions = SurveyQuestion::active()
+            ->where('part', 'part3')
+            ->where('question_type', 'comment')
+            ->get();
+        
+        // Build validation rules
+        $rules = [
             'subject_id' => 'required|exists:subjects,id',
             'program' => 'required|string',
             'feedback_text' => 'nullable|string|max:1000',
             'student_name' => 'nullable|string|max:255',
-            'question_responses' => 'nullable|array'
+            'question_responses' => 'required|array'
+        ];
+        
+        // Add required validation for each part3 question
+        foreach ($part3Questions as $question) {
+            $rules['question_responses.' . $question->id] = 'required|string|min:10';
+        }
+        
+        $validator = Validator::make($request->all(), $rules, [
+            'question_responses.required' => 'Please provide responses to all Open Ended Questions.',
+            'question_responses.*.required' => 'This Open Ended Question is required.',
+            'question_responses.*.min' => 'Please provide a more detailed response (at least 10 characters).'
         ]);
 
-        // Debug: Log validation errors if any
         if ($validator->fails()) {
+            // Debug: Log validation errors
             \Log::error('Survey validation failed:', $validator->errors()->toArray());
-        }
-
-        if ($validator->fails()) {
+            
+            // Group and format error messages to avoid duplication
+            $errors = $validator->errors();
+            $errorMessages = [];
+            
+            // Check for part3 question errors
+            $part3Errors = [];
+            $hasPart3Required = false;
+            $hasPart3MinLength = false;
+            
+            foreach ($part3Questions as $question) {
+                $fieldKey = 'question_responses.' . $question->id;
+                if ($errors->has($fieldKey)) {
+                    $fieldErrors = $errors->get($fieldKey);
+                    foreach ($fieldErrors as $error) {
+                        if (strpos($error, 'required') !== false) {
+                            $hasPart3Required = true;
+                        } elseif (strpos($error, 'more detailed') !== false) {
+                            $hasPart3MinLength = true;
+                        }
+                    }
+                }
+            }
+            
+            // Add summary messages instead of individual field errors
+            if ($hasPart3Required) {
+                $errorMessages[] = 'Please provide responses to all Open Ended Questions.';
+            }
+            if ($hasPart3MinLength) {
+                $errorMessages[] = 'Please provide more detailed responses (at least 10 characters) for all Open Ended Questions.';
+            }
+            
+            // Add other validation errors (subject_id, program, etc.)
+            foreach ($errors->keys() as $key) {
+                if (!str_starts_with($key, 'question_responses.')) {
+                    $errorMessages = array_merge($errorMessages, $errors->get($key));
+                }
+            }
+            
+            // Remove duplicates while preserving order
+            $errorMessages = array_unique($errorMessages);
+            
             return response()->json([
                 'success' => false,
-                'errors' => $validator->errors()
+                'message' => implode(' ', $errorMessages),
+                'errors' => $errors
             ], 422);
         }
 

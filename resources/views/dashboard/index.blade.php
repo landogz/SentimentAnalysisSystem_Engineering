@@ -1053,27 +1053,6 @@ $(document).ready(function() {
             method: 'GET',
             success: function(response) {
                 $('#allSurveysContent').html(response);
-                
-                // Re-attach click handlers for survey rows in the modal
-                $(document).off('click', '#allSurveysContent .survey-row').on('click', '#allSurveysContent .survey-row', function(e) {
-                    // Don't trigger if clicking on the view button or inside the button
-                    if ($(e.target).closest('.view-survey-btn').length || $(e.target).hasClass('view-survey-btn')) {
-                        return;
-                    }
-                    
-                    const surveyId = $(this).data('survey-id');
-                    openSurveyResponsesModal(surveyId);
-                });
-
-                // Handle view button clicks
-                $(document).off('click', '#allSurveysContent .view-survey-btn').on('click', '#allSurveysContent .view-survey-btn', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const surveyId = $(this).data('survey-id');
-                    if (surveyId) {
-                        openSurveyResponsesModal(surveyId);
-                    }
-                });
             },
             error: function(xhr) {
                 console.error('Surveys loading error:', xhr);
@@ -1089,6 +1068,87 @@ $(document).ready(function() {
                 });
             }
         });
+    });
+
+    // Handle pagination clicks in All Surveys modal - using event delegation
+    $(document).on('click', '#allSurveysContent .pagination a', function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        
+        $('#allSurveysContent').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading surveys...</p>
+            </div>
+        `);
+        
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(response) {
+                $('#allSurveysContent').html(response);
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load surveys. Please try again.',
+                    confirmButtonColor: '#F16E70'
+                });
+            }
+        });
+    });
+
+    // Handle view button clicks in All Surveys modal - using event delegation
+    $(document).on('click', '#allSurveysContent .view-survey-btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        
+        const surveyId = $(this).data('survey-id');
+        console.log('View button clicked, Survey ID:', surveyId);
+        
+        if (!surveyId) {
+            console.error('Survey ID not found');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Survey ID not found. Please try again.',
+                confirmButtonColor: '#F16E70'
+            });
+            return;
+        }
+        
+        if (typeof openSurveyResponsesModal !== 'function') {
+            console.error('openSurveyResponsesModal function not available');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Function not available. Please refresh the page.',
+                confirmButtonColor: '#F16E70'
+            });
+            return;
+        }
+        
+        openSurveyResponsesModal(surveyId);
+    });
+
+    // Handle survey row clicks (excluding view button) - using event delegation
+    $(document).on('click', '#allSurveysContent .survey-row', function(e) {
+        // Don't trigger if clicking on the view button or inside the button
+        if ($(e.target).closest('.view-survey-btn').length || 
+            $(e.target).hasClass('view-survey-btn') || 
+            $(e.target).closest('button').hasClass('view-survey-btn') ||
+            $(e.target).is('button') ||
+            $(e.target).is('i')) {
+            return;
+        }
+        const surveyId = $(this).data('survey-id');
+        if (surveyId && typeof openSurveyResponsesModal === 'function') {
+            openSurveyResponsesModal(surveyId);
+        }
     });
 });
 </script>

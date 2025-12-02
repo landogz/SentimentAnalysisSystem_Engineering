@@ -270,9 +270,13 @@ class SentimentAnalysisService
      */
     private function determineSentiment(float $totalScore, float $positiveScore, float $negativeScore): string
     {
-        if ($positiveScore > $negativeScore && $positiveScore > 0) {
+        // Negative scores are negative numbers, so we need to compare absolute values
+        $absPositive = abs($positiveScore);
+        $absNegative = abs($negativeScore);
+        
+        if ($absPositive > $absNegative && $positiveScore > 0) {
             return 'positive';
-        } elseif ($negativeScore > $positiveScore && $negativeScore > 0) {
+        } elseif ($absNegative > $absPositive && $negativeScore < 0) {
             return 'negative';
         } else {
             return 'neutral';

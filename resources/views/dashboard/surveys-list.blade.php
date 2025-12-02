@@ -52,7 +52,7 @@
                         <small class="text-muted">{{ $survey->created_at->format('h:i A') }}</small>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-primary view-survey-btn" data-survey-id="{{ $survey->id }}" style="border-radius: 8px;">
+                        <button type="button" class="btn btn-sm btn-primary view-survey-btn" data-survey-id="{{ $survey->id }}" style="border-radius: 8px; position: relative; z-index: 10;">
                             <i class="fas fa-eye me-1"></i>View
                         </button>
                     </td>
@@ -134,59 +134,4 @@
     </nav>
 </div>
 @endif
-
-<script>
-$(document).ready(function() {
-    // Handle pagination clicks
-    $(document).on('click', '#allSurveysContent .pagination a', function(e) {
-        e.preventDefault();
-        const url = $(this).attr('href');
-        
-        $('#allSurveysContent').html(`
-            <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-3" style="color: #6c757d; font-weight: 500;">Loading surveys...</p>
-            </div>
-        `);
-        
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: function(response) {
-                $('#allSurveysContent').html(response);
-                
-                // Re-attach click handlers after pagination
-                $(document).off('click', '#allSurveysContent .survey-row').on('click', '#allSurveysContent .survey-row', function(e) {
-                    if ($(e.target).closest('.view-survey-btn').length || $(e.target).hasClass('view-survey-btn')) {
-                        return;
-                    }
-                    const surveyId = $(this).data('survey-id');
-                    if (typeof openSurveyResponsesModal === 'function') {
-                        openSurveyResponsesModal(surveyId);
-                    }
-                });
-
-                $(document).off('click', '#allSurveysContent .view-survey-btn').on('click', '#allSurveysContent .view-survey-btn', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const surveyId = $(this).data('survey-id');
-                    if (surveyId && typeof openSurveyResponsesModal === 'function') {
-                        openSurveyResponsesModal(surveyId);
-                    }
-                });
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load surveys. Please try again.',
-                    confirmButtonColor: '#F16E70'
-                });
-            }
-        });
-    });
-});
-</script>
 

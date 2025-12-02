@@ -1320,16 +1320,6 @@
             <h1>PRMSU ENGINEERING</h1>
                 <p>Student Feedback Survey</p>
                  
-                <!-- Login Link Section -->
-                <div class="mt-4" style="position: relative; z-index: 10;">
-                    <p class="mb-3" style="color: rgba(255, 255, 255, 0.95); font-size: 0.95rem; font-weight: 500;">
-                        <i class="fas fa-user-lock me-2" style="color: rgba(255, 255, 255, 0.9);"></i>
-                        Faculty or Staff Member?
-                    </p>
-                    <a href="{{ route('login') }}" class="btn btn-outline-light" style="border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid rgba(255, 255, 255, 0.4); position: relative; z-index: 10; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
-                    </a>
-            </div>
                 <!-- Multi-Step Wizard Indicator -->
                 <div class="wizard-steps">
                     <div class="wizard-step active" data-step="1">
@@ -1582,12 +1572,14 @@
                                 <div class="form-group mb-3">
                                     <label for="comment_{{ $question->id }}" class="question-label">
                                         <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
+                                        <span class="text-danger">*</span>
                                     </label>
                                     <textarea class="form-control" 
                                               id="comment_{{ $question->id }}" 
                                               name="question_responses[{{ $question->id }}]" 
                                               rows="3" 
-                                              placeholder="Please provide your response..."></textarea>
+                                              placeholder="Please provide your response..."
+                                              required></textarea>
                                 </div>
                             @endforeach
                         </div>
@@ -1658,27 +1650,34 @@
                 const currentStepElement = $(`.wizard-content[data-step="${currentStep}"]`);
                 let isValid = true;
                 
+                // Remove previous validation styling
+                currentStepElement.find('.is-invalid').removeClass('is-invalid');
+                
                 // Check required fields in current step
                 const requiredFields = currentStepElement.find('input[required], select[required], textarea[required]');
                 
                 requiredFields.each(function() {
                     const $field = $(this);
+                    let fieldValid = true;
+                    
                     if ($field.attr('type') === 'radio') {
                         const name = $field.attr('name');
                         if (!$(`input[name="${name}"]:checked`).length) {
-                            isValid = false;
-                            return false;
+                            fieldValid = false;
                         }
                     } else if ($field.is('select')) {
                         if (!$field.val()) {
-                            isValid = false;
-                            return false;
+                            fieldValid = false;
                         }
                     } else {
                         if (!$field.val().trim()) {
-                            isValid = false;
-                            return false;
+                            fieldValid = false;
                         }
+                    }
+                    
+                    if (!fieldValid) {
+                        isValid = false;
+                        $field.addClass('is-invalid');
                     }
                 });
                 
@@ -1812,11 +1811,17 @@
                         let errorMessage = 'An error occurred while submitting your feedback.';
                         
                         if (xhr.responseJSON) {
-                            if (xhr.responseJSON.errors) {
-                                const errors = xhr.responseJSON.errors;
-                                errorMessage = Object.values(errors).flat().join('\n');
-                            } else if (xhr.responseJSON.message) {
+                            // Prioritize the formatted message from backend
+                            if (xhr.responseJSON.message) {
                                 errorMessage = xhr.responseJSON.message;
+                            } else if (xhr.responseJSON.errors) {
+                                // If no formatted message, process errors to avoid duplication
+                                const errors = xhr.responseJSON.errors;
+                                const errorArray = Object.values(errors).flat();
+                                
+                                // Remove duplicate messages
+                                const uniqueErrors = [...new Set(errorArray)];
+                                errorMessage = uniqueErrors.join('\n');
                             } else if (xhr.responseJSON.debug) {
                                 errorMessage = xhr.responseJSON.debug;
                             }

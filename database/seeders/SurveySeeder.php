@@ -5,13 +5,20 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Survey;
-use App\Models\Teacher;
 use App\Models\Subject;
 use App\Models\SurveyResponse;
 use App\Models\SurveyQuestion;
+use Faker\Factory as Faker;
 
 class SurveySeeder extends Seeder
 {
+    private $faker;
+
+    public function __construct()
+    {
+        $this->faker = Faker::create();
+    }
+
     /**
      * Run the database seeds.
      */
@@ -22,12 +29,11 @@ class SurveySeeder extends Seeder
         Survey::query()->delete();
         $this->command->info('Cleared existing surveys and responses...');
 
-        $teachers = Teacher::all();
         $subjects = Subject::all();
         $questions = SurveyQuestion::active()->get();
 
-        if ($teachers->isEmpty() || $subjects->isEmpty()) {
-            $this->command->info('No teachers or subjects found. Please run TeacherSeeder and SubjectSeeder first.');
+        if ($subjects->isEmpty()) {
+            $this->command->info('No subjects found. Please run SubjectSeeder first.');
             return;
         }
 
@@ -36,198 +42,168 @@ class SurveySeeder extends Seeder
             return;
         }
 
-        // Sample survey data with part-specific analysis for Engineering students
-        $sampleSurveys = [
-            [
-                'rating' => 4.6,
-                'sentiment' => 'positive',
-                'part1_rating' => 4.7, // Student Evaluation
-                'part2_rating' => 4.1, // Difficulty Level
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Excellent engineering course! The instructor makes complex engineering concepts easy to understand. Very practical approach to learning.',
-                'student_name' => 'Carlos Santos',
-                'student_email' => 'carlos.santos@engineering.edu'
-            ],
-            [
-                'rating' => 4.1,
-                'sentiment' => 'positive',
-                'part1_rating' => 4.3,
-                'part2_rating' => 3.8,
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Great course structure for engineering students. The instructor provides excellent real-world examples and applications.',
-                'student_name' => 'Maria Gonzales',
-                'student_email' => 'maria.gonzales@engineering.edu'
-            ],
-            [
-                'rating' => 4.4,
-                'sentiment' => 'positive',
-                'part1_rating' => 4.5,
-                'part2_rating' => 4.0,
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Very knowledgeable engineering instructor. Makes theoretical concepts practical and engaging for students.',
-                'student_name' => 'Ahmed Hassan',
-                'student_email' => 'ahmed.hassan@engineering.edu'
-            ],
-            [
-                'rating' => 2.8,
-                'sentiment' => 'negative',
-                'part1_rating' => 3.0,
-                'part2_rating' => 4.6,
-                'part3_sentiment' => 'negative',
-                'feedback_text' => 'Engineering course needs improvement in communication. The subject is very challenging and lacks proper guidance.',
-                'student_name' => 'Jennifer Lee',
-                'student_email' => 'jennifer.lee@engineering.edu'
-            ],
-            [
-                'rating' => 3.3,
-                'sentiment' => 'neutral',
-                'part1_rating' => 3.4,
-                'part2_rating' => 3.2,
-                'part3_sentiment' => 'neutral',
-                'feedback_text' => 'Average engineering course, could be better organized. The difficulty level is appropriate for engineering students.',
-                'student_name' => 'David Kim',
-                'student_email' => 'david.kim@engineering.edu'
-            ],
-            [
-                'rating' => 4.9,
-                'sentiment' => 'positive',
-                'part1_rating' => 5.0,
-                'part2_rating' => 4.2,
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Outstanding engineering instructor! Very passionate about engineering and makes complex topics accessible.',
-                'student_name' => 'Isabella Martinez',
-                'student_email' => 'isabella.martinez@engineering.edu'
-            ],
-            [
-                'rating' => 3.7,
-                'sentiment' => 'neutral',
-                'part1_rating' => 3.8,
-                'part2_rating' => 3.5,
-                'part3_sentiment' => 'neutral',
-                'feedback_text' => 'Decent engineering course, some improvements needed. The instructor is knowledgeable but could be more engaging.',
-                'student_name' => 'Ryan Thompson',
-                'student_email' => 'ryan.thompson@engineering.edu'
-            ],
-            [
-                'rating' => 4.2,
-                'sentiment' => 'positive',
-                'part1_rating' => 4.4,
-                'part2_rating' => 3.7,
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Good engineering learning experience. The instructor is professional and the course is well-structured for practical applications.',
-                'student_name' => 'Sofia Rodriguez',
-                'student_email' => 'sofia.rodriguez@engineering.edu'
-            ],
-            [
-                'rating' => 2.1,
-                'sentiment' => 'negative',
-                'part1_rating' => 2.3,
-                'part2_rating' => 4.9,
-                'part3_sentiment' => 'negative',
-                'feedback_text' => 'Poor engineering course experience. The instructor lacks clarity and the course is extremely difficult without proper support.',
-                'student_name' => 'Kevin Chen',
-                'student_email' => 'kevin.chen@engineering.edu'
-            ],
-            [
-                'rating' => 4.8,
-                'sentiment' => 'positive',
-                'part1_rating' => 4.9,
-                'part2_rating' => 3.4,
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Amazing engineering instructor! Very passionate about teaching engineering and makes learning enjoyable and practical.',
-                'student_name' => 'Ana Silva',
-                'student_email' => 'ana.silva@engineering.edu'
-            ],
-            [
-                'rating' => 3.9,
-                'sentiment' => 'positive',
-                'part1_rating' => 4.0,
-                'part2_rating' => 3.6,
-                'part3_sentiment' => 'positive',
-                'feedback_text' => 'Good engineering course with practical focus. The instructor provides valuable industry insights and real-world applications.',
-                'student_name' => 'Miguel Torres',
-                'student_email' => 'miguel.torres@engineering.edu'
-            ],
-            [
-                'rating' => 2.9,
-                'sentiment' => 'negative',
-                'part1_rating' => 3.1,
-                'part2_rating' => 4.3,
-                'part3_sentiment' => 'negative',
-                'feedback_text' => 'Engineering course needs better organization. The instructor could improve communication and provide more practical examples.',
-                'student_name' => 'Lisa Wang',
-                'student_email' => 'lisa.wang@engineering.edu'
-            ]
+        // Sample feedback texts for different sentiments
+        // POSITIVE: clearly positive language, strong positive tokens
+        $positiveFeedbacks = [
+            'This engineering course is excellent. The instructor is very clear, very helpful, and the lessons are extremely well organized.',
+            'The overall experience in this course is outstanding. The instructor explains every topic very clearly and supports students very well.',
+            'This is a great engineering class. The examples are very practical and the instructor is highly supportive and encouraging.',
+            'The course is amazing. The instructor is very engaging, very patient, and always provides helpful feedback.',
+            'I am very satisfied with this course. The teaching is excellent, the materials are very useful, and the instructor is highly professional.',
+            'This subject is very well taught. The instructor is knowledgeable, organized, and always willing to help.',
+            'The engineering lessons are very clear and very interesting. The instructor creates a positive and motivating learning environment.',
+            'This course provides an excellent learning experience. The instructor is passionate, supportive, and explains difficult topics very well.',
+            'I feel very positive about this class. The structure is strong, the activities are meaningful, and the instructor is very effective.',
+            'Overall, this is an outstanding course. The instructor shows great expertise and makes the subject enjoyable and easy to follow.'
+        ];
+
+        // NEGATIVE: clearly negative language, strong negative tokens
+        $negativeFeedbacks = [
+            'This engineering course is poor. The explanations are unclear and the overall support for students is very weak.',
+            'The course experience is disappointing. The instructor is often unprepared and the lessons feel very confusing.',
+            'This subject is very difficult to follow. The instructions are unclear and the organization of the topics is bad.',
+            'The course is frustrating. There is little guidance, the schedule is disorganized, and questions are not answered properly.',
+            'Overall, this class feels very unhelpful. The instructor rarely explains concepts clearly and the materials are poorly prepared.',
+            'The learning experience is negative. The course is stressful, the workload is heavy, and support from the instructor is limited.',
+            'This course is badly organized. Important topics are rushed, instructions are confusing, and feedback is not given in a helpful way.',
+            'I am not satisfied with this class. The lectures are boring, the explanations are unclear, and it is hard to learn effectively.',
+            'The engineering course feels like a waste of time. The teaching style is ineffective and there is almost no practical support.',
+            'The overall quality of this subject is poor. The instructor is not responsive, the content is disorganized, and the class is very discouraging.'
+        ];
+
+        // NEUTRAL: balanced language, no strong positive or negative tokens
+        $neutralFeedbacks = [
+            'This engineering course is acceptable. The content covers the required topics and the overall experience is average.',
+            'The course is okay. Some parts are clear while other parts feel a bit rushed, but it still meets the basic expectations.',
+            'Overall, the class is moderate in quality. The lessons are standard and the learning pace is normal.',
+            'The course provides a typical learning experience. It is neither very strong nor very weak in any specific area.',
+            'This subject is reasonable. The teaching style is simple and the activities are ordinary, without major problems.',
+            'The engineering course is neutral in impact. The explanations are sometimes clear and sometimes unclear, but generally acceptable.',
+            'My experience with this class is mixed. Some sessions are helpful while others feel routine and unremarkable.',
+            'The course runs as expected. It follows the syllabus and delivers the required information without many issues.',
+            'The overall impression of this subject is average. It functions correctly but does not stand out in a positive or negative way.',
+            'This course is neither very good nor very bad. It provides a normal learning environment with standard results.'
         ];
 
         $totalSurveys = 0;
+        $targetSurveys = 100;
 
-        foreach ($teachers as $teacher) {
-            // Get subjects for this teacher
-            $teacherSubjects = $teacher->subjects;
-            
-            if ($teacherSubjects->isEmpty()) {
-                // If no subjects assigned, assign a random subject
-                $randomSubject = $subjects->random();
-                $teacher->subjects()->attach($randomSubject->id, ['is_primary' => true]);
-                $teacherSubjects = collect([$randomSubject]);
+        // Create exactly 100 surveys
+        for ($i = 0; $i < $targetSurveys; $i++) {
+            // Randomly select subject
+            $subject = $subjects->random();
+
+            // Determine sentiment distribution (60% positive, 25% neutral, 15% negative)
+            $sentimentRand = rand(1, 100);
+            if ($sentimentRand <= 60) {
+                $sentiment = 'positive';
+                $rating = $this->faker->randomFloat(1, 4.0, 5.0);
+                $part2Rating = $this->faker->randomFloat(1, 3.0, 4.5);
+                $feedbackText = $positiveFeedbacks[array_rand($positiveFeedbacks)];
+            } elseif ($sentimentRand <= 85) {
+                $sentiment = 'neutral';
+                $rating = $this->faker->randomFloat(1, 3.0, 3.9);
+                $part2Rating = $this->faker->randomFloat(1, 3.0, 4.0);
+                $feedbackText = $neutralFeedbacks[array_rand($neutralFeedbacks)];
+            } else {
+                $sentiment = 'negative';
+                $rating = $this->faker->randomFloat(1, 1.5, 2.9);
+                $part2Rating = $this->faker->randomFloat(1, 3.5, 5.0); // Higher difficulty for negative
+                $feedbackText = $negativeFeedbacks[array_rand($negativeFeedbacks)];
             }
 
-            // Create 3-6 surveys for each teacher
-            $numSurveys = rand(3, 6);
-            
-            for ($i = 0; $i < $numSurveys; $i++) {
-                $surveyData = $sampleSurveys[array_rand($sampleSurveys)];
-                $subject = $teacherSubjects->random();
-                
-                // Create survey
-                $survey = Survey::create([
-                    'teacher_id' => $teacher->id,
-                    'subject_id' => $subject->id,
-                    'rating' => $surveyData['rating'],
-                    'sentiment' => $surveyData['sentiment'],
-                    'feedback_text' => $surveyData['feedback_text'],
-                    'student_name' => $surveyData['student_name'],
-                    'student_email' => $surveyData['student_email'],
-                    'ip_address' => '127.0.0.1',
-                    'created_at' => now()->subDays(rand(1, 60))
-                ]);
+            // Ensure ratings are within valid range
+            $rating = max(1.0, min(5.0, round($rating, 1)));
+            $part2Rating = max(1.0, min(5.0, round($part2Rating, 1)));
 
-                // Create survey responses for each part
-                $this->createSurveyResponses($survey, $questions, $surveyData);
-                
-                $totalSurveys++;
-            }
+            // Generate student data
+            $studentName = $this->faker->name();
+            $studentEmail = strtolower(str_replace(' ', '.', $studentName)) . '@prmsu.edu.ph';
+            $ipAddress = $this->faker->ipv4();
+
+            // Create survey (without teacher_id)
+            $survey = Survey::create([
+                'subject_id' => $subject->id,
+                'rating' => $rating,
+                'sentiment' => $sentiment,
+                'feedback_text' => $feedbackText,
+                'student_name' => $studentName,
+                'student_email' => $studentEmail,
+                'ip_address' => $ipAddress,
+                'created_at' => $this->faker->dateTimeBetween('-6 months', 'now')
+            ]);
+
+            // Create survey responses for each part (only Part 2 and Part 3)
+            $surveyData = [
+                'part2_rating' => $part2Rating,
+                'part3_sentiment' => $sentiment
+            ];
+            $this->createSurveyResponses($survey, $questions, $surveyData);
+            
+            $totalSurveys++;
         }
 
-        $this->command->info("Sample surveys created successfully!");
+        // Create 5 surveys with perfect 5.0 ratings
+        $this->command->info("Creating 5 surveys with perfect 5.0 ratings...");
+        
+        $perfectFeedbacks = [
+            'Outstanding engineering course! The instructor is absolutelyr exceptional. Every concept is explained with perfect clarity and enthusiasm. The practical applications and real-world examples make this the best learning experience I have ever had. Highly recommended!',
+            'Perfect teaching methodology! The instructor demonstrates exceptional expertise and passion. The course structure is flawless, with excellent resources and support. This is exactly what engineering education should be - inspiring, practical, and comprehensive.',
+            'Exceptional course delivery! The instructor shows remarkable dedication and makes complex engineering concepts incredibly accessible. The learning materials are outstanding, and the support provided is second to none. Truly an amazing experience!',
+            'Absolutely brilliant engineering course! The instructor is phenomenal - clear, engaging, and extremely knowledgeable. The practical approach and real-world applications are perfect. This course has exceeded all my expectations in every way possible.',
+            'Perfect engineering education experience! The instructor is outstanding in every aspect - communication, expertise, and support. The course is excellently organized with fantastic resources. This is the gold standard for engineering courses!'
+        ];
+
+        for ($i = 0; $i < 5; $i++) {
+            // Randomly select subject
+            $subject = $subjects->random();
+
+            // Generate student data
+            $studentName = $this->faker->name();
+            $studentEmail = strtolower(str_replace(' ', '.', $studentName)) . '@prmsu.edu.ph';
+            $ipAddress = $this->faker->ipv4();
+
+            // Create survey with perfect 5.0 rating (without teacher_id)
+            $survey = Survey::create([
+                'subject_id' => $subject->id,
+                'rating' => 5.0,
+                'sentiment' => 'positive',
+                'feedback_text' => $perfectFeedbacks[$i],
+                'student_name' => $studentName,
+                'student_email' => $studentEmail,
+                'ip_address' => $ipAddress,
+                'created_at' => $this->faker->dateTimeBetween('-6 months', 'now')
+            ]);
+
+            // Create survey responses with perfect ratings
+            // Part 2 (Course Evaluation): All 5.0 ratings
+            // Part 3 (Open Ended Questions): Very positive comments to get 5.0 sentiment score
+            $surveyData = [
+                'part2_rating' => 5.0, // All Course Evaluation questions = 5.0
+                'part3_sentiment' => 'positive' // Will be converted to 4.5, but with high intensity can reach 5.0
+            ];
+            $this->createSurveyResponses($survey, $questions, $surveyData, true); // Pass true for perfect rating
+            
+            $totalSurveys++;
+        }
+
+        $this->command->info("Surveys created successfully!");
         $this->command->info("Total surveys created: $totalSurveys");
         $this->command->info("Total responses created: " . SurveyResponse::count());
     }
 
     /**
-     * Create survey responses for all parts
+     * Create survey responses for all parts (only Part 2 and Part 3)
      */
-    private function createSurveyResponses($survey, $questions, $surveyData)
+    private function createSurveyResponses($survey, $questions, $surveyData, $perfectRating = false)
     {
-        // Group questions by part
-        $part1Questions = $questions->where('part', 'part1'); // Instructor Evaluation
-        $part2Questions = $questions->where('part', 'part2'); // Difficulty Level
-        $part3Questions = $questions->where('part', 'part3'); // Open Comments
+        // Group questions by part (only Part 2 and Part 3)
+        $part2Questions = $questions->where('part', 'part2'); // Course Evaluation
+        $part3Questions = $questions->where('part', 'part3'); // Open Ended Questions
 
-        // Part 1: Instructor Evaluation (1-5 scale)
-        foreach ($part1Questions as $question) {
-            $rating = $this->generatePart1Rating($surveyData['part1_rating']);
-            SurveyResponse::create([
-                'survey_id' => $survey->id,
-                'survey_question_id' => $question->id,
-                'answer' => $rating
-            ]);
-        }
-
-        // Part 2: Difficulty Level (1-5 scale)
+        // Part 2: Course Evaluation (1-5 scale)
         foreach ($part2Questions as $question) {
-            $rating = $this->generatePart2Rating($surveyData['part2_rating']);
+            $rating = $perfectRating ? 5 : $this->generatePart2Rating($surveyData['part2_rating']);
             SurveyResponse::create([
                 'survey_id' => $survey->id,
                 'survey_question_id' => $question->id,
@@ -235,26 +211,20 @@ class SurveySeeder extends Seeder
             ]);
         }
 
-        // Part 2: Open Comments
+        // Part 3: Open Ended Questions
         foreach ($part3Questions as $question) {
-            $comment = $this->generatePart3Comment($question, $surveyData['part3_sentiment']);
+            if ($perfectRating) {
+                // Use extremely positive comments for perfect ratings
+                $comment = $this->generatePerfectComment($question);
+            } else {
+                $comment = $this->generatePart3Comment($question, $surveyData['part3_sentiment']);
+            }
             SurveyResponse::create([
                 'survey_id' => $survey->id,
                 'survey_question_id' => $question->id,
                 'answer' => $comment
             ]);
         }
-    }
-
-    /**
-     * Generate Part 1 rating based on target rating
-     */
-    private function generatePart1Rating($targetRating)
-    {
-        // Generate rating with some variation around the target
-        $variation = rand(-2, 2) / 10; // ±0.2 variation
-        $rating = max(1, min(5, $targetRating + $variation));
-        return round($rating);
     }
 
     /**
@@ -331,5 +301,34 @@ class SurveySeeder extends Seeder
         $sentimentComments = $comments[$sentiment][$questionText] ?? ['No comment available.'];
         
         return $sentimentComments[array_rand($sentimentComments)];
+    }
+
+    /**
+     * Generate perfect comments for 5.0 rating surveys
+     */
+    private function generatePerfectComment($question)
+    {
+        $perfectComments = [
+            'How do your major subjects influence your interest and motivation in pursuing your chosen engineering program?' => [
+                'My major subjects have absolutely transformed my passion for engineering! The exceptional teaching methods, outstanding practical applications, and incredible real-world relevance have made me incredibly excited and motivated about my future engineering career. This is the best educational experience I have ever had!',
+                'These subjects have dramatically increased my commitment to engineering! The instructor is absolutely phenomenal, providing excellent examples and making every concept incredibly clear. I can see exactly how this knowledge directly applies to solving real engineering problems. Outstanding experience!',
+                'My major subjects have tremendously motivated me to pursue advanced engineering studies! The instructor\'s exceptional enthusiasm, brilliant practical examples, and outstanding teaching approach are absolutely inspiring. This is perfect engineering education!'
+            ],
+            'What do you find most challenging about your major subjects, and how do you usually cope with these challenges?' => [
+                'The mathematical complexity is challenging, but the instructor provides absolutely excellent support and guidance! I cope extremely well by seeking help from this outstanding instructor and practicing regularly with the fantastic resources provided. The support system is perfect!',
+                'Understanding theoretical concepts is challenging, but the instructor makes it incredibly manageable! I cope excellently by attending the amazing extra sessions and forming study groups with classmates. The instructor\'s support is absolutely exceptional!',
+                'The workload is challenging, but the instructor provides perfect guidance! I cope very well by organizing my time effectively and using the instructor\'s excellent office hours for clarification. The support is outstanding!'
+            ],
+            'In your own words, describe your overall experience and feelings toward your major subjects, what factors positively or negatively affect your attitude, motivation and performance in these subjects?' => [
+                'I have an absolutely perfect and exceptional experience with my major subjects! The instructor\'s outstanding explanations, brilliant practical examples, and incredible supportive attitude tremendously motivate me to perform excellently. This is the best learning environment possible!',
+                'My experience is absolutely outstanding and perfect! The instructor\'s exceptional passion for engineering, outstanding real-world applications, and brilliant interactive teaching methods tremendously and positively impact my motivation and performance. This is exceptional!',
+                'I feel incredibly motivated and extremely engaged! The instructor\'s outstanding expertise, perfect practical approach, and excellent encouragement create an absolutely positive and exceptional learning environment that tremendously enhances my performance. This is perfect!'
+            ]
+        ];
+
+        $questionText = $question->question_text;
+        $comments = $perfectComments[$questionText] ?? ['This is an absolutely outstanding and perfect experience! The instructor is exceptional in every way possible!'];
+        
+        return $comments[array_rand($comments)];
     }
 } 
