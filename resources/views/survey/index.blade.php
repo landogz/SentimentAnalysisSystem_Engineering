@@ -1494,8 +1494,9 @@
                                     <div class="section-subtitle">{{ $sectionName }}</div>
                                     @foreach($sectionQuestions as $question)
                                         <div class="form-group mb-3">
-                                            <label class="question-label">
-                                                <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
+                                            <label class="question-label dynamic-question-label" data-template="{{ $question->question_text }}">
+                                                <span class="question-number">{{ $question->order_number }}.</span>
+                                                <span class="question-text">{{ $question->question_text }}</span>
                                             </label>
                                             <div class="btn-group w-100" role="group">
                                                 <input type="radio" class="btn-check" name="question_responses[{{ $question->id }}]" 
@@ -1570,8 +1571,9 @@
                         <div class="part-section part3">
                             @foreach($questionsByPart['part3'] as $question)
                                 <div class="form-group mb-3">
-                                    <label for="comment_{{ $question->id }}" class="question-label">
-                                        <span class="question-number">{{ $question->order_number }}.</span> {{ $question->question_text }}
+                                    <label for="comment_{{ $question->id }}" class="question-label dynamic-question-label" data-template="{{ $question->question_text }}">
+                                        <span class="question-number">{{ $question->order_number }}.</span>
+                                        <span class="question-text">{{ $question->question_text }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
                                     <textarea class="form-control" 
@@ -1755,7 +1757,7 @@
                 const program = $(this).val();
                 const subjectSelect = $('#subject_id');
                 
-                if (program) {
+                        if (program) {
                     $.ajax({
                         url: '{{ route("survey.subjects-by-program") }}',
                         method: 'GET',
@@ -1763,7 +1765,7 @@
                         success: function(response) {
                             subjectSelect.empty().append('<option value="">Choose a subject...</option>');
                             response.forEach(function(subject) {
-                                subjectSelect.append(`<option value="${subject.id}">${subject.name} (${subject.subject_code})</option>`);
+                                subjectSelect.append(`<option value="${subject.id}" data-name="${subject.name}">${subject.name} (${subject.subject_code})</option>`);
                             });
                             subjectSelect.prop('disabled', false);
                         },
@@ -1779,6 +1781,28 @@
                 } else {
                     subjectSelect.empty().append('<option value="">Choose a subject...</option>').prop('disabled', true);
                 }
+            });
+
+            function updateQuestionTextBySubject() {
+                const selectedOption = $('#subject_id').find('option:selected');
+                const subjectName = selectedOption.data('name') || '';
+
+                $('.dynamic-question-label').each(function() {
+                    const template = $(this).data('template');
+                    if (!template) {
+                        return;
+                    }
+
+                    const finalText = subjectName
+                        ? template.replace('{selectedSubject}', subjectName)
+                        : template;
+
+                    $(this).find('.question-text').text(finalText);
+                });
+            }
+
+            $('#subject_id').on('change', function() {
+                updateQuestionTextBySubject();
             });
             
             // Form submission with AJAX

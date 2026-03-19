@@ -7,16 +7,22 @@ use App\Models\Subject;
 use App\Models\SurveyQuestion;
 use App\Models\SurveyResponse;
 use App\Services\SentimentAnalysisService;
+use App\Services\Sentiment\SentimentLinearRegressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class SurveyController extends Controller
 {
     protected $sentimentService;
+    protected $linearRegressionService;
 
-    public function __construct(SentimentAnalysisService $sentimentService)
+    public function __construct(
+        SentimentAnalysisService $sentimentService,
+        SentimentLinearRegressionService $linearRegressionService
+    )
     {
         $this->sentimentService = $sentimentService;
+        $this->linearRegressionService = $linearRegressionService;
     }
 
     /**
@@ -168,31 +174,32 @@ class SurveyController extends Controller
             // Calculate average rating from option questions
             $averageRating = $ratingCount > 0 ? $totalRating / $ratingCount : 0;
 
-            // Analyze sentiment from all text responses
+            // Linear regression prediction (numeric) using stars only.
+            $starsInput = $ratingCount > 0 ? (float) $averageRating : 3.0;
+            $starsLinearPrediction = $this->linearRegressionService->predictFromStars($starsInput);
+            $starsLinearPredictedScore = $starsLinearPrediction['predicted_score'];
+
+            // Multinomial (3-class) sentiment classifier using feedback_text + part3 open-ended answers
+            // => Positive / Neutral / Negative with probabilities + expected numeric score.
             $textSentiment = 'neutral';
-            $sentimentRating = 3.0; // Default neutral rating
+            $textSentimentScore = 3.0; // default neutral expected rating
+            $textSentimentProbabilities = ['positive' => 0.0, 'neutral' => 1.0, 'negative' => 0.0];
+            $sentimentRating = 3.0; // used by your existing final rating formula
 
             if (!empty(trim($allTextResponses))) {
                 try {
-                    $textSentiment = $this->sentimentService->analyzeSentiment($allTextResponses);
+                    $multi = $this->sentimentService->analyzeSentimentMultinomialWithProbabilities($allTextResponses, 'en');
+                    $textSentiment = $multi['sentiment'];
+                    $textSentimentScore = (float) $multi['expected_rating'];
+                    $textSentimentProbabilities = $multi['probabilities'];
+                    $sentimentRating = $textSentimentScore;
                 } catch (\Exception $e) {
                     // Fallback to neutral if sentiment analysis fails
                     $textSentiment = 'neutral';
-                    \Log::warning('Sentiment analysis failed: ' . $e->getMessage());
-                }
-                
-                // Convert sentiment to numerical rating
-                switch ($textSentiment) {
-                    case 'positive':
-                        $sentimentRating = 4.5;
-                        break;
-                    case 'negative':
-                        $sentimentRating = 1.5;
-                        break;
-                    case 'neutral':
-                    default:
-                        $sentimentRating = 3.0;
-                        break;
+                    $textSentimentScore = 3.0;
+                    $textSentimentProbabilities = ['positive' => 0.0, 'neutral' => 1.0, 'negative' => 0.0];
+                    $sentimentRating = 3.0;
+                    \Log::warning('Multinomial sentiment analysis failed: ' . $e->getMessage());
                 }
             }
 
@@ -228,6 +235,10 @@ class SurveyController extends Controller
                         'rating' => $finalRating,
                         'sentiment' => $sentiment,
                         'feedback_text' => $request->feedback_text,
+                        'text_sentiment' => $textSentiment,
+                        'text_sentiment_score' => $textSentimentScore,
+                        'text_sentiment_probabilities' => $textSentimentProbabilities,
+                        'stars_linear_predicted_score' => $starsLinearPredictedScore,
                         'student_name' => $request->student_name,
                         'student_email' => null,
                         'ip_address' => $request->ip()

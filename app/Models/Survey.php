@@ -17,6 +17,10 @@ class Survey extends Model
         'rating',
         'sentiment',
         'feedback_text',
+        'text_sentiment',
+        'text_sentiment_score',
+        'text_sentiment_probabilities',
+        'stars_linear_predicted_score',
         'survey_responses',
         'student_name',
         'student_email',
@@ -26,6 +30,7 @@ class Survey extends Model
     protected $casts = [
         'rating' => 'decimal:1',
         'survey_responses' => 'array',
+        'text_sentiment_probabilities' => 'array',
     ];
 
     /**

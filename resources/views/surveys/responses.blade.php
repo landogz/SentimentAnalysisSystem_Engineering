@@ -203,11 +203,58 @@
                             <div class="col-md-6">
                                 <div class="info-section">
                                     <h6 class="text-muted mb-3">Sentiment Analysis</h6>
+                                    @php
+                                        $textProbs = is_array($survey->text_sentiment_probabilities ?? null)
+                                            ? $survey->text_sentiment_probabilities
+                                            : [];
+                                        $textPos = isset($textProbs['positive']) ? (float)$textProbs['positive'] : null;
+                                        $textNeu = isset($textProbs['neutral']) ? (float)$textProbs['neutral'] : null;
+                                        $textNeg = isset($textProbs['negative']) ? (float)$textProbs['negative'] : null;
+                                    @endphp
                                     <div class="sentiment-display">
-                                        <span class="badge {{ $survey->sentiment_badge_class }} fs-6 px-3 py-2">
-                                            <i class="fas fa-heart me-1"></i>
-                                            Overall Sentiment: {{ ucfirst($survey->sentiment) }}
-                                        </span>
+                                        <div class="w-100">
+                                            <div class="mb-3">
+                                                <span class="badge {{ $survey->sentiment_badge_class }} fs-6 px-3 py-2">
+                                                    <i class="fas fa-heart me-1"></i>
+                                                    Overall Sentiment: {{ ucfirst($survey->sentiment) }}
+                                                </span>
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <small class="text-muted d-block">Text Sentiment (Multinomial)</small>
+                                                <span class="badge {{ $survey->text_sentiment === 'positive' ? 'badge-success' : ($survey->text_sentiment === 'negative' ? 'badge-danger' : ($survey->text_sentiment === 'neutral' ? 'badge-warning' : 'badge-secondary')) }} fs-6 px-3 py-2">
+                                                    {{ $survey->text_sentiment ? 'Text: ' . ucfirst($survey->text_sentiment) : 'Text: N/A' }}
+                                                </span>
+                                                <div class="mt-2">
+                                                    <small class="text-muted d-block">Expected score</small>
+                                                    <strong class="text-info fs-5">
+                                                        {{ $survey->text_sentiment_score !== null ? number_format((float)$survey->text_sentiment_score, 1) : 'N/A' }}
+                                                    </strong>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <small class="text-muted d-block mb-2">Probabilities</small>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <span class="badge badge-success px-3 py-2">
+                                                        Positive: {{ $textPos !== null ? number_format($textPos * 100, 1) . '%' : 'N/A' }}
+                                                    </span>
+                                                    <span class="badge badge-warning px-3 py-2">
+                                                        Neutral: {{ $textNeu !== null ? number_format($textNeu * 100, 1) . '%' : 'N/A' }}
+                                                    </span>
+                                                    <span class="badge badge-danger px-3 py-2">
+                                                        Negative: {{ $textNeg !== null ? number_format($textNeg * 100, 1) . '%' : 'N/A' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <small class="text-muted d-block">Stars Linear Predicted Score</small>
+                                                <strong class="text-primary fs-5">
+                                                    {{ $survey->stars_linear_predicted_score !== null ? number_format((float)$survey->stars_linear_predicted_score, 1) : 'N/A' }}
+                                                </strong>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -310,27 +357,6 @@
         </div>
     </div>
 </div>
-
-<!-- Additional Feedback -->
-@if($survey->feedback_text)
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="modern-card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-comment-dots"></i>
-                    Additional Feedback
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="bg-light p-3 rounded">
-                    {{ $survey->feedback_text }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
 
 <style>
     :root {

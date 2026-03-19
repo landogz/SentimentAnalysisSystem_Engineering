@@ -234,6 +234,84 @@ class SentimentAnalysisService
     }
 
     /**
+     * Multinomial (3-class) sentiment output using softmax over positive/neutral/negative scores.
+     *
+     * This stays inside your current Laravel sentiment scoring system:
+     * - you already have learned-ish per-word scores in `sentiment_words`
+     * - we convert those aggregated class scores into probabilities like multinomial logistic regression.
+     *
+     * @return array{
+     *   sentiment: 'positive'|'neutral'|'negative',
+     *   expected_rating: float,
+     *   probabilities: array{positive: float, neutral: float, negative: float},
+     *   original_text: string,
+     *   positive_score: float,
+     *   neutral_score: float,
+     *   negative_score: float
+     * }
+     */
+    public function analyzeSentimentMultinomialWithProbabilities(string $text, string $language = 'en'): array
+    {
+        $analysis = $this->analyzeSentimentWithScore($text, $language);
+
+        // negative_score is negative by construction in your scoring logic,
+        // so we convert it to a positive magnitude for logits.
+        $logitPositive = max(0.0, (float) $analysis['positive_score']);
+        $logitNeutral = max(0.0, (float) $analysis['neutral_score']);
+        $logitNegative = max(0.0, abs((float) $analysis['negative_score']));
+
+        $temperature = 1.0;
+
+        // Prevent overflow by subtracting max logit before exp().
+        $maxLogit = max($logitPositive, $logitNeutral, $logitNegative);
+        $expPositive = exp(($logitPositive - $maxLogit) / $temperature);
+        $expNeutral = exp(($logitNeutral - $maxLogit) / $temperature);
+        $expNegative = exp(($logitNegative - $maxLogit) / $temperature);
+
+        $sum = $expPositive + $expNeutral + $expNegative;
+        if ($sum <= 0.00001) {
+            // Fallback if all logits are effectively zero.
+            $probabilities = ['positive' => 0.0, 'neutral' => 1.0, 'negative' => 0.0];
+            $sentiment = 'neutral';
+        } else {
+            $pPos = $expPositive / $sum;
+            $pNeu = $expNeutral / $sum;
+            $pNeg = $expNegative / $sum;
+
+            $probabilities = [
+                'positive' => round($pPos, 4),
+                'neutral' => round($pNeu, 4),
+                'negative' => round($pNeg, 4),
+            ];
+
+            $sentiment = array_key_first($probabilities);
+            $best = -1.0;
+            foreach ($probabilities as $k => $v) {
+                if ($v > $best) {
+                    $best = $v;
+                    $sentiment = $k;
+                }
+            }
+        }
+
+        // Expected numeric sentiment score (same scale you already use).
+        $expectedRating =
+            ($probabilities['positive'] * 4.5) +
+            ($probabilities['neutral'] * 3.0) +
+            ($probabilities['negative'] * 1.5);
+
+        return [
+            'sentiment' => $sentiment,
+            'expected_rating' => round((float) $expectedRating, 1),
+            'probabilities' => $probabilities,
+            'original_text' => (string) $analysis['original_text'],
+            'positive_score' => (float) $analysis['positive_score'],
+            'neutral_score' => (float) $analysis['neutral_score'],
+            'negative_score' => (float) $analysis['negative_score'],
+        ];
+    }
+
+    /**
      * Analyze sentiment with translation support
      */
     public function analyzeSentimentWithTranslation(string $text, string $sourceLang = 'tl', string $targetLang = 'en'): array
