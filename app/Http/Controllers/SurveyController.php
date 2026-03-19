@@ -227,7 +227,16 @@ class SurveyController extends Controller
 
             // Use database transaction to ensure data consistency
             try {
-                $survey = \DB::transaction(function() use ($request, $finalRating, $sentiment, $questionResponses) {
+                $survey = \DB::transaction(function() use (
+                    $request,
+                    $finalRating,
+                    $sentiment,
+                    $questionResponses,
+                    $textSentiment,
+                    $textSentimentScore,
+                    $textSentimentProbabilities,
+                    $starsLinearPredictedScore
+                ) {
                     // Create survey - teacher_id is nullable now
                     $survey = Survey::create([
                         'teacher_id' => null,
