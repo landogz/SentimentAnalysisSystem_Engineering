@@ -50,8 +50,17 @@ class ReportsController extends Controller
         ->orderBy('rating_group')
         ->get();
 
+        $reportSubjectsPayload = $subjects->map(function (Subject $s) {
+            return [
+                'id' => $s->id,
+                'name' => $s->name,
+                'program' => $s->program,
+            ];
+        })->values();
+
         return view('reports.index', compact(
             'subjects',
+            'reportSubjectsPayload',
             'topSubjects',
             'totalSurveys',
             'averageRating',

@@ -164,6 +164,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        min-width: 0;
     }
 
     .sentiment-breakdown {
@@ -171,6 +172,7 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+        min-width: 0;
     }
 
     /* Sentiment Stats List Items */
@@ -284,6 +286,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 260px;
+        overflow: hidden;
+    }
+
+    #sentimentPieChart {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 220px !important;
     }
 
     /* Equal Height Cards Row */
@@ -353,6 +366,23 @@
         padding: 0.75rem 1.5rem;
     }
 
+    @media (max-width: 1199.98px) {
+        .sentiment-analysis-body {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1.5rem;
+        }
+
+        .sentiment-breakdown {
+            flex: 1;
+            width: 100%;
+        }
+
+        .sentiment-chart-container {
+            width: 100%;
+        }
+    }
+
     @media (max-width: 768px) {
         .sentiment-analysis-body {
             flex-direction: column;
@@ -366,6 +396,15 @@
 
         .sentiment-chart-container {
             width: 100%;
+        }
+
+        .chart-container {
+            min-height: 220px;
+            padding: 0.75rem;
+        }
+
+        #sentimentPieChart {
+            height: 190px !important;
         }
 
         .stat-card {
@@ -597,6 +636,28 @@
 <script>
 let sentimentChart, ratingChart;
 
+// Subjects for dependent dropdown (program value must match subject.program in database)
+const REPORT_SUBJECTS = @json($reportSubjectsPayload);
+
+function refreshSubjectOptionsForProgram() {
+    const program = $('#program_filter').val();
+    const $subject = $('#subject_filter');
+    const currentVal = $subject.val();
+    $subject.empty().append('<option value=\"\">All Subjects</option>');
+    const list = program
+        ? REPORT_SUBJECTS.filter(function (s) { return s.program && String(s.program) === String(program); })
+        : REPORT_SUBJECTS.slice();
+    list.sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); });
+    list.forEach(function (s) {
+        $subject.append($('<option></option>').attr('value', s.id).text(s.name));
+    });
+    if (currentVal && $subject.find('option[value=\"' + currentVal + '\"]').length) {
+        $subject.val(currentVal);
+    } else {
+        $subject.val('');
+    }
+}
+
 $(document).ready(function() {
     // Initialize charts
     initializeCharts();
@@ -604,6 +665,27 @@ $(document).ready(function() {
     // Form submission
     $('#reportFilterForm').submit(function(e) {
         e.preventDefault();
+        loadReportData();
+    });
+
+    $('#program_filter').on('change', function () {
+        refreshSubjectOptionsForProgram();
+        loadReportData();
+    });
+    $('#subject_filter').on('change', function () {
+        loadReportData();
+    });
+    $('#date_from, #date_to').on('change', function () {
+        const from = $('#date_from').val();
+        const to = $('#date_to').val();
+        if (from && to && from > to) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Invalid range', text: 'From date must be before or equal to To date.', confirmButtonColor: '#F5B445' });
+            } else {
+                alert('From date must be before or equal to To date.');
+            }
+            return;
+        }
         loadReportData();
     });
 });

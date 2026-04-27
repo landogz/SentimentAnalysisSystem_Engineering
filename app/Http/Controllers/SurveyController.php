@@ -203,10 +203,10 @@ class SurveyController extends Controller
                 }
             }
 
-            // Calculate final rating: 70% from option questions, 30% from sentiment
+            // Calculate final rating: 50% from option questions, 50% from sentiment (balanced)
             $finalRating = 0;
             if ($ratingCount > 0) {
-                $finalRating = ($averageRating * 0.7) + ($sentimentRating * 0.3);
+                $finalRating = ($averageRating * 0.5) + ($sentimentRating * 0.5);
             } else {
                 $finalRating = $sentimentRating;
             }
@@ -365,6 +365,7 @@ class SurveyController extends Controller
      */
     public function getResponses(Survey $survey)
     {
+        $survey->load('subject');
         $responses = $survey->responses()->with('question')->get();
         
         // Group responses by part - filter by the related question's part
@@ -436,9 +437,9 @@ class SurveyController extends Controller
             }
         }
         
-        // Calculate final rating breakdown
-        // Final Rating = (Course Evaluation Average * 0.7) + (Part 3 Sentiment Score * 0.3)
-        $calculatedFinalRating = ($part2Average * 0.7) + ($part3Score * 0.3);
+        // Calculate final rating breakdown (50% / 50% — balanced with survey submission)
+        // Final Rating = (Course Evaluation Average * 0.5) + (Part 3 Sentiment Score * 0.5)
+        $calculatedFinalRating = ($part2Average * 0.5) + ($part3Score * 0.5);
         $calculatedFinalRating = max(1.0, min(5.0, round($calculatedFinalRating, 1)));
         
         return view('surveys.responses', compact(

@@ -242,6 +242,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        min-width: 0;
     }
 
     .sentiment-breakdown {
@@ -249,6 +250,7 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+        min-width: 0;
     }
 
     /* Sentiment Stats List Items */
@@ -452,6 +454,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 260px;
+        overflow: hidden;
+    }
+
+    #sentimentPieChart {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 220px !important;
     }
 
     /* Animations */
@@ -477,6 +490,23 @@
     .stat-card:nth-child(4) { animation-delay: 0.4s; }
 
     /* Responsive */
+    @media (max-width: 1199.98px) {
+        .sentiment-analysis-body {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1.5rem;
+        }
+
+        .sentiment-breakdown {
+            flex: 1;
+            width: 100%;
+        }
+
+        .sentiment-chart-container {
+            width: 100%;
+        }
+    }
+
     @media (max-width: 768px) {
         .stat-card {
             padding: 1.5rem;
@@ -502,6 +532,15 @@
 
         .sentiment-chart-container {
             width: 100%;
+        }
+
+        .chart-container {
+            min-height: 220px;
+            padding: 0.75rem;
+        }
+
+        #sentimentPieChart {
+            height: 190px !important;
         }
     }
 </style>

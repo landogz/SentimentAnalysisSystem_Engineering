@@ -1,3 +1,12 @@
+@php
+    $selectedSubjectName = $survey->subject?->name ?? '';
+    $renderQuestionText = function (?string $template) use ($selectedSubjectName) {
+        if ($template === null || $template === '') {
+            return '';
+        }
+        return str_replace('{selectedSubject}', $selectedSubjectName, $template);
+    };
+@endphp
 <!-- Survey Information Header -->
 <div class="row mb-4">
     <div class="col-12">
@@ -40,15 +49,15 @@
                             </div>
                             <div class="rating-stars">
                                 @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= $survey->rating)
+                                    @if($i <= $calculatedFinalRating)
                                         <i class="fas fa-star text-warning"></i>
-                                    @elseif($i - 0.5 <= $survey->rating)
+                                    @elseif($i - 0.5 <= $calculatedFinalRating)
                                         <i class="fas fa-star-half-alt text-warning"></i>
                                     @else
                                         <i class="far fa-star text-warning"></i>
                                     @endif
                                 @endfor
-                                <span class="ms-2 fw-bold">{{ $survey->rating }}/5.0</span>
+                                <span class="ms-2 fw-bold">{{ number_format($calculatedFinalRating, 1) }}/5.0</span>
                             </div>
                         </div>
                     </div>
@@ -129,7 +138,7 @@
                                         <div class="analysis-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2">
                                             <i class="fas fa-star"></i>
                                         </div>
-                                        <h4 class="text-warning mb-1">{{ number_format($survey->rating, 1) }}</h4>
+                                        <h4 class="text-warning mb-1">{{ number_format($calculatedFinalRating, 1) }}</h4>
                                         <p class="mb-0 fw-bold text-dark">Overall Rating</p>
                                         <small class="text-muted">Combined Score</small>
                                     </div>
@@ -167,15 +176,15 @@
                                                     <div class="formula-text">
                                                         <strong>Final Rating Formula:</strong><br>
                                                         <small class="text-muted">
-                                                            (Course Evaluation Average × 70%) + (Open Ended Questions Sentiment Score × 30%)
+                                                            (Course Evaluation Average × 50%) + (Open Ended Questions Sentiment Score × 50%)
                                                         </small>
                                                     </div>
                                                     <div class="formula-calculation text-end">
                                                         <div class="calculation-step">
-                                                            <small class="text-muted">= ({{ number_format($part2Average, 1) }} × 0.7) + ({{ number_format($part3Score, 1) }} × 0.3)</small>
+                                                            <small class="text-muted">= ({{ number_format($part2Average, 1) }} × 0.5) + ({{ number_format($part3Score, 1) }} × 0.5)</small>
                                                         </div>
                                                         <div class="calculation-step mt-1">
-                                                            <small class="text-muted">= {{ number_format($part2Average * 0.7, 2) }} + {{ number_format($part3Score * 0.3, 2) }}</small>
+                                                            <small class="text-muted">= {{ number_format($part2Average * 0.5, 2) }} + {{ number_format($part3Score * 0.5, 2) }}</small>
                                                         </div>
                                                         <div class="calculation-result mt-2">
                                                             <strong class="text-warning fs-4">= {{ number_format($calculatedFinalRating, 1) }}/5.0</strong>
@@ -287,7 +296,7 @@
                                             <span class="badge bg-info">Q{{ $response->question->order_number }}</span>
                                             <span class="badge bg-secondary">{{ $response->answer }}/5</span>
                                         </div>
-                                        <p class="mb-2 text-muted small">{{ $response->question->question_text }}</p>
+                                        <p class="mb-2 text-muted small">{{ $renderQuestionText($response->question->question_text) }}</p>
                                         <div class="rating-display">
                                             @for($i = 1; $i <= 5; $i++)
                                                 @if($i <= $response->answer)
@@ -335,7 +344,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <h6 class="text-muted mb-2">Question:</h6>
-                                    <p class="mb-0">{{ $response->question->question_text }}</p>
+                                    <p class="mb-0">{{ $renderQuestionText($response->question->question_text) }}</p>
                                 </div>
                                 <div>
                                     <h6 class="text-muted mb-2">Response:</h6>

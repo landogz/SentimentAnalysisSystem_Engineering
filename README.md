@@ -11,7 +11,7 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Total Surveys Modal**: Clickable Total Surveys card on dashboard opens modal with all surveys, pagination, and quick access to survey responses
 - **BS Program Prefix**: All program selections and displays now include "BS" prefix (e.g., "BS Civil Engineering", "BS Mining Engineering")
 - **Improved Modal Stacking**: Enhanced modal management allowing multiple modals to remain open simultaneously
-- **Updated Rating Calculation**: Simplified formula using Course Evaluation (70%) and Open Ended Questions sentiment (30%)
+- **Updated Rating Calculation**: Balanced formula using Course Evaluation (50%) and Open Ended Questions sentiment (50%)
 - **Enhanced Survey Seeder**: Updated to reflect new structure with 15 Course Evaluation questions across 3 sections
 
 ### **Previous Enhancements (v3.3)**
@@ -42,7 +42,7 @@ A modern, professional Laravel-based system for collecting and analyzing student
 - **Advanced Survey Management**: Real-time form validation and AJAX submissions
 - **Dynamic Survey Questions CRUD**: Complete management system for survey questions with option and comment types
 - **Survey Responses Viewer**: Clickable survey rows with detailed response modal on teacher and subject pages
-- **Automatic Rating Calculation**: Smart rating calculation based on option questions (70%) and sentiment analysis (30%)
+- **Automatic Rating Calculation**: Smart rating calculation based on option questions (50%) and sentiment analysis (50%)
 - **Comprehensive Reporting**: Multi-format export capabilities (PDF, Excel, CSV)
 - **Mobile-First Design**: Fully responsive interface optimized for all devices
 - **Session Management**: 30-minute timeout with SweetAlert notifications
@@ -249,14 +249,14 @@ The system comes pre-loaded with:
   - **Section B: Exposure to Resources and Motivation** (5 questions): Resource availability, learning materials, motivation factors, support systems, engagement
   - **Section C: Other Questions** (5 questions): Additional course evaluation metrics
 - **Open Ended Questions Analysis**: Sentiment score conversion (1-5 scale)
-- **Overall Analysis**: Combined rating with Course Evaluation (70%) and Open Ended Questions sentiment (30%)
+- **Overall Analysis**: Combined rating with Course Evaluation (50%) and Open Ended Questions sentiment (50%)
 - **Visual Indicators**: Color-coded cards with icons and scores
 - **Detailed Breakdown**: Individual question responses with ratings organized by section
 
 ### **Smart Rating Calculation**
 - **Automatic Algorithm**: Calculates overall rating from Course Evaluation and Open Ended Questions
-- **Course Evaluation Weight**: 70% weight from Course Evaluation responses (15 questions, 1-5 scale)
-- **Open Ended Questions Weight**: 30% weight from sentiment analysis of text responses
+- **Course Evaluation Weight**: 50% weight from Course Evaluation responses (15 questions, 1-5 scale)
+- **Open Ended Questions Weight**: 50% weight from sentiment analysis of text responses
 - **Sentiment Conversion**: Positive (4.5), Neutral (3.0), Negative (1.5) ratings
 - **Range Validation**: Ensures final rating stays within 1.0-5.0 range
 - **Precision Control**: Rounds to 1 decimal place for consistency
