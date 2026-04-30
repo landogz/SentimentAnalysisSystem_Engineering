@@ -156,24 +156,24 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-search"></i>
                                 </span>
-                                <input type="text" class="form-control" id="searchInput" placeholder="Search subjects...">
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search subjects..." value="{{ request('search') }}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <select class="form-select" id="programFilter">
                                 <option value="">All Programs</option>
-                                <option value="Civil Engineering">BS Civil Engineering</option>
-                                <option value="Mining Engineering">BS Mining Engineering</option>
-                                <option value="Electrical Engineering">BS Electrical Engineering</option>
-                                <option value="Mechanical Engineering">BS Mechanical Engineering</option>
-                                <option value="Computer Engineering">BS Computer Engineering</option>
+                                <option value="Civil Engineering" {{ request('program') === 'Civil Engineering' ? 'selected' : '' }}>BS Civil Engineering</option>
+                                <option value="Mining Engineering" {{ request('program') === 'Mining Engineering' ? 'selected' : '' }}>BS Mining Engineering</option>
+                                <option value="Electrical Engineering" {{ request('program') === 'Electrical Engineering' ? 'selected' : '' }}>BS Electrical Engineering</option>
+                                <option value="Mechanical Engineering" {{ request('program') === 'Mechanical Engineering' ? 'selected' : '' }}>BS Mechanical Engineering</option>
+                                <option value="Computer Engineering" {{ request('program') === 'Computer Engineering' ? 'selected' : '' }}>BS Computer Engineering</option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <select class="form-select" id="statusFilter">
                                 <option value="">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -273,7 +273,7 @@
 
                 <!-- Pagination -->
                 <div class="mt-4">
-                    {{ $subjects->links('vendor.pagination.bootstrap-5') }}
+                    {{ $subjects->appends(request()->query())->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>
@@ -405,14 +405,17 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Search functionality
-    $('#searchInput').on('keyup', function() {
-        filterSubjects();
+    let searchTimer = null;
+
+    // Search functionality (server-side, debounced)
+    $('#searchInput').on('input', function() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(applyServerFilters, 400);
     });
 
-    // Filter functionality
+    // Filter functionality (server-side)
     $('#programFilter, #statusFilter').on('change', function() {
-        filterSubjects();
+        applyServerFilters();
     });
 
     // Clear filters
@@ -420,7 +423,7 @@ $(document).ready(function() {
         $('#searchInput').val('');
         $('#programFilter').val('');
         $('#statusFilter').val('');
-        filterSubjects();
+        window.location.href = '{{ route("subjects.index") }}';
     });
 
     // Add subject form
@@ -489,41 +492,36 @@ $(document).ready(function() {
     });
 });
 
-function filterSubjects() {
-    const search = $('#searchInput').val().toLowerCase();
+function applyServerFilters() {
+    const params = new URLSearchParams(window.location.search);
+    const search = $('#searchInput').val().trim();
     const program = $('#programFilter').val();
     const status = $('#statusFilter').val();
-    
-    $('#subjectsTable tbody tr').each(function() {
-        const row = $(this);
-        const code = row.find('td:first').text().toLowerCase();
-        const name = row.find('td:nth-child(2)').text().toLowerCase();
-        const programCell = row.find('td:nth-child(3)');
-        const isActive = row.find('td:nth-child(7)').text().includes('Active');
-        
-        let show = true;
-        
-        // Search filter
-        if (search && !code.includes(search) && !name.includes(search)) {
-            show = false;
-        }
-        
-        // Program filter
-        if (program) {
-            const programText = programCell.text().trim();
-            if (!programText.includes(program)) {
-                show = false;
-            }
-        }
-        
-        // Status filter
-        if (status) {
-            if (status === 'active' && !isActive) show = false;
-            if (status === 'inactive' && isActive) show = false;
-        }
-        
-        row.toggle(show);
-    });
+
+    if (search) {
+        params.set('search', search);
+    } else {
+        params.delete('search');
+    }
+
+    if (program) {
+        params.set('program', program);
+    } else {
+        params.delete('program');
+    }
+
+    if (status) {
+        params.set('status', status);
+    } else {
+        params.delete('status');
+    }
+
+    // Reset pagination when changing filters/search.
+    params.delete('page');
+
+    const query = params.toString();
+    const baseUrl = '{{ route("subjects.index") }}';
+    window.location.href = query ? `${baseUrl}?${query}` : baseUrl;
 }
 
 function viewSubject(id) {
