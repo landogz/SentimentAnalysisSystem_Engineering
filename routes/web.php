@@ -123,6 +123,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports/subjects-ajax', [ReportsController::class, 'getSubjectsAjax'])->name('reports.subjects-ajax');
     Route::get('/reports/rating-distribution', [ReportsController::class, 'getRatingDistribution'])->name('reports.rating-distribution');
     Route::get('/reports/filtered-stats', [ReportsController::class, 'getFilteredStats'])->name('reports.filtered-stats');
+    Route::get('/reports/grouped-subject-responses', [ReportsController::class, 'getGroupedSubjectResponses'])->name('reports.grouped-subject-responses');
     
     // Sentiment Words Management
     Route::prefix('sentiment-words')->name('sentiment-words.')->group(function () {

@@ -214,15 +214,24 @@ class SurveyController extends Controller
             // Ensure rating is within 1.0 to 5.0 range
             $finalRating = max(1.0, min(5.0, round($finalRating, 1)));
 
-            // Determine final sentiment based on both text analysis and final rating
-            // If rating is very low (< 2.5), it's negative; if very high (> 4.0), it's positive
-            if ($finalRating < 2.5) {
-                $sentiment = 'negative';
-            } elseif ($finalRating > 4.0) {
+            // Determine final sentiment with rating-first safeguards to avoid mismatches:
+            // - averageRating >= 4.0 => force Positive
+            // - 3.5 <= averageRating < 4.0 => minimum Neutral (never Negative)
+            // - below 3.5 => keep current hybrid/text logic
+            if ($ratingCount > 0 && $averageRating >= 4.0) {
                 $sentiment = 'positive';
+            } elseif ($ratingCount > 0 && $averageRating >= 3.5 && $averageRating < 4.0) {
+                $candidate = !empty(trim($allTextResponses)) ? $textSentiment : 'neutral';
+                $sentiment = $candidate === 'negative' ? 'neutral' : $candidate;
             } else {
-                // For middle ratings, use text sentiment if available, otherwise neutral
-                $sentiment = !empty(trim($allTextResponses)) ? $textSentiment : 'neutral';
+                // Keep prior fallback for low/mid ratings
+                if ($finalRating < 2.5) {
+                    $sentiment = 'negative';
+                } elseif ($finalRating > 4.0) {
+                    $sentiment = 'positive';
+                } else {
+                    $sentiment = !empty(trim($allTextResponses)) ? $textSentiment : 'neutral';
+                }
             }
 
             // Use database transaction to ensure data consistency

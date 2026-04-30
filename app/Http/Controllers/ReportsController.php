@@ -50,6 +50,25 @@ class ReportsController extends Controller
         ->orderBy('rating_group')
         ->get();
 
+        // Grouped subject responses (one subject row with multiple survey responses)
+        $groupedSubjectResponses = Survey::query()
+            ->join('subjects', 'subjects.id', '=', 'surveys.subject_id')
+            ->selectRaw('
+                surveys.subject_id,
+                subjects.name as subject_name,
+                subjects.program as program,
+                COUNT(surveys.id) as responses_count,
+                AVG(surveys.rating) as avg_rating,
+                SUM(CASE WHEN surveys.sentiment = "positive" THEN 1 ELSE 0 END) as positive_count,
+                SUM(CASE WHEN surveys.sentiment = "neutral" THEN 1 ELSE 0 END) as neutral_count,
+                SUM(CASE WHEN surveys.sentiment = "negative" THEN 1 ELSE 0 END) as negative_count,
+                MIN(surveys.created_at) as first_response_at,
+                MAX(surveys.created_at) as latest_response_at
+            ')
+            ->groupBy('surveys.subject_id', 'subjects.name', 'subjects.program')
+            ->orderByDesc('responses_count')
+            ->get();
+
         $reportSubjectsPayload = $subjects->map(function (Subject $s) {
             return [
                 'id' => $s->id,
@@ -65,7 +84,8 @@ class ReportsController extends Controller
             'totalSurveys',
             'averageRating',
             'sentimentStats',
-            'ratingDistribution'
+            'ratingDistribution',
+            'groupedSubjectResponses'
         ));
     }
 
@@ -356,5 +376,64 @@ class ReportsController extends Controller
             'average_rating' => number_format($averageRating, 1),
             'sentiment_stats' => $sentimentStats
         ]);
+    }
+
+    /**
+     * Get grouped subject responses for reports table
+     */
+    public function getGroupedSubjectResponses(Request $request)
+    {
+        $query = Survey::query()
+            ->join('subjects', 'subjects.id', '=', 'surveys.subject_id');
+
+        // Apply filters
+        if ($request->filled('program')) {
+            $query->where('subjects.program', $request->program);
+        }
+
+        if ($request->filled('subject_id')) {
+            $query->where('surveys.subject_id', $request->subject_id);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('surveys.created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('surveys.created_at', '<=', $request->date_to);
+        }
+
+        $rows = $query
+            ->selectRaw('
+                surveys.subject_id,
+                subjects.name as subject_name,
+                subjects.program as program,
+                COUNT(surveys.id) as responses_count,
+                AVG(surveys.rating) as avg_rating,
+                SUM(CASE WHEN surveys.sentiment = "positive" THEN 1 ELSE 0 END) as positive_count,
+                SUM(CASE WHEN surveys.sentiment = "neutral" THEN 1 ELSE 0 END) as neutral_count,
+                SUM(CASE WHEN surveys.sentiment = "negative" THEN 1 ELSE 0 END) as negative_count,
+                MIN(surveys.created_at) as first_response_at,
+                MAX(surveys.created_at) as latest_response_at
+            ')
+            ->groupBy('surveys.subject_id', 'subjects.name', 'subjects.program')
+            ->orderByDesc('responses_count')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'subject_id' => (int) $row->subject_id,
+                    'subject_name' => $row->subject_name,
+                    'program' => $row->program,
+                    'responses_count' => (int) $row->responses_count,
+                    'avg_rating' => round((float) $row->avg_rating, 1),
+                    'positive_count' => (int) $row->positive_count,
+                    'neutral_count' => (int) $row->neutral_count,
+                    'negative_count' => (int) $row->negative_count,
+                    'first_response_at' => $row->first_response_at ? \Carbon\Carbon::parse($row->first_response_at)->format('M d, Y') : null,
+                    'latest_response_at' => $row->latest_response_at ? \Carbon\Carbon::parse($row->latest_response_at)->format('M d, Y') : null,
+                ];
+            });
+
+        return response()->json($rows);
     }
 } 

@@ -593,6 +593,61 @@
         </div>
     </div>
 
+    <!-- All Surveys (Grouped by Subject) -->
+    <div class="col-12">
+        <div class="modern-card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-list"></i>
+                    All Surveys (Grouped by Subject)
+                </h3>
+                <div class="d-flex align-items-center gap-2" style="min-width: 280px; width: min(100%, 360px);">
+                    <input type="text" id="groupedSurveySearch" class="form-control" placeholder="Search subject/program...">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table modern-table" id="groupedSubjectTable">
+                        <thead>
+                            <tr>
+                                <th>Program</th>
+                                <th>Subject</th>
+                                <th>Responses</th>
+                                <th>Average Rating</th>
+                                <th>Sentiment Breakdown</th>
+                                <th>Response Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($groupedSubjectResponses as $row)
+                                <tr>
+                                    <td>{{ $row->program ? 'BS ' . $row->program : 'N/A' }}</td>
+                                    <td>{{ $row->subject_name }}</td>
+                                    <td>{{ $row->responses_count }}</td>
+                                    <td>{{ number_format((float)$row->avg_rating, 1) }}/5.0</td>
+                                    <td>
+                                        <span class="badge bg-success me-1">P: {{ (int)$row->positive_count }}</span>
+                                        <span class="badge bg-warning text-dark me-1">N: {{ (int)$row->neutral_count }}</span>
+                                        <span class="badge bg-danger">Neg: {{ (int)$row->negative_count }}</span>
+                                    </td>
+                                    <td>
+                                        {{ $row->first_response_at ? \Carbon\Carbon::parse($row->first_response_at)->format('M d, Y') : 'N/A' }}
+                                        -
+                                        {{ $row->latest_response_at ? \Carbon\Carbon::parse($row->latest_response_at)->format('M d, Y') : 'N/A' }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No grouped survey data found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Export Options -->
     <!-- <div class="col-12">
@@ -687,6 +742,10 @@ $(document).ready(function() {
             return;
         }
         loadReportData();
+    });
+
+    $('#groupedSurveySearch').on('input', function () {
+        filterGroupedSubjectTable($(this).val());
     });
 });
 
@@ -807,6 +866,9 @@ function loadReportData() {
         
         // Load rating distribution
         loadRatingDistribution();
+
+        // Load grouped subject table
+        loadGroupedSubjectResponses();
     });
 }
 
@@ -817,6 +879,58 @@ function loadRatingDistribution() {
         ratingChart.data.datasets[0].data = data;
         ratingChart.update();
     });
+}
+
+function loadGroupedSubjectResponses() {
+    const formData = $('#reportFilterForm').serialize();
+    $.get('{{ route("reports.grouped-subject-responses") }}', formData, function(data) {
+        const $tbody = $('#groupedSubjectTable tbody');
+        $tbody.empty();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            $tbody.append('<tr><td colspan="6" class="text-center text-muted">No grouped survey data found.</td></tr>');
+            return;
+        }
+
+        data.forEach(function(row) {
+            const programLabel = row.program ? `BS ${row.program}` : 'N/A';
+            const rangeText = `${row.first_response_at || 'N/A'} - ${row.latest_response_at || 'N/A'}`;
+            const tr = `
+                <tr>
+                    <td>${escapeHtml(programLabel)}</td>
+                    <td>${escapeHtml(row.subject_name || '')}</td>
+                    <td>${row.responses_count ?? 0}</td>
+                    <td>${Number(row.avg_rating || 0).toFixed(1)}/5.0</td>
+                    <td>
+                        <span class="badge bg-success me-1">P: ${row.positive_count ?? 0}</span>
+                        <span class="badge bg-warning text-dark me-1">N: ${row.neutral_count ?? 0}</span>
+                        <span class="badge bg-danger">Neg: ${row.negative_count ?? 0}</span>
+                    </td>
+                    <td>${escapeHtml(rangeText)}</td>
+                </tr>
+            `;
+            $tbody.append(tr);
+        });
+
+        filterGroupedSubjectTable($('#groupedSurveySearch').val());
+    });
+}
+
+function filterGroupedSubjectTable(keyword) {
+    const q = String(keyword || '').toLowerCase().trim();
+    $('#groupedSubjectTable tbody tr').each(function() {
+        const text = $(this).text().toLowerCase();
+        $(this).toggle(!q || text.includes(q));
+    });
+}
+
+function escapeHtml(input) {
+    return String(input ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 function exportReport(format) {
