@@ -203,6 +203,15 @@ class SurveyController extends Controller
                 }
             }
 
+            // Neutral-lock rule for panel consistency:
+            // If Course Evaluation average sits in neutral band, keep open-ended sentiment neutral.
+            if ($ratingCount > 0 && $averageRating >= 2.5 && $averageRating <= 3.5) {
+                $textSentiment = 'neutral';
+                $textSentimentScore = 3.0;
+                $textSentimentProbabilities = ['positive' => 0.0, 'neutral' => 1.0, 'negative' => 0.0];
+                $sentimentRating = 3.0;
+            }
+
             // Calculate final rating: 50% from option questions, 50% from sentiment (balanced)
             $finalRating = 0;
             if ($ratingCount > 0) {
@@ -214,17 +223,19 @@ class SurveyController extends Controller
             // Ensure rating is within 1.0 to 5.0 range
             $finalRating = max(1.0, min(5.0, round($finalRating, 1)));
 
-            // Determine final sentiment with rating-first safeguards to avoid mismatches:
+            // Determine final sentiment with score-lock safeguards:
+            // - 2.5 to 3.5 final score => always Neutral
             // - averageRating >= 4.0 => force Positive
             // - 3.5 <= averageRating < 4.0 => minimum Neutral (never Negative)
-            // - below 3.5 => keep current hybrid/text logic
-            if ($ratingCount > 0 && $averageRating >= 4.0) {
+            // - otherwise use current hybrid/text logic
+            if ($finalRating >= 2.5 && $finalRating <= 3.5) {
+                $sentiment = 'neutral';
+            } elseif ($ratingCount > 0 && $averageRating >= 4.0) {
                 $sentiment = 'positive';
             } elseif ($ratingCount > 0 && $averageRating >= 3.5 && $averageRating < 4.0) {
                 $candidate = !empty(trim($allTextResponses)) ? $textSentiment : 'neutral';
                 $sentiment = $candidate === 'negative' ? 'neutral' : $candidate;
             } else {
-                // Keep prior fallback for low/mid ratings
                 if ($finalRating < 2.5) {
                     $sentiment = 'negative';
                 } elseif ($finalRating > 4.0) {
@@ -413,37 +424,35 @@ class SurveyController extends Controller
                 // Convert sentiment to numerical score (1-5 scale)
                 switch ($part3Sentiment) {
                     case 'positive':
-                        $part3Score = 4.5; // High positive score
+                        $part3Score = 4.5; // Positive score (capped to avoid over-boosting)
                         break;
                     case 'negative':
-                        $part3Score = 1.5; // Low negative score
+                        $part3Score = 1.5; // Negative score
                         break;
                     case 'neutral':
                     default:
                         $part3Score = 3.0; // Neutral score
                         break;
                 }
-                
-                // Adjust score based on sentiment intensity
-                if (isset($analysis['score'])) {
-                    $sentimentIntensity = abs($analysis['score']);
-                    if ($sentimentIntensity > 5) {
-                        // Very strong sentiment
-                        if ($part3Sentiment === 'positive') {
-                            $part3Score = min(5.0, $part3Score + 0.5);
-                        } elseif ($part3Sentiment === 'negative') {
-                            $part3Score = max(1.0, $part3Score - 0.5);
-                        }
-                    } elseif ($sentimentIntensity < 2) {
-                        // Weak sentiment
-                        $part3Score = 3.0; // Move towards neutral
-                    }
+
+                // Neutral guard band:
+                // If lexical sentiment magnitude is weak/moderate, keep open-ended score neutral
+                // to avoid jumping to 5.0 positive for mixed/neutral narratives.
+                if (isset($analysis['score']) && abs((float)$analysis['score']) <= 4.0) {
+                    $part3Sentiment = 'neutral';
+                    $part3Score = 3.0;
                 }
             } catch (\Exception $e) {
                 // Fallback to neutral if sentiment analysis fails
                 $part3Sentiment = 'neutral';
                 $part3Score = 3.0;
             }
+        }
+
+        // Keep response-breakdown aligned with submission-time neutral lock.
+        if ($part2Average >= 2.5 && $part2Average <= 3.5) {
+            $part3Sentiment = 'neutral';
+            $part3Score = 3.0;
         }
         
         // Calculate final rating breakdown (50% / 50% — balanced with survey submission)
